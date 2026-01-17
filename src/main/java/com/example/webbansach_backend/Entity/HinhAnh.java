@@ -21,7 +21,7 @@ public class HinhAnh {
     @Column(name= "link")
     private String link ; // duongDan
 
-    @Column(name = "du_lieu_anh")
+    @Column(name = "du_lieu_anh" , columnDefinition = "LONGTEXT") // kiểu dữ liệu lớn
     @Lob
     private String duLieuAnh ; // base64
 

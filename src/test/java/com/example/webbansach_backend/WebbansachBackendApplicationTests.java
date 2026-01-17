@@ -9,7 +9,7 @@ class WebbansachBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
-	
+
 	}
 
 }
