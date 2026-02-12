@@ -17,6 +17,9 @@ public class ChiTietDonHang {
 
     @Column(name = "gia_ban")
     private double giaBan ;
+    @Column(name = "tong_gia")
+    private Double tongGia ;
+
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,

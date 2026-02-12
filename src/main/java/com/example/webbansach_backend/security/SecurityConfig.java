@@ -1,6 +1,6 @@
 package com.example.webbansach_backend.security;
 
-//import com.example.webbansach_backend.filter.AuthenticationFilter;
+import com.example.webbansach_backend.filter.AuthenticationFilter;
 import com.example.webbansach_backend.security.EndPoint;
 import com.example.webbansach_backend.service.UserService;
 import jakarta.servlet.Filter;
@@ -27,8 +27,8 @@ import java.util.Arrays;
 
 public class SecurityConfig {
 
-//    @Autowired
-//    private AuthenticationFilter authenticationFilter ;
+    @Autowired
+    private AuthenticationFilter authenticationFilter ;
 
     @Autowired
     private  UserService userService ;
@@ -56,9 +56,12 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, EndPoint.PUBLIC_GET_ENDPOINS).permitAll()
                         .requestMatchers(HttpMethod.POST , EndPoint.PUBLIC_POST_ENDPOINS ).permitAll()
-                        .requestMatchers(HttpMethod.GET , EndPoint.ADMIN_GET_ENDPOINS).hasAnyAuthority("ADMIN" , "STAFF" ,"USER")
+                        .requestMatchers(HttpMethod.GET , EndPoint.ADMIN_GET_ENDPOINS).hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.POST ,EndPoint.ADMIN_POST_ENDPOINS).hasAuthority("ADMIN")
-
+                        .requestMatchers(HttpMethod.GET , EndPoint.USER_GET_ENDPINTS).hasAnyAuthority("ADMIN" , "USER" , "STAFF")
+                        .requestMatchers(HttpMethod.DELETE, EndPoint.USER_DELETE_ENDPINTS).hasAnyAuthority("ADMIN" , "USER","STAFF")
+                        .requestMatchers(HttpMethod.POST, EndPoint.USER_POST_ENDPINTS).hasAnyAuthority("USER" , "ADMIN" , "STAFF")
+                        .requestMatchers(HttpMethod.PUT ,EndPoint.USER_PUT_ENDPINTS).hasAnyAuthority("ADMIN" , "USER" , "STAFF")
         );
         http.cors(cors->{
             cors.configurationSource(request -> {
@@ -70,9 +73,9 @@ public class SecurityConfig {
             });
         }) ;
 
-//
-//        http.addFilterBefore(authenticationFilter , UsernamePasswordAuthenticationFilter.class) ;
-//        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) ;
+
+        http.addFilterBefore(authenticationFilter , UsernamePasswordAuthenticationFilter.class) ;
+        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) ;
 //        http.authenticationProvider(daoAuthenticationProvider()) ;
         http.httpBasic(Customizer.withDefaults());
         http.csrf(csrf->csrf.disable());

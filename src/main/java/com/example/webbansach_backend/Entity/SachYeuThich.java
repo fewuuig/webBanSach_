@@ -13,15 +13,14 @@ public class SachYeuThich {
     @Column(name = "ma_sach_yeu_thich")
     private Long maSachYeuThich ;
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH , CascadeType.MERGE , CascadeType.PERSIST , CascadeType.REFRESH
-    })
+    @Column(name = "trang_thai_yeu_thich")
+    private boolean trangThaiYeuThich ;
+
+    @ManyToOne
     @JoinColumn(name = "ma_sach" , nullable = false)
     private Sach sach;
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH , CascadeType.MERGE , CascadeType.PERSIST , CascadeType.REFRESH
-    })
-    @JoinColumn(name = "ma_nguoi_dung")
+    @ManyToOne
+    @JoinColumn(name = "ma_nguoi_dung" , nullable = false)
     private NguoiDung nguoiDung ;
 }

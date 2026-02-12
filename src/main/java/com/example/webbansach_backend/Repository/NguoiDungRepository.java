@@ -7,6 +7,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 @RepositoryRestResource(path = "nguoi-dung")
 public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
     boolean existsByTenDangNhap(String tenDangNhap) ;
@@ -17,5 +20,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
     @Query("SELECT nd FROM NguoiDung nd " +
             "JOIN FETCH nd.danhSachQuyen " +
             "WHERE nd.tenDangNhap = :tenDangNhap")
-     NguoiDung findByTenDangNhap(@Param("tenDangNhap") String tenDangNhap) ;
+    Optional<NguoiDung> findByTenDangNhap(@Param("tenDangNhap") String tenDangNhap) ;
+
+
 }

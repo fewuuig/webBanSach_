@@ -1,0 +1,1 @@
+Create Unique Index idx_ten_dang_nhap ON nguoi_dung(ten_dang_nhap) ;

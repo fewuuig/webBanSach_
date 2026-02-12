@@ -1,2 +1,9 @@
-package com.example.webbansach_backend.dto;public class Logout {
+package com.example.webbansach_backend.dto;
+
+import lombok.Data;
+
+@Data
+public class Logout {
+    private String RefreshToken ;
+
 }

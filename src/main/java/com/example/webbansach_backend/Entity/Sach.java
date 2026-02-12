@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 
-import javax.naming.Name;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "sach")
@@ -69,4 +72,10 @@ public class Sach {
 
     @OneToMany(mappedBy = "sach" ,fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private List<SachYeuThich> danhSachSachYeuThich ;
+
+    @OneToMany(mappedBy = "sach" , fetch = FetchType.LAZY )
+    private List<GioHangSach> gioHangSaches ;
+    @OneToMany(mappedBy = "sach", cascade = CascadeType.ALL)
+    Set<MaGiamGiaSach> maGiamGiaSaches = new HashSet<>();
+
 }

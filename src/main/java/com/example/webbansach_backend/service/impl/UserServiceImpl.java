@@ -20,11 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class  UserServiceImpl implements UserService {
 
-
-
-
     private NguoiDungRepository nguoiDungRepository ;
-
     private QuyenRepository quyenRepository ;
     @Autowired
     public UserServiceImpl(NguoiDungRepository nguoiDungRepository , QuyenRepository quyenRepository){
@@ -34,12 +30,13 @@ public class  UserServiceImpl implements UserService {
 
     @Override
     public NguoiDung findByUsername(String tenDangNhap) {
-        return null;
+         return nguoiDungRepository.findByTenDangNhap(tenDangNhap)
+                 .orElseThrow(()->new RuntimeException("Không tìm thấy người dùng")) ;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(username) ;
+            NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(username).orElseThrow(()->new RuntimeException("Khôg tìm thấy người dùng")) ;
 
 
             if(nguoiDung == null) {

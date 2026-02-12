@@ -20,7 +20,7 @@ public class HinhThucGiaoHang {
     private String moTa ;
 
     @Column(name = "chi_phi_giao_hang")
-    private String chiPhiGiaoHang ;
+    private double chiPhiGiaoHang ;
 
     @OneToMany(mappedBy = "hinhThucGiaoHang" , fetch = FetchType.LAZY ,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,

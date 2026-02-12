@@ -1,0 +1,1 @@
+create index idx_ma_nguoi_dung on ma_giam_gia_nguoi_dung(ma_nguoi_dung) ;

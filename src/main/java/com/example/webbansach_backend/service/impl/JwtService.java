@@ -1,21 +1,28 @@
 package com.example.webbansach_backend.service.impl;
 
+import com.example.webbansach_backend.Entity.NguoiDung;
+import com.example.webbansach_backend.Entity.Quyen;
+import com.example.webbansach_backend.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 @Component
 public class JwtService {
+    @Autowired
+    private UserService userService ;
     // khóa bí mật
     private static final String SECRET_KEY = "8492384NNK34234234238084M234234KK23423MH4234LF4234" ;
 
@@ -23,6 +30,26 @@ public class JwtService {
     public String generateToken(String username){
         // tại nội dung payload của token
         Map<String , Object> claims = new HashMap<>() ;
+        claims.put("role" , true) ;
+        NguoiDung nguoiDung = userService.findByUsername(username) ;
+        List<Quyen> quyen = nguoiDung.getDanhSachQuyen() ;
+        boolean isAdmin = false ;
+        boolean isStaff = false ;
+        boolean isUser = false ;
+        for(Quyen q : quyen){
+            if(q.getTenQuyen().equals("ADMIN")){
+                isAdmin = true ;
+            }
+            if(q.getTenQuyen().equals("STAFF")){
+                isStaff = true ;
+            }
+            if(q.getTenQuyen().equals("USER")){
+                isUser = true ;
+            }
+        }
+        claims.put("isAdmin" , isAdmin) ;
+        claims.put("isStaff" , isStaff) ;
+        claims.put("isUser" ,isUser) ;
 
         return createToken(claims , username ) ;
     }
@@ -31,7 +58,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 100000L * 60 * 60 * 1000) )
+                .setExpiration(new Date(System.currentTimeMillis() + 30*60 *1000) )
                 .signWith(SignatureAlgorithm.HS256 , getSignKey())
                 .compact() ;
     }
@@ -71,7 +98,7 @@ public class JwtService {
     // kiêmr tra tínhd hợp lệ đăng nhập
     public Boolean validateToken(String token , UserDetails userDetails){
         String username = extractUsername(token) ;
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token)) ;
+        return (username.equals(userDetails.getUsername())) ;
     }
 
 

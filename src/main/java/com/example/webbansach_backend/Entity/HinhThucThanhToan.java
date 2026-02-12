@@ -22,9 +22,6 @@ public class HinhThucThanhToan {
     @Column(name = "chi_phi_thanh_toan")
     private double chiPhiThanhToan ;
 
-    @OneToMany(mappedBy ="hinhThucThanhToan" ,fetch = FetchType.LAZY , cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,
-            CascadeType.PERSIST , CascadeType.REFRESH
-    })
+    @OneToMany(mappedBy ="hinhThucThanhToan" ,fetch = FetchType.LAZY)
     private List<DonHang> danhSachDonHang ;
 }

@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class sachController {
     @Autowired
     private SachRepository sachRepository ;
-    @PostMapping("/sach")
+    @PostMapping("/them-sach")
     private ResponseEntity themSach(@RequestBody Sach sach){
         if(sach!=null){
             sachRepository.save(sach) ;
-            return ResponseEntity.badRequest().body("ok") ;
+            System.out.println("Thêm sách thành công");
+            return ResponseEntity.ok("ok") ;
+
         }else {
             return ResponseEntity.badRequest().body("Loi") ;
         }
