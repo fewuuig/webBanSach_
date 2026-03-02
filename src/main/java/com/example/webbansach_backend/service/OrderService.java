@@ -10,7 +10,7 @@ import java.util.Set;
 
 public interface OrderService {
     void placeOrderFromCart(String tenDangNhap , DatHangFromCartRequestDTO datHangFromCartRequestDTO) ;
-    public void placeOder(String tenDangNhap , DatHangRequestDTO datHangRequestDTO) ;
+    public void placeOder( String tenDangNhap , DatHangRequestDTO datHangRequestDTO) ;
     void capNhatTrangThaiDonHang(int maDonHang, TrangThaiGiaoHang trangThai) ;
     List<DonHangTrangThaiResponeDTO> getDonHangTheoTrangThai( String tenDangNhap,TrangThaiGiaoHang trangThaiGiaoHang);
     void thaoTacDonHang(String tenDangNhap , int maDonHang) ;

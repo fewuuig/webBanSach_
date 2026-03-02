@@ -1,23 +1,38 @@
 package com.example.webbansach_backend.service.impl;
 
 import com.example.webbansach_backend.Entity.*;
+import com.example.webbansach_backend.Enum.StatusLogOrder;
 import com.example.webbansach_backend.Enum.TrangThaiGiaoHang;
 import com.example.webbansach_backend.Repository.*;
 import com.example.webbansach_backend.dto.*;
 import com.example.webbansach_backend.exception.OutOfStockException;
 import com.example.webbansach_backend.service.CartService;
+import com.example.webbansach_backend.service.MaGiamGiaService;
 import com.example.webbansach_backend.service.OrderService;
+import com.example.webbansach_backend.utils.ParseJacksonUtil;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Range;
+import org.springframework.data.redis.connection.stream.*;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import reactor.core.publisher.Flux;
 
+import java.awt.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
 
 
 @Service
-@Transactional
+
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private GioHangSachRepository gioHangSachRepository ;
@@ -37,10 +52,19 @@ public class OrderServiceImpl implements OrderService {
     private DiaChiGiaoHangRepository diaChiGiaoHangRepository ;
     @Autowired
     private ModelMapper modelMapper ;
+    @Autowired
+    private RedisTemplate<String , Object> redisTemplate ;
+    @Autowired
+    private DefaultRedisScript<Long> stockOrder ;
+    @Autowired
+    private LogOrderRepository logOrderRepository ;
+    @Autowired
+    private MaGiamGiaService maGiamGiaService ;
 
     // đầu tiên phải check xem ngươiuf dùng có đơn hàng hay chưa . Nếu chưa có thì tạo mơi
     // đây là trường hợp đặt tất cả sản pphaamr trong giỏ hàng .
     @Override
+    @Transactional
     public void placeOrderFromCart(String tenDangNhap , DatHangFromCartRequestDTO datHangFromCartRequestDTO){
         GioHang gioHang = cartService.checkGioHang(tenDangNhap) ;
         if(gioHang.getGioHangSaches().isEmpty()) {
@@ -103,49 +127,42 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    @Override
-    public void placeOder(String tenDangNhap, DatHangRequestDTO datHangRequestDTO) {
-        DonHang donHang = new DonHang() ;
-        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
-        Sach sach = sachRepository.findByMaSach(datHangRequestDTO.getMaSach()).orElseThrow(()->new RuntimeException("Sách không tồn tại")) ;
-        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.findById(datHangRequestDTO.getMaHinhThucThanhToan()).orElseThrow(()->new RuntimeException("Không thấy HÌnh thức thamh toán")) ;
-        HinhThucGiaoHang hinhThucGiaoHang = hinhThucGiaoHangRepository.findById(datHangRequestDTO.getMaHinhThucGiaoHang()).orElseThrow(()->new RuntimeException("Không thấy HÌnh thức giao hàng")) ;
-        DiaChiGiaoHang diaChiGiaoHang = diaChiGiaoHangRepository.findById(datHangRequestDTO.getMaDiaChiGiaoHang()).orElseThrow(()->new RuntimeException("Không thấy địa chỉ giao hàng"));
 
-        String diaChi = diaChiGiaoHang.getSoNha() +","+ diaChiGiaoHang.getPhuongOrXa() +","+ diaChiGiaoHang.getQuanOrHuyen() +","+ diaChiGiaoHang.getTinhOrCity() ;
-        donHang.setNguoiDung(nguoiDung);
-        donHang.setNgayTao(LocalDateTime.now());
-        // chỗ này nên điều kiện nếu nó là hình thức giao hnagf nhanh  hay chậm ... thì mk sẽ cso cái phí giao hàng khác nhau
-        if(hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Giao hàng nhanh")
-                || hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Giao hàng tiết kiệm")
-                || hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Hỏa tốc") ){
-            donHang.setChiPhiGiaoHang(hinhThucGiaoHang.getChiPhiGiaoHang());
-        }
-        donHang.setTrangThai(TrangThaiGiaoHang.CHO_XAC_NHAN); // set trạng thaias đơn hàng , luacs đầu luôn là đang chờ xác nhận từ người bán
-        donHang.setHinhThucThanhToan(hinhThucThanhToan);
-        donHang.setHinhThucGiaoHang(hinhThucGiaoHang);
-        donHang.setDiaChiNhanHang(diaChi);
-        if(datHangRequestDTO.getSoLuong() > sach.getSoLuong()){
-            throw  new RuntimeException("Kho không đủ số lượng") ;
-        }else {
-            sach.setSoLuong(sach.getSoLuong() - datHangRequestDTO.getSoLuong());
-            ChiTietDonHang chiTietDonHang = new ChiTietDonHang() ;
-            chiTietDonHang.setDonHang(donHang);
-            chiTietDonHang.setSach(sach);
-            chiTietDonHang.setSoLuong(datHangRequestDTO.getSoLuong());
-            chiTietDonHang.setGiaBan(sach.getGiaBan()) ;
-            chiTietDonHang.setTongGia(sach.getGiaBan() * datHangRequestDTO.getSoLuong());
-            donHang.getDanhSachChiTietDonHang().add(chiTietDonHang) ;
-        }
-        donHangRepository.save(donHang) ;
+    // rào chắn chống truy cập quá mức vào DB
+    @Override
+    public void placeOder( String tenDangNhap,DatHangRequestDTO datHangRequestDTO) {
+        // keys
+        String key1 = "book:"+datHangRequestDTO.getMaSach() ;
+        String key2 = "order-stream" ;
+        List<String> keys = Arrays.asList(key1 , key2) ;
+
+        Long result = redisTemplate.execute(stockOrder ,keys ,
+                UUID.randomUUID().toString() ,
+                datHangRequestDTO.getSoLuong(),
+                datHangRequestDTO.getMaSach(),
+                datHangRequestDTO.getMaGiam() ,
+                datHangRequestDTO.getMaDiaChiGiaoHang(),
+                datHangRequestDTO.getMaHinhThucThanhToan() ,
+                datHangRequestDTO.getMaHinhThucGiaoHang(),
+                datHangRequestDTO.getTenDangNhap()
+        );
+
+        if(result == -1) throw  new RuntimeException("kho không tồn tại") ;
+        if(result == -2) throw  new RuntimeException("kho bị âm") ;
+        if(result == -4) throw  new RuntimeException("số lượng muốn mua phải là chữu số") ;
+        if(result == -3) throw  new RuntimeException("số lượng muốn mua phải laf số dương (klhoong được âm)") ;
+        if(result ==  0) throw  new RuntimeException("kho không đủ") ;
+
     }
 
     @Override
+    @Transactional
     public void capNhatTrangThaiDonHang(int maDonHang, TrangThaiGiaoHang trangThai){
         DonHang donHang = donHangRepository.findById(maDonHang).orElseThrow() ;
         donHang.setTrangThai(trangThai);
     }
     @Override
+    @Transactional
     public List<DonHangTrangThaiResponeDTO> getDonHangTheoTrangThai(String tenDangNhap , TrangThaiGiaoHang trangThaiGiaoHang) {
         List<DonHang> donHangs = donHangRepository.findByNguoiDung_TenDangNhapAndTrangThai( tenDangNhap, trangThaiGiaoHang) ;
 
@@ -168,6 +185,7 @@ public class OrderServiceImpl implements OrderService {
         return result ;
     }
     @Override
+    @Transactional
     public void thaoTacDonHang(String tenDangNhap , int maDonHang){
         DonHang donHang = donHangRepository.findByNguoiDung_TenDangNhapAndMaDonHang(tenDangNhap , maDonHang).orElseThrow(()->new RuntimeException("Don hàng không tồn tại")) ;
         if(donHang.getTrangThai().equals(TrangThaiGiaoHang.DA_HUY)){
@@ -194,6 +212,202 @@ public class OrderServiceImpl implements OrderService {
         }
 
     }
+    @PostConstruct
+    public void initOrderStream(){
+        try {
+            redisTemplate.opsForStream().createGroup("order-dead-letter" , ReadOffset.latest() , "order-dead-letter-group") ;
+            redisTemplate.opsForStream().createGroup("order-stream" , ReadOffset.latest() , "order-group") ;
+        }catch (Exception ignoreException){
+            // có rồi thì thôi .
+        }
+    }
+    @Transactional
+    @Scheduled(fixedDelay = 100)  //
+    public void consumeNewMessage(){
+        List<MapRecord<String , Object , Object>> messages = redisTemplate.opsForStream().read(
+                Consumer.from("order-group" , "consumer-1") ,
+                StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)) ,
+                StreamOffset.create("order-stream" , ReadOffset.lastConsumed())
+        ) ;
+
+        if(messages == null) return ;
+
+        // xử lý đơn hàng ở đây
+        messages.forEach(this::handleMessage);
+    }
+    @Scheduled(fixedDelay = 5000)
+    private void retryOrder(){
+        PendingMessagesSummary pendingMessagesSummary = redisTemplate.opsForStream().pending(
+                "order-stream" ,
+                "order-group"
+        ) ;
+        if(pendingMessagesSummary == null || pendingMessagesSummary.getTotalPendingMessages() == 0) return ;
+
+        PendingMessages pendingMessages = redisTemplate.opsForStream().pending(
+                "order-stream" ,
+                Consumer.from("order-group" , "consumer-1") ,
+                Range.unbounded() , 10
+        ) ;
+
+        for(PendingMessage pendingMessage : pendingMessages){
+            if(pendingMessage.getTotalDeliveryCount() >=10){
+                List<MapRecord<String , Object,Object>> claimed  = redisTemplate.opsForStream().claim(
+                        "order-stream" ,
+                        "order-group" ,
+                        "consumer-1" ,
+                        Duration.ofSeconds(10) ,
+                        pendingMessage.getId()
+                );
+                // lưu vào stream dead-letter để sưe lý sau
+                for(MapRecord<String , Object ,Object> message : claimed){
+                    redisTemplate.opsForStream()
+                            .add(StreamRecords.mapBacked(message.getValue()).withStreamKey("order-dead-letter")) ;
+                }
+                // ACK để xóa nó khỏi PEL của voucher-stream -> voucher-group
+                redisTemplate.opsForStream().acknowledge(
+                        "order-stream",
+                        "order-group" ,
+                        pendingMessage.getId()
+                );
+                continue;
+            }
+
+            if(pendingMessage.getElapsedTimeSinceLastDelivery().toSeconds() >= 10){
+                List<MapRecord<String , Object,Object>> claimed  = redisTemplate.opsForStream().claim(
+                        "order-stream" ,
+                        "order-group" ,
+                        "consumer-1" ,
+                        Duration.ofSeconds(10) ,
+                        pendingMessage.getId()
+                );
+
+               // xử lý message ở đây
+                claimed.forEach(this::handleMessage);
+            }
+
+        }
+    }
+    @Transactional
+    public void handleMessage(MapRecord<String , Object , Object> message ){
+        boolean exist = logOrderRepository.existsByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()));
+        // idempotent DB
+        if(exist){
+            redisTemplate.opsForStream().acknowledge("order-stream" , "order-group" , message.getId()) ;
+            return ;
+        }
+        processOrder(message); // nó sẽ chạy chung 1 transition với handleMessage chứ k chạy cái transis=tion của riêng nó .
+
+        LogOrder entity = new LogOrder() ;
+        entity.setCreateAt(LocalDateTime.now());
+        entity.setStatus(StatusLogOrder.PENDING);
+        entity.setVoucherID(Integer.parseInt(message.getValue().get("maGiam").toString())) ;
+        entity.setRequestId(message.getValue().get("request_id").toString()) ;
+        logOrderRepository.save(entity) ;
+
+        // chỉ khi thành công mới ACK
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        Integer maGiam =Integer.parseInt( message.getValue().get("maGiam").toString() );
+                        String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString()) ;
+                        String request_id = ParseJacksonUtil.toString(message.getValue().get("request_id").toString()) ;
+                        if(maGiam != null) maGiamGiaService.dungMaGiamGiaUser(tenDangNhap , maGiam ,request_id );
+                        redisTemplate.opsForStream().acknowledge("order-stream" ,"order-group" , message.getId()) ;
+                    }
+                }
+        );
+
+    }
+
+    public void processOrder(MapRecord<String , Object , Object> message) {
+        // Kiểm tra người dùng
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString())).orElseThrow() ;
+
+        // permisstic lock
+        Sach sach = sachRepository.findByIdForUpdate(Integer.parseInt(message.getValue().get("maSach").toString())).orElseThrow(()->new RuntimeException("Sách không tồn tại")) ;
+        if(sach.getSoLuong() < Integer.parseInt(message.getValue().get("soLuong").toString())){
+            throw  new RuntimeException("sách trong kho không đủ số lượng để bán") ;
+        }
+        sach.setSoLuong(sach.getSoLuong() - Integer.parseInt( message.getValue().get("soLuong").toString()));
+
+        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.findById(Integer.parseInt(message.getValue().get("maHinhThucThanhToan").toString())).orElseThrow(()->new RuntimeException("Không thấy HÌnh thức thamh toán")) ;
+        HinhThucGiaoHang hinhThucGiaoHang = hinhThucGiaoHangRepository.findById(Integer.parseInt(message.getValue().get("maHinhThucGiaoHang").toString())).orElseThrow(()->new RuntimeException("Không thấy HÌnh thức giao hàng")) ;
+        /// thiết lập địa chỉ giao hàng
+        DiaChiGiaoHang diaChiGiaoHang = diaChiGiaoHangRepository.findById(Integer.parseInt(message.getValue().get("maDiaChiGiaoHang").toString())).orElseThrow(()->new RuntimeException("Không thấy địa chỉ giao hàng"));
+        String diaChi = diaChiGiaoHang.getSoNha() +","+ diaChiGiaoHang.getPhuongOrXa() +","+ diaChiGiaoHang.getQuanOrHuyen() +","+ diaChiGiaoHang.getTinhOrCity() ;
+
+        // tạo đơn hàng
+        DonHang donHang = new DonHang() ;
+        donHang.setNguoiDung(nguoiDung);
+        donHang.setNgayTao(LocalDateTime.now());
+        // chỗ này nên điều kiện nếu nó là hình thức giao hnagf nhanh  hay chậm ... thì mk sẽ cso cái phí giao hàng khác nhau
+        if(hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Giao hàng nhanh")
+            || hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Giao hàng tiết kiệm")
+            || hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Hỏa tốc") )
+        {
+            donHang.setChiPhiGiaoHang(hinhThucGiaoHang.getChiPhiGiaoHang());
+        }
+        donHang.setTrangThai(TrangThaiGiaoHang.CHO_XAC_NHAN); // default = "CHO_XAC_NHAN"
+        donHang.setHinhThucThanhToan(hinhThucThanhToan);
+        donHang.setHinhThucGiaoHang(hinhThucGiaoHang);
+        donHang.setDiaChiNhanHang(diaChi);
 
 
+        // tạo chi tiết đơn và lưu vào DB
+        ChiTietDonHang chiTietDonHang = new ChiTietDonHang() ;
+        chiTietDonHang.setDonHang(donHang);
+        chiTietDonHang.setSach(sach);
+        chiTietDonHang.setSoLuong(Integer.parseInt( message.getValue().get("soLuong").toString()));
+        chiTietDonHang.setGiaBan(sach.getGiaBan()) ;
+        chiTietDonHang.setTongGia(sach.getGiaBan() * Integer.parseInt( message.getValue().get("soLuong").toString()));
+
+        donHang.getDanhSachChiTietDonHang().add(chiTietDonHang) ;
+        donHangRepository.save(donHang) ; // có thể bỏ cái này cx k sao .
+    }
+
+    @Transactional
+    @Scheduled(fixedDelay = 5000) // 5s bù kho một lần
+    public void compensateStockBook(){
+        List<MapRecord<String, Object, Object>> messages = redisTemplate.opsForStream().read(
+                Consumer.from("order-dead-letter-group", "consumer-1"),
+                StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)),
+                StreamOffset.create("order-dead-letter", ReadOffset.lastConsumed())
+        );
+        if (messages == null || messages.isEmpty()) return;
+
+        // lấy ra danh sách id voucher để check dưới DB rồi reconcicle
+        Set<Integer> idBooks = new HashSet<>() ;
+        for (MapRecord<String, Object, Object> message : messages) {
+            idBooks.add(Integer.parseInt(message.getValue().get("maSach").toString()));
+        }
+
+        List<Sach> saches = sachRepository.findByMaSachIn(idBooks) ;
+        if(saches == null) return ;
+
+        for(Sach sach : saches ){
+            Integer value = null ;
+            try {
+                 value = Integer.parseInt(redisTemplate.opsForValue().get("book:"+sach.getMaSach()).toString()) ;
+            }catch (NumberFormatException ex){
+                redisTemplate.opsForValue().set("book:"+sach.getMaSach() , sach.getSoLuong());
+                continue;
+            }
+
+            if(sach.getSoLuong() == value) continue;
+            else redisTemplate.opsForValue().set("book:"+sach.getMaSach() , sach.getSoLuong());
+        }
+
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        for (MapRecord<String, Object, Object> message : messages) {
+                            redisTemplate.opsForStream().acknowledge("order-dead-letter" , "order-dead-letter-group" , message.getId()) ;
+                        }
+                    }
+                }
+        );
+
+    }
 }

@@ -34,7 +34,7 @@ public class MaGiamGia {
     @Column(name = "so_luong")
     private int soLuong ;
 
-    @Column(name = "so_ma_da_dung")
+    @Column(name = "so_ma_da_dung" )
     private int soMaDaDung ;
     @Column(name = "giam_toi_da")
     private double giamToiDa ;

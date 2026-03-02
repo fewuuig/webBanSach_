@@ -36,6 +36,8 @@ public class EndPoint {
             "/don-hang/trang-thai/**",
             "cart/sach-dat-tu-gio-hang",
             "/tai-khoan/lay-thong-tin",
+            "/vouchers/user" ,
+            "/profile/info"
 
     } ;
     public  static final String[] USER_DELETE_ENDPINTS = {
@@ -47,10 +49,11 @@ public class EndPoint {
             "/order/place-order-from-cart",
             "/order/place-order",
             "/dia-chi/them-dia-chi-giao-hang" ,
-
+            "/vouchers/user/use-voucher/{maGiam}"
     } ;
     public  static final String[] USER_PUT_ENDPINTS = {
             "/don-hang/{maDonHang}/huy-don",
-            "/don-hang/{maDonHang}/dat-lai"
+            "/don-hang/{maDonHang}/dat-lai",
+            "/vouchers/update/{maGiam}"
     } ;
 }

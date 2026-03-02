@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RepositoryRestResource(path = "sach")
 public interface SachRepository extends JpaRepository<Sach,Integer> {
@@ -21,7 +22,7 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
      Page<Sach> findByTenSachContainingAndDanhSachTheLoai_MaTheLoai(@RequestParam("tenSach") String tenSach ,@RequestParam("maTheLoai") int maTheLoai ,Pageable pageable) ;
      Optional<Sach> findByMaSach(int maSach ) ;
      List<Sach> findByMaSachIn(List<Integer> danhSachMaSach) ;
-
+     List<Sach> findByMaSachIn(Set<Integer> danhSachMaSach) ;
      @Lock(LockModeType.PESSIMISTIC_WRITE)
      @Query("select s from Sach s where s.maSach = :maSach")
      Optional<Sach> findByIdForUpdate(@Param("maSach") int maSach) ;

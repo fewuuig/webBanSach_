@@ -23,7 +23,7 @@ public class PlaceOrderController {
     @PostMapping("/place-order")
     private ResponseEntity<?> placeOrder(@RequestBody DatHangRequestDTO datHangRequestDTO){
         String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName();
-        orderService.placeOder(tenDangNhap, datHangRequestDTO);
+        orderService.placeOder(  tenDangNhap,datHangRequestDTO);
         System.out.println("dat hang thanh cong");
         return ResponseEntity.ok("đặt hàng thành công") ;
     }

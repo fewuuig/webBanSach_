@@ -12,4 +12,5 @@ public interface MaGiamGiaService {
     MaGiamGiaUserResponeDTO getMaGiamGiaCuaNguoiDung(String tenDangNhap ) ;
     void capNhatMaGiamGiaSach(int maGiam , UpdateMaGiamGiaDTO updateMaGiamGiaDTO) ;
     void themMaGiamGia(MaGiamGiaRequestDTO maGiamGiaRequestDTO) ;
+    void dungMaGiamGiaUser(String tenDangNhap , int maGiam , String request_id) ;
 }

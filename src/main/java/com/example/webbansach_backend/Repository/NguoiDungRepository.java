@@ -22,5 +22,9 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
             "WHERE nd.tenDangNhap = :tenDangNhap")
     Optional<NguoiDung> findByTenDangNhap(@Param("tenDangNhap") String tenDangNhap) ;
 
-
+    @Query("SELECT nd FROM NguoiDung nd " +
+            "LEFT JOIN fetch nd.maGiamGiaNguoiDungs mggnd " +
+            "LEFT JOIN fetch mggnd.maGiamGia " +
+            "WHERE nd.tenDangNhap =: tenDangNhap")
+    Optional<NguoiDung> findByTenDangNhapFetchMaGiamNguoiDungAndMaGiam(@Param("tenDangNhap") String tenDangNhap) ;
 }
