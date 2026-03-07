@@ -2,6 +2,8 @@ package com.example.webbansach_backend.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
@@ -9,7 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "nguoi_dung")
 public class NguoiDung {

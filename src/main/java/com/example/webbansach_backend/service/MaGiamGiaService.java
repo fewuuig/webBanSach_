@@ -1,5 +1,6 @@
 package com.example.webbansach_backend.service;
 
+import com.example.webbansach_backend.Entity.MaGiamGia;
 import com.example.webbansach_backend.dto.MaGiamGiaRequestDTO;
 import com.example.webbansach_backend.dto.MaGiamGiaResponeDTO;
 import com.example.webbansach_backend.dto.MaGiamGiaUserResponeDTO;
@@ -13,4 +14,5 @@ public interface MaGiamGiaService {
     void capNhatMaGiamGiaSach(int maGiam , UpdateMaGiamGiaDTO updateMaGiamGiaDTO) ;
     void themMaGiamGia(MaGiamGiaRequestDTO maGiamGiaRequestDTO) ;
     void dungMaGiamGiaUser(String tenDangNhap , int maGiam , String request_id) ;
+    MaGiamGia getMaGiamGia(int maGiam) ;
 }

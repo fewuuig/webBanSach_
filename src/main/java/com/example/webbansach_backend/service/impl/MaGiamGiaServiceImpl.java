@@ -2,9 +2,7 @@
 package com.example.webbansach_backend.service.impl;
 
 import com.example.webbansach_backend.Entity.*;
-import com.example.webbansach_backend.Enum.DoiTuongApDungMa;
-import com.example.webbansach_backend.Enum.StatusLogOrder;
-import com.example.webbansach_backend.Enum.TrangThaiMaGiamGia;
+import com.example.webbansach_backend.Enum.*;
 import com.example.webbansach_backend.Repository.*;
 import com.example.webbansach_backend.dto.*;
 import com.example.webbansach_backend.exception.NotFoundException;
@@ -13,6 +11,7 @@ import com.example.webbansach_backend.exception.VoucherStateException;
 import com.example.webbansach_backend.mapper.MaGiamGiaMapper;
 import com.example.webbansach_backend.mapper.MaGiamGiaUserMapper;
 import com.example.webbansach_backend.service.MaGiamGiaService;
+import com.example.webbansach_backend.service.OrderService;
 import com.example.webbansach_backend.utils.ParseJacksonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +22,7 @@ import org.flywaydb.core.internal.util.JsonUtils;
 import org.hibernate.resource.transaction.backend.jta.internal.synchronization.RegisteredSynchronization;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -41,6 +41,7 @@ import javax.sound.midi.Soundbank;
 import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -66,9 +67,13 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
     @Autowired
     private MaGiamGiaUserMapper maGiamGiaUserMapper ;
     @Autowired
+    @Qualifier("stockVoucher")
     private DefaultRedisScript<Long> stockVoucher ;
     @Autowired
     private LogOrderRepository logOrderRepository ;
+    @Autowired
+    private DonHangRepository donHangRepository ;
+
     // chỗ này chú ý rằng nó sẽ có mã như 1 chuỗi ký tự . VD : "1,2,3" . khi lấy phải trùng y hệt "1,2,3" thì ms lấy đc .
     // "1" hay "2,3" cx k bao giừo lấy đc . vì nó có dạng chuỗi để so khớp cho nhanh nhất có thể
     @Cacheable(
@@ -340,6 +345,7 @@ public void updateVoucherStatusAuto(){
                         "voucher-group" ,
                         message.getId()
                 );
+                return ;
             }else if(status == StatusLogOrder.PENDING){
                 processVoucher(message);
                 exsist.get().setStatus(StatusLogOrder.CONFIRMED);
@@ -351,11 +357,15 @@ public void updateVoucherStatusAuto(){
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
+                        System.out.println("dùng mã giảm giá thành công .");
                         redisTemplate.opsForStream().acknowledge("voucher-stream", "voucher-group" , message.getId()) ;
                     }
                 }
         );
     }
+
+
+
 
     // nếu 2  consumer trở lên vẫn có thể dinh multiThread (stream cho phép )
 
@@ -367,7 +377,7 @@ public void updateVoucherStatusAuto(){
         MaGiamGia maGiamGia = maGiamGiaRepository.findByMaGiamForUpdate(maGiam).orElseThrow() ;
 
         if(maGiamGia.getTrangThaiMaGiamGia() == TrangThaiMaGiamGia.KHOA || maGiamGia.getTrangThaiMaGiamGia() == TrangThaiMaGiamGia.HET_HAN){
-            throw new RuntimeException("mã giảm giá "+message.getValue().get("voucherID").toString()+ " không còn hoạt động") ;
+            throw new VoucherStateException("mã giảm giá "+message.getValue().get("voucherID").toString()+ " không còn hoạt động") ;
         }
 
         Optional<MaGiamGiaNguoiDung> exsist = maGiamGiaNguoiDungRepository.findByMaGiamGia_MaGiamAndNguoiDung_TenDangNhap(maGiam,tenDangNhap);
@@ -394,6 +404,10 @@ public void updateVoucherStatusAuto(){
 
         maGiamGia.setSoMaDaDung(maGiamGia.getSoMaDaDung() + 1);
 
+        // set status đơn hàng
+        DonHang donHang = donHangRepository.findByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString())).orElseThrow(()-> new RuntimeException("không tìm thấy sách")) ;
+        donHang.setTrangThai(TrangThaiGiaoHang.DA_XAC_NHAN);
+
         TransactionSynchronizationManager.registerSynchronization(
                 new TransactionSynchronization() {
                     @Override
@@ -408,6 +422,7 @@ public void updateVoucherStatusAuto(){
 
     // xử lý những mã voucher bị dead-letter
     @Scheduled(fixedDelay = 6000)
+    @Transactional
     // sao 6s thì compensate
     void compensateVoucherInDeadLetter() {
         // lấy lên danh sách message(voucher cần compensate )
@@ -419,7 +434,7 @@ public void updateVoucherStatusAuto(){
         if (messages == null || messages.isEmpty()) return;
 
         // lấy ra danh sách id voucher để check dưới DB rồi reconcicle
-        List<Integer> idVouchers = new ArrayList<>();
+        Set<Integer> idVouchers = new HashSet<>();
         for (MapRecord<String, Object, Object> message : messages) {
             redisTemplate.opsForStream().acknowledge("voucher-dead-letter", "voucher-dead-letter-group", message.getId());
             idVouchers.add(Integer.parseInt(message.getValue().get("voucherID").toString()));
@@ -433,16 +448,20 @@ public void updateVoucherStatusAuto(){
             int redisStock = Integer.parseInt(redisTemplate.opsForValue().get(key).toString());
             if(redisStock == maGiamGia.getSoLuong() - maGiamGia.getSoMaDaDung()) continue;
             else redisTemplate.opsForValue().set(key ,  maGiamGia.getSoLuong() - maGiamGia.getSoMaDaDung());
-
         }
+
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        messages.forEach(message ->  redisTemplate.opsForStream().acknowledge("voucher-dead-letter", "voucher-dead-letter-group", message.getId()));
+                    }
+                }
+        );
     }
 
-
+    @Transactional
+    public MaGiamGia getMaGiamGia(int maGiam){
+        return maGiamGiaRepository.findByMaGiam(maGiam).orElseThrow();
+    }
 }
-
-// caching : jeets hợp nhièu anotation cache : cacheevict , cachable ....
-// cacheput : chạy method rồi cập nhậ` cache
-// unless : điều kiện sau khi chạy method : unless ="# " ,
-// condition : điều kiện trước , tùy vào từng @ để sử dùng phù phù hợp
-
-// compensate vopucher flow : voucher-dead-letter (stream riêng ) - reconcile worker (consumer)

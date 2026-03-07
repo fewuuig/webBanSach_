@@ -2,8 +2,11 @@ package com.example.webbansach_backend.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "gio_hang_sach")
 public class GioHangSach {

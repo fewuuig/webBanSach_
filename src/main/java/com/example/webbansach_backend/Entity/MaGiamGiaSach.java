@@ -2,12 +2,15 @@ package com.example.webbansach_backend.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "ma_giam_gia_sach")
-@Data
+@Getter
+@Setter
 public class MaGiamGiaSach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -17,8 +17,6 @@ import java.time.Duration;
 @Transactional
 public class ProfileUserServiceImpl implements ProfileUserService {
     @Autowired
-    private RedisScript<Long> redisScript ;
-    @Autowired
     private RedisTemplate<String,Object> redisTemplate ;
     @Autowired
     private NguoiDungRepository nguoiDungRepository ;
@@ -35,7 +33,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
 
         ProfileUserResponeDTO profileUserResponeDTO = profileUserMapper.toDTO(nguoiDung) ;
 
-        redisTemplate.opsForValue().set(key,profileUserResponeDTO , Duration.ofDays(5));
+        redisTemplate.opsForValue().set(key,profileUserResponeDTO , Duration.ofHours(12));
         return profileUserResponeDTO ;
     }
 }

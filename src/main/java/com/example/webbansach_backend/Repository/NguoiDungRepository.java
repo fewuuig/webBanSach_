@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.swing.text.html.Option;
 import java.util.Optional;
+import java.util.Set;
 
 @RepositoryRestResource(path = "nguoi-dung")
 public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
@@ -27,4 +28,11 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
             "LEFT JOIN fetch mggnd.maGiamGia " +
             "WHERE nd.tenDangNhap =: tenDangNhap")
     Optional<NguoiDung> findByTenDangNhapFetchMaGiamNguoiDungAndMaGiam(@Param("tenDangNhap") String tenDangNhap) ;
+    @Query("""
+          SELECT DISTINCT nd.tenDangNhap
+          FROM NguoiDung nd
+          JOIN  nd.danhSachQuyen q
+          WHERE q.tenQuyen = :tenQuyen
+    """)
+    Set<String> findAllUsernameManager(@Param("tenQuyen") String tenQuyen) ;
 }

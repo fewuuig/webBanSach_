@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class DatHangRequestDTO {
-    private String tenDangNhap ;
     private int maSach ;
-    private int maGiam ; // mới thêm caí này
+    private Integer maGiam ; // mới thêm caí này
     private int soLuong ;
     private int maDiaChiGiaoHang;
     private int maHinhThucThanhToan ;

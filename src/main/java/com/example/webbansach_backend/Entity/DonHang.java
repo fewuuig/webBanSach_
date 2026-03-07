@@ -3,13 +3,16 @@ package com.example.webbansach_backend.Entity;
 import com.example.webbansach_backend.Enum.TrangThaiGiaoHang;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Controller;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "don_hang")
 public class DonHang {
@@ -30,6 +33,12 @@ public class DonHang {
 
     @Column(name = "dia_chi_nhan_hang")
     private String diaChiNhanHang ;
+
+    @Column(name = "request_id")
+    private String requestId ;
+
+    @Column(name = "tong_gia")
+    private double tongGia ;
 
     @OneToMany(mappedBy = "donHang" , fetch = FetchType.LAZY ,
             cascade = CascadeType.ALL)

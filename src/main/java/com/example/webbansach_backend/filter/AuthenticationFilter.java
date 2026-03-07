@@ -30,6 +30,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         // cái này giúp khong cần đăng nhập lại sau mỗi request
         // sau khi xác minh xong nó sẽ lưu vào SecurtyContext
         // lấy heder từ client gửi về trong mỗi lần request , rồi tiến hnahf xác minh
+        if(request.getRequestURI().startsWith("/wc")){
+            filterChain.doFilter(request , response);
+            return ;
+        }
        try {
            String token = null ;
            String username = null ;

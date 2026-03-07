@@ -53,7 +53,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http ) throws Exception {
         http.authorizeHttpRequests(
                 configurer->configurer
-
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers(HttpMethod.GET, EndPoint.PUBLIC_GET_ENDPOINS).permitAll()
                         .requestMatchers(HttpMethod.POST , EndPoint.PUBLIC_POST_ENDPOINS ).permitAll()
                         .requestMatchers(HttpMethod.GET , EndPoint.ADMIN_GET_ENDPOINS).hasAnyAuthority("ADMIN")
@@ -62,13 +62,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, EndPoint.USER_DELETE_ENDPINTS).hasAnyAuthority("ADMIN" , "USER","STAFF")
                         .requestMatchers(HttpMethod.POST, EndPoint.USER_POST_ENDPINTS).hasAnyAuthority("USER" , "ADMIN" , "STAFF")
                         .requestMatchers(HttpMethod.PUT ,EndPoint.USER_PUT_ENDPINTS).hasAnyAuthority("ADMIN" , "USER" , "STAFF")
+                        .anyRequest().authenticated()
         );
         http.cors(cors->{
             cors.configurationSource(request -> {
                 CorsConfiguration corsConfig = new CorsConfiguration() ;
-                corsConfig.addAllowedOrigin("*");
-                corsConfig.setAllowedMethods(Arrays.asList("GET", "POST" , "PUT" , "DELETE"));
+                corsConfig.addAllowedOrigin("http://localhost:3000");
+                corsConfig.addAllowedMethod("*");
                 corsConfig.addAllowedHeader("*");
+                corsConfig.setAllowCredentials(true);
                 return corsConfig;
             });
         }) ;

@@ -2,13 +2,16 @@ package com.example.webbansach_backend.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "ma_giam_gia_nguoi_dung")
-@Data
+@Getter
+@Setter
 public class MaGiamGiaNguoiDung {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

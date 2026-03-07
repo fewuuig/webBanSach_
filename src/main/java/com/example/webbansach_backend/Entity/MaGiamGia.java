@@ -49,6 +49,11 @@ public class MaGiamGia {
     @Column(name = "ma_the_loai")
     private int maTheLoai ;
 
+    @Column(name = "phan_tram_giam")
+    private Double phanTramGiam ;
+
+    @Column(name = "tien_giam")
+    private Double tienGiam ;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "trang_thai_ma_giam_gia")

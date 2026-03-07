@@ -3,12 +3,15 @@ package com.example.webbansach_backend.Entity;
 import com.example.webbansach_backend.Enum.StatusLogOrder;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "log_order")
-@Data
+@Getter
+@Setter
 public class LogOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
