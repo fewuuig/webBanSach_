@@ -5,6 +5,7 @@ import com.example.webbansach_backend.Entity.Quyen;
 import com.example.webbansach_backend.Repository.NguoiDungRepository;
 import com.example.webbansach_backend.Repository.QuyenRepository;
 import com.example.webbansach_backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,6 +36,7 @@ public class  UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
             NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(username).orElseThrow(()->new RuntimeException("Khôg tìm thấy người dùng")) ;
 
@@ -48,6 +50,8 @@ public class  UserServiceImpl implements UserService {
     private Collection<? extends GrantedAuthority> rolesToAuthorities(Collection<Quyen> quyens){
         return quyens.stream().map(quyen->new SimpleGrantedAuthority(quyen.getTenQuyen())).collect(Collectors.toList()) ;
     }
+
+
 }
 
 

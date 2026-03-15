@@ -11,8 +11,9 @@ public class ParseJacksonUtil {
             return value ;
         }catch (Exception ex){
             System.out.println("quá trình chuyển đổi từ jackson sang String thuần bị sai");
+            throw new RuntimeException("loi trong qua trinh parse sang string thuan");
 
         }
-        return value ;
+
     }
 }

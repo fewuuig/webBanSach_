@@ -4,14 +4,17 @@ public class EndPoint {
     public static final String FRONT_END_ENDPOINS = "http://localhost:3000" ;
     public static final String[] PUBLIC_GET_ENDPOINS = {
             "/sach" ,
-           "/sach/**" ,
+            "/sach/**" ,
             "/hinh-anh" ,
             "/hinh-anh/**",
             "/nguoi-dung/search/existsByTenDangNhap",
             "/nguoi-dung/search/existsByEmail" ,
             "/tai-khoan/kich-hoat",
             "/sach/{maSach}/danhSachDanhGia",
-            "/danh-gia/{maSach}/danhSachDanhGia"
+            "/danh-gia/{maSach}/danhSachDanhGia" ,
+            "/books/**" ,
+            "/tai-khoan/check-username",
+            "/tai-khoan/check-email"
     };
     public static final String[] PUBLIC_POST_ENDPOINS = {
             "/tai-khoan/dang-ky",

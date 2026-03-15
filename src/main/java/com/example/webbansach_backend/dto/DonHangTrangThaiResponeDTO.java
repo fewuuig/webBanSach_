@@ -12,4 +12,5 @@ public class DonHangTrangThaiResponeDTO {
     private String diaChiNhanHang ;
     private TrangThaiGiaoHang trangThai ;
     List<SachTrongDonDTO> sachTrongDonDTOS ;
+    private double tongGia ;
 }

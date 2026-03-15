@@ -6,7 +6,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.PathResource;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.data.redis.core.script.ScriptExecutor;
 import org.springframework.security.core.userdetails.UserCache;
+
+import java.util.List;
 
 @Configuration
 public class RedisLuaConfig {
@@ -24,5 +27,18 @@ public class RedisLuaConfig {
         script.setResultType(Long.class);
         return script ;
     }
-
+    @Bean
+    public DefaultRedisScript<List> returnOrderTimeout(){
+        DefaultRedisScript<List> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/orderTimeout/orderTimeout.lua"));
+        script.setResultType(List.class);
+        return script ;
+    }
+    @Bean
+    public DefaultRedisScript<List> paginate(){
+        DefaultRedisScript<List> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/paginate/paginate.lua"));
+        script.setResultType(List.class);
+        return script ;
+    }
 }

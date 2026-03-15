@@ -1,3 +1,16 @@
+-- kiểm limit rate requets
+local limit = redis.call("INCR" , KEYS[3])
+
+if limit == 1 then
+	redis.call("EXPIRE" , KEYS[3] , 5) -- 5s giới hạn cho phép 1 request đối vưới 1 người
+end
+
+if limit >1 then
+	return -5 -- spam request quá số lần quy đinh
+end
+
+
+-- check kho
 local stock = redis.call("GET" , KEYS[1]) -- số lươngj sách conf lại trong kho
 
 if not stock then
@@ -21,6 +34,8 @@ end
 if tonumber(stock) < quantityBuy  then
 	return 0 -- kho không đủ
 end
+
+-- message
 redis.call("XADD" , KEYS[2] , "*" ,
           "request_id" ,ARGV[1] ,
           "tenDangNhap" ,ARGV[8],

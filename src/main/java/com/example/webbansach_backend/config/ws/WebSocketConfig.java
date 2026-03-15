@@ -25,7 +25,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private JwtService jwtService ;
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws/chat")
+        registry.addEndpoint("/ws")
                 .setAllowedOrigins("http://localhost:3000") // domain cho truy cập
                 .withSockJS() ;
     }
@@ -33,7 +33,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app") ; // cho client gửi lên app
-        registry.enableSimpleBroker("/topic" ,"/queue") ; // sv broadcasr xuống client
+        registry.enableSimpleBroker("/topic" ,"/queue") ; // sv broadcast xuống client
         registry.setUserDestinationPrefix("/user")  ;
     }
 

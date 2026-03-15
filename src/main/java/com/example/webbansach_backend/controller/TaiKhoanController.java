@@ -7,15 +7,13 @@ import com.example.webbansach_backend.dto.Logout;
 import com.example.webbansach_backend.dto.RefreshTokenRequestDTO;
 import com.example.webbansach_backend.security.JwtRespone;
 import com.example.webbansach_backend.security.LoginRequest;
-import com.example.webbansach_backend.service.DangKyService;
-import com.example.webbansach_backend.service.NguoiDungService;
-import com.example.webbansach_backend.service.RefreshTokenService;
-import com.example.webbansach_backend.service.UserService;
+import com.example.webbansach_backend.service.*;
 
 import com.example.webbansach_backend.service.impl.JwtService;
 import com.example.webbansach_backend.service.impl.RefreshTokenServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +40,8 @@ public class TaiKhoanController {
     private RefreshTokenService refreshTokenService ;
     @Autowired
     private NguoiDungService nguoiDungService ;
+    @Autowired
+    private AccountService accountService ;
     @CrossOrigin(origins = "*")
     @PostMapping("/dang-ky")
     private ResponseEntity<?> dangKy(@Validated @RequestBody NguoiDung nguoiDung){
@@ -97,4 +97,14 @@ public class TaiKhoanController {
         String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
         return ResponseEntity.ok(nguoiDungService.getThongTin(tenDangNhap)) ;
     }
+
+    @GetMapping("/check-username")
+    public ResponseEntity<?> checkUsername(@RequestParam("username") String username){
+         return ResponseEntity.ok(accountService.checkUsername(username));
+    }
+    @GetMapping("/check-email")
+    public ResponseEntity<?> checkEmail(@RequestParam("email") String email){
+          return ResponseEntity.ok(accountService.checkEmail(email) );
+    }
+
 }

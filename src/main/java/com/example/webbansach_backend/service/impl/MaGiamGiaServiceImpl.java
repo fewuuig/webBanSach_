@@ -103,7 +103,6 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
             maGiamGiaResponeDTOS.add(maGiamGiaResponeDTO) ;
         }
 
-
         return maGiamGiaResponeDTOS ;
 
     }
@@ -337,6 +336,8 @@ public void updateVoucherStatusAuto(){
     @Transactional
     public void handleMessage(MapRecord<String , Object , Object> message)  {
         Optional<LogOrder> exsist = logOrderRepository.findByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString())) ;
+
+        Integer maDonHang = null ;
         if(exsist.isPresent()){
             StatusLogOrder status =  exsist.get().getStatus() ;
             if(status == StatusLogOrder.CONFIRMED){
@@ -345,18 +346,23 @@ public void updateVoucherStatusAuto(){
                         "voucher-group" ,
                         message.getId()
                 );
+                redisTemplate.opsForZSet().remove("order_timeout_queue" , maDonHang) ;
                 return ;
             }else if(status == StatusLogOrder.PENDING){
-                processVoucher(message);
+                maDonHang = processVoucher(message);
                 exsist.get().setStatus(StatusLogOrder.CONFIRMED);
             }
 
         }else return ;
 
+        Integer finalMaDonHang = maDonHang;
         TransactionSynchronizationManager.registerSynchronization(
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
+                        // xóa khỏi danh sách quêue order timeout khi nó đã thành công xác thực đơn
+                        if(finalMaDonHang != null) redisTemplate.opsForZSet().remove("order_timeout_queue" , finalMaDonHang) ;
+
                         System.out.println("dùng mã giảm giá thành công .");
                         redisTemplate.opsForStream().acknowledge("voucher-stream", "voucher-group" , message.getId()) ;
                     }
@@ -369,7 +375,7 @@ public void updateVoucherStatusAuto(){
 
     // nếu 2  consumer trở lên vẫn có thể dinh multiThread (stream cho phép )
 
-    public void processVoucher(MapRecord<String , Object , Object> message){
+    public Integer processVoucher(MapRecord<String , Object , Object> message){
         String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("username").toString()) ;
         int maGiam = Integer.parseInt(message.getValue().get("voucherID").toString()) ;
 
@@ -383,7 +389,7 @@ public void updateVoucherStatusAuto(){
         Optional<MaGiamGiaNguoiDung> exsist = maGiamGiaNguoiDungRepository.findByMaGiamGia_MaGiamAndNguoiDung_TenDangNhap(maGiam,tenDangNhap);
         if(exsist.isPresent()){
             MaGiamGiaNguoiDung maGiamGiaNguoiDung = exsist.get() ;
-            if(maGiamGiaNguoiDung.getDaDung() == maGiamGiaNguoiDung.getLuotDungToiDa()) return ;
+            if(maGiamGiaNguoiDung.getDaDung() == maGiamGiaNguoiDung.getLuotDungToiDa()) return 0;
             exsist.get().setDaDung(maGiamGiaNguoiDung.getDaDung() + 1);
             maGiamGiaNguoiDungRepository.save(maGiamGiaNguoiDung) ;
 
@@ -400,7 +406,7 @@ public void updateVoucherStatusAuto(){
             maGiamGiaNguoiDungRepository.save(entity) ;
         }
 
-        if(maGiamGia.getSoMaDaDung() == maGiamGia.getSoLuong()) return ;
+        if(maGiamGia.getSoMaDaDung() == maGiamGia.getSoLuong()) return 0;
 
         maGiamGia.setSoMaDaDung(maGiamGia.getSoMaDaDung() + 1);
 
@@ -417,7 +423,7 @@ public void updateVoucherStatusAuto(){
                 }
         );
 
-
+        return donHang.getMaDonHang() ;
     }
 
     // xử lý những mã voucher bị dead-letter
