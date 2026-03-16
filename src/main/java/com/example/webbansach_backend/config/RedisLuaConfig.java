@@ -41,4 +41,11 @@ public class RedisLuaConfig {
         script.setResultType(List.class);
         return script ;
     }
+    @Bean
+    public DefaultRedisScript<Long>  stats(){
+        DefaultRedisScript<Long> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/stats/statOrder.lua"));
+        script.setResultType(Long.class);
+        return script ;
+    }
 }

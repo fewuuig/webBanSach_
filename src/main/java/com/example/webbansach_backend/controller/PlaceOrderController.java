@@ -3,6 +3,7 @@ import com.example.webbansach_backend.dto.DatHangFromCartRequestDTO;
 import com.example.webbansach_backend.dto.DatHangRequestDTO;
 
 import com.example.webbansach_backend.service.OrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,17 +15,17 @@ public class PlaceOrderController {
     @Autowired
     private OrderService orderService ;
 
-    @PostMapping("/place-order-from-cart")
-    private ResponseEntity<?> placeOrderFromCart(@RequestBody DatHangFromCartRequestDTO datHangFromCartRequestDTO){
-        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName();
-        orderService.placeOrderFromCart(tenDangNhap,datHangFromCartRequestDTO);
-        return ResponseEntity.ok("đặt hàng thành công") ;
-    }
+//    @PostMapping("/place-order-from-cart")
+//    private ResponseEntity<?> placeOrderFromCart(@RequestBody DatHangFromCartRequestDTO datHangFromCartRequestDTO){
+//        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName();
+//        orderService.placeOrderFromCart(tenDangNhap,datHangFromCartRequestDTO);
+//        return ResponseEntity.ok("đặt hàng thành công") ;
+//    }
     @PostMapping("/place-order")
-    private ResponseEntity<?> placeOrder(@RequestBody DatHangRequestDTO datHangRequestDTO){
+    private ResponseEntity<?> placeOrder(@RequestBody DatHangRequestDTO datHangRequestDTO) throws JsonProcessingException {
+        System.out.println(datHangRequestDTO.getItems());
         String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName();
         orderService.placeOder(  tenDangNhap,datHangRequestDTO);
-        System.out.println("dat hang thanh cong");
         return ResponseEntity.ok("đặt hàng thành công") ;
     }
 

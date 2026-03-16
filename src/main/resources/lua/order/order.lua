@@ -1,59 +1,115 @@
--- kiểm limit rate requets
-local limit = redis.call("INCR" , KEYS[3])
+-- KEYS
+-- KEYS[1] = order-stream
+-- KEYS[2] = rate limit key
+
+-- ARGV
+-- 1 request_id
+-- 2 items json
+-- 3 maGiam
+-- 4 maDiaChi
+-- 5 maThanhToan
+-- 6 maVanChuyen
+-- 7 tenDangNhap
+
+------------------------------------------------
+-- 1 rate limit
+------------------------------------------------
+
+local limit = redis.call("INCR", KEYS[2])
 
 if limit == 1 then
-	redis.call("EXPIRE" , KEYS[3] , 5) -- 5s giới hạn cho phép 1 request đối vưới 1 người
+    redis.call("EXPIRE", KEYS[2], 10)
 end
 
-if limit >1 then
-	return -5 -- spam request quá số lần quy đinh
+if limit > 1 then
+    return -5
 end
 
 
--- check kho
-local stock = redis.call("GET" , KEYS[1]) -- số lươngj sách conf lại trong kho
+------------------------------------------------
+-- 2 parse JSON
+------------------------------------------------
 
-if not stock then
-return -1 -- kho không tồn tại
-end
-if stock and tonumber(stock) then
-	if tonumber(stock) < 0  then
-		return -2 -- kho bị âm
-	end
-end
-local quantityBuy = tonumber(ARGV[2]) ;
-if not  quantityBuy then
-	return -4 -- sối lượng múa phải là chữ sóo (number)
-end
-if quantityBuy then
-	if quantityBuy <= 0 then
-		return -3 -- số lượng muốn mua khôing hợp lệ
-	end
+local items = cjson.decode(ARGV[2])
+
+-- fix double JSON
+if type(items) == "string" then
+    items = cjson.decode(items)
 end
 
-if tonumber(stock) < quantityBuy  then
-	return 0 -- kho không đủ
+if type(items) ~= "table" then
+    return -9
 end
 
--- message
-redis.call("XADD" , KEYS[2] , "*" ,
-          "request_id" ,ARGV[1] ,
-          "tenDangNhap" ,ARGV[8],
-          "maSach" ,ARGV[3] ,
-          "maGiam",ARGV[4] ,
-          "soLuong",ARGV[2] ,
-          "maDiaChiGiaoHang" ,ARGV[5]  ,
-          "maHinhThucThanhToan", ARGV[6],
-          "maHinhThucGiaoHang" ,ARGV[7]
-          )
-redis.call("DECRBY" , KEYS[1]  , quantityBuy )
-return 1 ;
--- ARGV[1] request_id
--- ARGV[2] số lượng muôns mua
--- ARGV[3] maSach
--- ARGV[4] maGiam
--- ARGV[2] soLuong
--- ARGV[5] maDiaChiGiaoHang
--- ARGV[6] maHinhThucThanhToan
--- ARGV[7] maHinhThucGiaoHang
--- ARGV[8] tenDangNhap
+
+------------------------------------------------
+-- 3 validate + check stock
+------------------------------------------------
+
+for _, item in ipairs(items) do
+
+    local maSach = tonumber(item["maSach"])
+    local soLuong = tonumber(item["soLuong"])
+
+    if not maSach or not soLuong then
+        return -9
+    end
+
+    if soLuong <= 0 then
+        return -3
+    end
+
+    local stockKey = "book:" .. maSach
+    local stock = redis.call("GET", stockKey)
+
+    if not stock then
+        return -1
+    end
+
+    stock = tonumber(stock)
+
+    if stock <= 0 then
+        return -2
+    end
+
+    if soLuong > stock then
+        return 0
+    end
+
+end
+
+
+------------------------------------------------
+-- 4 giảm kho
+------------------------------------------------
+
+for _, item in ipairs(items) do
+
+    local maSach = tonumber(item["maSach"])
+    local soLuong = tonumber(item["soLuong"])
+
+    local stockKey = "book:" .. maSach
+
+    redis.call("DECRBY", stockKey, soLuong)
+
+end
+
+
+------------------------------------------------
+-- 5 push order vào stream
+------------------------------------------------
+
+redis.call(
+    "XADD",
+    KEYS[1],
+    "*",
+    "request_id", ARGV[1],
+    "tenDangNhap", ARGV[7],
+    "items", ARGV[2],
+    "maGiam", ARGV[3],
+    "maDiaChiGiaoHang", ARGV[4],
+    "maHinhThucThanhToan", ARGV[5],
+    "maHinhThucGiaoHang", ARGV[6]
+)
+
+return 1

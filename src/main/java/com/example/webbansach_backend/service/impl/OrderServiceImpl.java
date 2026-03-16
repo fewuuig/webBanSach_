@@ -7,10 +7,14 @@ import com.example.webbansach_backend.Enum.TrangThaiGiaoHang;
 import com.example.webbansach_backend.Enum.TrangThaiMaGiamGia;
 import com.example.webbansach_backend.Repository.*;
 import com.example.webbansach_backend.dto.*;
+import com.example.webbansach_backend.dto.OrderItem;
 import com.example.webbansach_backend.exception.OutOfStockException;
 import com.example.webbansach_backend.exception.VoucherStateException;
 import com.example.webbansach_backend.service.*;
 import com.example.webbansach_backend.utils.ParseJacksonUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -28,6 +32,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import reactor.core.publisher.Flux;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,108 +74,46 @@ public class OrderServiceImpl implements OrderService {
     private ThongKeBanHangService thongKeBanHangService ;
     @Autowired
     private ReturnOrderTimeoutBatchService returnOrderTimeoutBatchService ;
+    @Autowired
+    @Qualifier("stats")
+    private DefaultRedisScript<Long>  stats ;
     @Override
-    @Transactional
-    public void placeOrderFromCart(String tenDangNhap , DatHangFromCartRequestDTO datHangFromCartRequestDTO){
-        GioHang gioHang = cartService.checkGioHang(tenDangNhap) ;
-        if(gioHang.getGioHangSaches().isEmpty()) {
-            throw new RuntimeException("Giỏ hàng chống!");
-        }
-        if(datHangFromCartRequestDTO.getDanhSachSanPhamDatHang().isEmpty()){
-            throw new RuntimeException("sản phẩm chọn hàng khồn hợp lệ") ;
-        }
-        // thiêts lập cho đơn hàng
-        HinhThucGiaoHang hinhThucGiaoHang = hinhThucGiaoHangRepository.findById(datHangFromCartRequestDTO.getMaHinhThucGiaoHang()).orElseThrow(()->new RuntimeException("Không thấy HÌnh thức giao hàng")) ;
-        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.findById(datHangFromCartRequestDTO.getMaHinhThucThanhToan()).orElseThrow(()->new RuntimeException("Không thấy HÌnh thức thamh toán")) ;
-        DiaChiGiaoHang diaChiGiaoHang = diaChiGiaoHangRepository.findById(datHangFromCartRequestDTO.getMaDiaChiGiaoHang()).orElseThrow(()->new RuntimeException("Không thấy địa chỉ giao hàng"));
-        String diaChi = diaChiGiaoHang.getSoNha() +","+ diaChiGiaoHang.getPhuongOrXa() +","+ diaChiGiaoHang.getQuanOrHuyen() +","+ diaChiGiaoHang.getTinhOrCity() ;
-        DonHang donHang = new DonHang() ;
-        donHang.setNguoiDung(gioHang.getNguoiDung());
-        donHang.setNgayTao(LocalDateTime.now());
-        donHang.setTrangThai(TrangThaiGiaoHang.CHO_XAC_NHAN);
-        if(hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Giao hàng nhanh")
-                || hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Giao hàng tiết kiệm")
-                || hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Hỏa tốc") ){
-            donHang.setChiPhiGiaoHang(hinhThucGiaoHang.getChiPhiGiaoHang());
-        }
-        donHang.setHinhThucGiaoHang(hinhThucGiaoHang);
-        donHang.setHinhThucThanhToan(hinhThucThanhToan);
-        donHang.setDiaChiNhanHang(diaChi);
-        // thiết lập cho cho tết đơn hàng
-
-        List<ChiTietDonHang> chiTietDonHangs = new ArrayList<>() ;
-        System.out.println("FE gửi : " + datHangFromCartRequestDTO.getDanhSachSanPhamDatHang());
-        System.out.println("BE có : " );
-        for(GioHangSach gioHangSach: gioHang.getGioHangSaches()){
-            System.out.print(gioHangSach.getMaGioHangSach() + " ");
-
-            if(datHangFromCartRequestDTO.getDanhSachSanPhamDatHang().contains(gioHangSach.getMaGioHangSach())){
-                Sach sach = sachRepository.findByIdForUpdate(gioHangSach.getSach().getMaSach()).orElseThrow(()-> new RuntimeException("không tìm thấy sách")) ;
-                if(gioHangSach.getSoLuong() > sach.getSoLuong()){
-                    throw new OutOfStockException("sốl lượng sách tồn kho không đủ")  ;
-                }
-                sach.setSoLuong(sach.getSoLuong() - gioHangSach.getSoLuong());
-                ChiTietDonHang chiTietDonHang = new ChiTietDonHang() ;
-                chiTietDonHang.setDonHang(donHang);
-                chiTietDonHang.setSach(sach);
-                chiTietDonHang.setSoLuong(gioHangSach.getSoLuong());
-                chiTietDonHang.setGiaBan(sach.getGiaBan()) ;
-                chiTietDonHang.setTongGia(gioHangSach.getSoLuong()*sach.getGiaBan());
-                chiTietDonHangs.add(chiTietDonHang) ;
-            }
-
-        }
-        if(chiTietDonHangs.isEmpty()){
-            throw new RuntimeException("Chọn sản phẩm đề đăth hàng") ;
-        }
-        donHang.setDanhSachChiTietDonHang(chiTietDonHangs);
-        donHangRepository.save(donHang) ;
-
-        // xử lý xóa sản phẩm khỏi giỏ hàng : chỗ này không xóa đơn lẻ vì nó đang đc quản lý bởi cha nên dù có xóa cx sẽ bị flush lại
-        Set<Long> ids = datHangFromCartRequestDTO.getDanhSachSanPhamDatHang() ; // lấy ra những cái cần xóa
-        // sau đó xóa theo điều kiên của collection.removeIf() ;
-        gioHang.getGioHangSaches().removeIf(gioHangSach -> ids.contains(gioHangSach.getMaGioHangSach())) ;
+    public void placeOrderFromCart(String tenDangNhap, DatHangFromCartRequestDTO datHangFromCartRequestDTO) throws JsonProcessingException {
 
     }
 
-
     // rào chắn chống truy cập quá mức vào DB
     @Override
-    public void placeOder( String tenDangNhap,DatHangRequestDTO datHangRequestDTO) {
+    public void placeOder( String tenDangNhap,DatHangRequestDTO datHangRequestDTO) throws JsonProcessingException {
         // sẽ két hợp với việc chjoongs spam API đối vs 1 user để k bị đặt hàng chùng - > trải nghiêm tệ đối với user
+
         // keys
-
-        String key1 = "book:"+datHangRequestDTO.getMaSach() ;
-        String key2 = "order-stream" ;
-        String key3 = "limit_rate_request:" + tenDangNhap ;
-        List<String> keys = Arrays.asList(key1 , key2 , key3) ;
-
+        ObjectMapper objectMapper = new ObjectMapper() ;
+        String itemJson = objectMapper.writeValueAsString(datHangRequestDTO.getItems()) ;
+        String key1 = "order-stream" ;
+        String key2 = "limit_rate_request:" + tenDangNhap ;
+        List<String> keys = Arrays.asList( key1 , key2) ;
         String request_id = UUID.randomUUID().toString() ;
-
         // sử lý đătj hàng mà không dùng mã giảm giá
         String maGiam = datHangRequestDTO.getMaGiam() == null ? "null": datHangRequestDTO.getMaGiam().toString() ;
-
         Long result = redisTemplate.execute(stockOrder ,keys ,
                 request_id,
-                datHangRequestDTO.getSoLuong(),
-                datHangRequestDTO.getMaSach(),
+                itemJson,
                 maGiam,
                 datHangRequestDTO.getMaDiaChiGiaoHang(),
                 datHangRequestDTO.getMaHinhThucThanhToan() ,
                 datHangRequestDTO.getMaHinhThucGiaoHang(),
                 tenDangNhap
         );
-
-
         if(result == -1) throw  new RuntimeException("kho không tồn tại") ;
         if(result == -2) throw  new RuntimeException("kho bị âm") ;
         if(result == -4) throw  new RuntimeException("số lượng muốn mua phải là chữu số") ;
         if(result == -3) throw  new RuntimeException("số lượng muốn mua phải laf số dương (klhoong được âm)") ;
         if(result ==  0) throw  new RuntimeException("kho không đủ") ;
         if(result == -5) throw  new RuntimeException(tenDangNhap + " Spam API quá số lần quy định") ;
+        if(result == -9) throw new RuntimeException("số lượng mua không hợp lệ") ;
         System.out.println("request : " + request_id);
     }
-
     @Override
     @Transactional
     public void capNhatTrangThaiDonHang(int maDonHang, TrangThaiGiaoHang trangThai){
@@ -203,6 +146,9 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     @Transactional
+    // chỗ này cần idempotent
+    // lock
+    // đây là moi trường đa luồng
     public void thaoTacDonHang(String tenDangNhap , int maDonHang){
         DonHang donHang = donHangRepository.findByNguoiDung_TenDangNhapAndMaDonHang(tenDangNhap , maDonHang).orElseThrow(()->new RuntimeException("Don hàng không tồn tại")) ;
         if(donHang.getTrangThai().equals(TrangThaiGiaoHang.DA_HUY)){
@@ -239,8 +185,8 @@ public class OrderServiceImpl implements OrderService {
         }
     }
     @Transactional
-    @Scheduled(fixedDelay = 100)  //
-    public void consumeNewMessage(){
+    @Scheduled(fixedDelay = 1000)  //
+    public void consumeNewMessage() throws JsonProcessingException {
         List<MapRecord<String , Object , Object>> messages = redisTemplate.opsForStream().read(
                 Consumer.from("order-group" , "consumer-1") ,
                 StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)) ,
@@ -250,11 +196,13 @@ public class OrderServiceImpl implements OrderService {
         if(messages == null) return ;
 
         // xử lý đơn hàng ở đây
-        messages.forEach(this::handleMessage);
+        for (MapRecord<String, Object, Object> message : messages) {
+            handleMessage(message);
+        }
     }
     @Scheduled(fixedDelay = 5000)
     @Transactional
-    public void retryOrder(){
+    public void retryOrder() throws JsonProcessingException {
 
         PendingMessagesSummary pendingMessagesSummary = redisTemplate.opsForStream().pending(
                 "order-stream" ,
@@ -269,7 +217,7 @@ public class OrderServiceImpl implements OrderService {
         ) ;
 
         for(PendingMessage pendingMessage : pendingMessages){
-            if(pendingMessage.getTotalDeliveryCount() >=3){
+            if(pendingMessage.getTotalDeliveryCount() >=5){
                 List<MapRecord<String , Object,Object>> claimed  = redisTemplate.opsForStream().claim(
                         "order-stream" ,
                         "order-group" ,
@@ -301,13 +249,15 @@ public class OrderServiceImpl implements OrderService {
                 );
 
                // xử lý message ở đây
-                claimed.forEach(this::handleMessage);
+                for (MapRecord<String, Object, Object> mapRecord : claimed) {
+                    handleMessage(mapRecord);
+                }
             }
 
         }
     }
     @Transactional
-    public void handleMessage(MapRecord<String , Object , Object> message ){
+    public void handleMessage(MapRecord<String , Object , Object> message ) throws JsonProcessingException {
         boolean exist = logOrderRepository.existsByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()));
         // idempotent DB
         if(exist){
@@ -351,7 +301,6 @@ public class OrderServiceImpl implements OrderService {
                             System.out.println("có vào khác null");
                             // push vào queue delay -> hoànd kho nếu k thể xá nhận đơn hang
                             returnOrderTimeoutBatchService.addOrderTimeout(maDonHang);
-
                             int value = Integer.parseInt(maGiam) ;
                             maGiamGiaService.dungMaGiamGiaUser(tenDangNhap , value ,request_id );
                         }
@@ -364,40 +313,30 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    public Integer processOrder(MapRecord<String , Object , Object> message) {
-        // Kiểm tra người dùng
+    public Integer processOrder(MapRecord<String , Object , Object> message) throws JsonProcessingException {
+        // Kiểm tra người dùng => choox nayf toi uu bang cach check tu redis nhu check ussername .
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString())).orElseThrow() ;
 
-        // permisstic lock
-        Sach sach = sachRepository.findByIdForUpdate(Integer.parseInt(message.getValue().get("maSach").toString())).orElseThrow(()->new RuntimeException("Sách không tồn tại")) ;
-        if(sach.getSoLuong() < Integer.parseInt(message.getValue().get("soLuong").toString())){
-            throw  new RuntimeException("sách trong kho không đủ số lượng để bán") ;
-        }
+        // parse json -> object List
+        String iteamJson = ParseJacksonUtil.toString(message.getValue().get("items").toString()) ;
+        ObjectMapper objectMapper = new ObjectMapper() ;
+        List<OrderItem>  items= objectMapper.readValue(iteamJson, new TypeReference<List<OrderItem>>(){});
 
-        // sử lý số lượng
-        Integer soLuong = null ;
-        try {
-            soLuong = Integer.parseInt( message.getValue().get("soLuong").toString()) ;
-        }catch (NumberFormatException ex){
-
-            System.out.println("số lượng mua không hợp lệ");
-            throw ex ;
-        }
-        sach.setSoLuong(sach.getSoLuong() - soLuong);
-
-        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.findById(Integer.parseInt(message.getValue().get("maHinhThucThanhToan").toString())).orElseThrow(()->new RuntimeException("Không thấy HÌnh thức thamh toán")) ;
-        HinhThucGiaoHang hinhThucGiaoHang = hinhThucGiaoHangRepository.findById(Integer.parseInt(message.getValue().get("maHinhThucGiaoHang").toString())).orElseThrow(()->new RuntimeException("Không thấy HÌnh thức giao hàng")) ;
-        /// thiết lập địa chỉ giao hàng
-        DiaChiGiaoHang diaChiGiaoHang = diaChiGiaoHangRepository.findById(Integer.parseInt(message.getValue().get("maDiaChiGiaoHang").toString())).orElseThrow(()->new RuntimeException("Không thấy địa chỉ giao hàng"));
-        String diaChi = diaChiGiaoHang.getSoNha() +","+ diaChiGiaoHang.getPhuongOrXa() +","+ diaChiGiaoHang.getQuanOrHuyen() +","+ diaChiGiaoHang.getTinhOrCity() ;
-
-        String  maGiam = ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()) ;
-
-        // tạo đơn hàng
+        // tạo dơn hàng
         DonHang donHang = new DonHang() ;
+        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.
+                findById(Integer.parseInt(message.getValue().get("maHinhThucThanhToan").toString())).
+                orElseThrow(()->new RuntimeException("Không thấy HÌnh thức thamh toán")) ;
+        HinhThucGiaoHang hinhThucGiaoHang = hinhThucGiaoHangRepository.
+                findById(Integer.parseInt(message.getValue().get("maHinhThucGiaoHang").toString())).
+                orElseThrow(()->new RuntimeException("Không thấy HÌnh thức giao hàng")) ;
+        DiaChiGiaoHang diaChiGiaoHang = diaChiGiaoHangRepository.
+                findById(Integer.parseInt(message.getValue().get("maDiaChiGiaoHang").toString())).
+                orElseThrow(()->new RuntimeException("Không thấy địa chỉ giao hàng"));
+        String diaChi = diaChiGiaoHang.getSoNha() +","+ diaChiGiaoHang.getPhuongOrXa() +","+ diaChiGiaoHang.getQuanOrHuyen() +","+ diaChiGiaoHang.getTinhOrCity() ;
         donHang.setNguoiDung(nguoiDung);
         donHang.setNgayTao(LocalDateTime.now());
-        // chỗ này nên điều kiện nếu nó là hình thức giao hnagf nhanh  hay chậm ... thì mk sẽ cso cái phí giao hàng khác nhau
+
         if(hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Giao hàng nhanh")
             || hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Giao hàng tiết kiệm")
             || hinhThucGiaoHang.getTenHinhThucGiaoHang().equals("Hỏa tốc") )
@@ -409,12 +348,36 @@ public class OrderServiceImpl implements OrderService {
         donHang.setHinhThucGiaoHang(hinhThucGiaoHang);
         donHang.setDiaChiNhanHang(diaChi);
         donHang.setRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()));
+        // mã giảm giá
+        String maGiam = ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()) ;
+        double totalPrice = 0 ;
+        int totalBook = 0 ;
+        // tạo chi tiết đơn hangf
+        for(OrderItem item : items){
+            if(item.getSoLuong() <= 0) throw new RuntimeException("số lượng muốn mua không hợp lệ") ;
+            Sach sach = sachRepository.findByIdForUpdate(item.getMaSach()).orElseThrow() ;
+            if(sach.getSoLuong() == 0 || sach.getSoLuong() < item.getSoLuong()){
+                throw new RuntimeException("số lượng sách trong kho không hợp lệ / số lượng muốn mua không hợp lệ") ;
+            }
+            // trừ DB
+            sach.setSoLuong(sach.getSoLuong() - item.getSoLuong());
+            // lên chi tiết cho dơn hàng
+            ChiTietDonHang chiTietDonHang = new ChiTietDonHang() ;
+            chiTietDonHang.setDonHang(donHang);
+            chiTietDonHang.setSach(sach);
+            chiTietDonHang.setSoLuong(item.getSoLuong());
+            chiTietDonHang.setGiaBan(sach.getGiaBan()) ;
+            chiTietDonHang.setTongGia(sach.getGiaBan() * item.getSoLuong());
+            donHang.getDanhSachChiTietDonHang().add(chiTietDonHang);
+            // tổng số sách
+            totalBook += item.getSoLuong() ;
+            //tiền mua sách
+            totalPrice = totalPrice + sach.getGiaBan()*item.getSoLuong() ;
+        }
 
-        // check giamr giá tiền đơn hàng
+        // giảm giá tiền
         if(maGiam.equals("null")){
-            System.out.println("nhảy vô null");
-
-            donHang.setTongGia(sach.getGiaBan());
+            donHang.setTongGia(totalPrice);
         }else {
             MaGiamGia maGiamGia =maGiamGiaService.getMaGiamGia(Integer.parseInt(maGiam)) ;
             if(maGiamGia.getTrangThaiMaGiamGia() == TrangThaiMaGiamGia.KHOA || maGiamGia.getTrangThaiMaGiamGia() == TrangThaiMaGiamGia.HET_HAN){
@@ -422,47 +385,30 @@ public class OrderServiceImpl implements OrderService {
             }
             donHang.setMaGiamGia(maGiamGia);
             if(maGiamGia.getLoaiMaGiamGia() == LoaiMaGiamGia.PHAN_TRAM){
-                if(sach.getGiaBan()*soLuong >= maGiamGia.getDonGiaTu()){
-                    double tienGiam = (double) (sach.getGiaBan() * soLuong * maGiamGia.getPhanTramGiam()) /100 ;
-                    if(tienGiam <= maGiamGia.getGiamToiDa()) donHang.setTongGia(sach.getGiaBan()*soLuong -  tienGiam );
-                    else if(tienGiam > maGiamGia.getGiamToiDa()) donHang.setTongGia(sach.getGiaBan()*soLuong -  maGiamGia.getGiamToiDa());
-                }else donHang.setTongGia(sach.getGiaBan());
+                if(totalPrice >= maGiamGia.getDonGiaTu()){
+                    double tienGiam =(totalPrice * maGiamGia.getPhanTramGiam())/100 ;
+                    if(tienGiam <= maGiamGia.getGiamToiDa()) donHang.setTongGia(totalPrice - tienGiam );
+                    else if(tienGiam > maGiamGia.getGiamToiDa()) donHang.setTongGia(totalPrice - maGiamGia.getGiamToiDa());
+                }else donHang.setTongGia(totalPrice);
             }else if(maGiamGia.getLoaiMaGiamGia() == LoaiMaGiamGia.TIEN){
-                double tienPhaiTra = sach.getGiaBan()*soLuong - maGiamGia.getTienGiam() ;
-                if(sach.getGiaBan() >= maGiamGia.getDonGiaTu()) donHang.setTongGia( tienPhaiTra < 0 ? 0 : tienPhaiTra );
-                else if(sach.getGiaBan() < maGiamGia.getDonGiaTu()) donHang.setTongGia(sach.getGiaBan()*soLuong);
+                double tienPhaiTra = totalPrice - maGiamGia.getTienGiam() ;
+                if(totalPrice >= maGiamGia.getDonGiaTu()) donHang.setTongGia( tienPhaiTra < 0 ? 0 : tienPhaiTra );
+                else if(totalPrice < maGiamGia.getDonGiaTu()) donHang.setTongGia(totalPrice);
             }
         }
 
-        // tạo chi tiết đơn và lưu vào DB
-        ChiTietDonHang chiTietDonHang = new ChiTietDonHang() ;
-        chiTietDonHang.setDonHang(donHang);
-        chiTietDonHang.setSach(sach);
-        chiTietDonHang.setSoLuong(soLuong);
-        chiTietDonHang.setGiaBan(sach.getGiaBan()) ;
-        chiTietDonHang.setTongGia(sach.getGiaBan() * soLuong);
+        // thống kê doanh số bán hàng
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd") ;
+        String key = "stats:"+ LocalDateTime.now().format(dateTimeFormatter) ;
+        redisTemplate.execute(stats , Arrays.asList(key) , 1 , totalBook , donHang.getTongGia()) ;
 
-        donHang.getDanhSachChiTietDonHang().add(chiTietDonHang) ;
-        donHangRepository.save(donHang) ; // có thể bỏ cái này cx k sao .
-
-        // stats : thống kê doanh số : // chấp nhận sai số
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd") ;
-        String key = "stats:" + LocalDateTime.now().format(format) ;
-        redisTemplate.opsForHash().increment(key , "orders" , 1) ;
-        redisTemplate.opsForHash().increment(key , "books" ,Integer.parseInt(message.getValue().get("soLuong").toString())) ;
-        redisTemplate.opsForHash().increment(key , "revenue" ,donHang.getTongGia()) ;
-        // trường hơp không dunmgf mã giảm giá
-
-        if(maGiam.equals("null")){
-            System.out.println("nahyr vô null");
-            donHang.setTrangThai(TrangThaiGiaoHang.DA_XAC_NHAN);
-        }
         return donHang.getMaDonHang() ;
     }
 
     @Transactional
     @Scheduled(fixedDelay = 5000) // 5s bù kho một lần
-    public void compensateStockBook(){
+    public void compensateStockBook() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper() ;
 
         List<MapRecord<String, Object, Object>> messages = redisTemplate.opsForStream().read(
                 Consumer.from("order-dead-letter-group", "consumer-1"),
@@ -474,9 +420,40 @@ public class OrderServiceImpl implements OrderService {
         // lấy ra danh sách id voucher để check dưới DB rồi reconcicle
         Set<Integer> idBooks = new HashSet<>() ;
         for (MapRecord<String, Object, Object> message : messages) {
-            idBooks.add(Integer.parseInt(message.getValue().get("maSach").toString()));
+            String itemString = ParseJacksonUtil.toString(message.getValue().get("items").toString()) ;
+            List<OrderItem> items = objectMapper.readValue(itemString, new TypeReference<List<OrderItem>>() {}) ;
+            for(OrderItem item : items){
+                idBooks.add(item.getMaSach());
+            }
         }
-
+//        // check prnding
+//        PendingMessagesSummary pendingMessagesSummary = redisTemplate.opsForStream().pending(
+//                "order-dead-letter",
+//                "order-dead-letter-group"
+//        );
+//        if(pendingMessagesSummary.getTotalPendingMessages() !=0){
+//            PendingMessages pendingMessages = redisTemplate.opsForStream().pending(
+//                    "order-dead-letter",
+//                    Consumer.from("order-dead-letter-group" , "consumer-1"),
+//                    Range.unbounded() , 10
+//            ) ;
+//
+//            for(PendingMessage pendingMessage1 : pendingMessages){
+//                if(pendingMessage1.getTotalDeliveryCount())
+//                List<MapRecord<String,Object ,Object>> messageClaim = redisTemplate.opsForStream().claim(
+//                        "order-dead-letter" ,
+//                        "order-dead-letter-group",
+//                        "consumer-1" ,
+//                        Duration.ofSeconds(5) ,
+//                        pendingMessage1.getId()
+//                );
+//                for(MapRecord<String , Object , Object> message : messageClaim){
+//
+//                }
+//            }
+//
+//
+//        }
         List<Sach> saches = sachRepository.findByMaSachIn(idBooks) ;
         if(saches == null) return ;
 
@@ -488,7 +465,6 @@ public class OrderServiceImpl implements OrderService {
                 redisTemplate.opsForValue().set("book:"+sach.getMaSach() , sach.getSoLuong());
                 continue;
             }
-
             if(sach.getSoLuong() == value) continue;
             else redisTemplate.opsForValue().set("book:"+sach.getMaSach() , sach.getSoLuong());
             System.out.println("đã bù kho redis mã sach : " + sach.getMaSach());
@@ -505,6 +481,14 @@ public class OrderServiceImpl implements OrderService {
         );
 
     }
+    // 5 phút thử bù lại kho
+    @Transactional
+    @Scheduled(fixedDelay = 5000)
+    public void retryCompensateStockBook(){
+
+    }
+
+
 }
 
 
