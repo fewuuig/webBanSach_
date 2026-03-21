@@ -10,8 +10,10 @@ import com.example.webbansach_backend.dto.*;
 import com.example.webbansach_backend.dto.OrderItem;
 import com.example.webbansach_backend.exception.OutOfStockException;
 import com.example.webbansach_backend.exception.VoucherStateException;
+import com.example.webbansach_backend.mapper.DonHangMapper;
 import com.example.webbansach_backend.service.*;
 import com.example.webbansach_backend.utils.ParseJacksonUtil;
+import com.example.webbansach_backend.utils.TimeLogUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,10 +79,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     @Qualifier("stats")
     private DefaultRedisScript<Long>  stats ;
-    @Override
-    public void placeOrderFromCart(String tenDangNhap, DatHangFromCartRequestDTO datHangFromCartRequestDTO) throws JsonProcessingException {
-
-    }
+    @Autowired
+    private DonHangMapper donHangMapper ;
 
     // rào chắn chống truy cập quá mức vào DB
     @Override
@@ -112,33 +112,36 @@ public class OrderServiceImpl implements OrderService {
         if(result ==  0) throw  new RuntimeException("kho không đủ") ;
         if(result == -5) throw  new RuntimeException(tenDangNhap + " Spam API quá số lần quy định") ;
         if(result == -9) throw new RuntimeException("số lượng mua không hợp lệ") ;
-        System.out.println("request : " + request_id);
+        System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+"đặt đơn hàng");
+
     }
+    // tính năng của admin
     @Override
     @Transactional
     public void capNhatTrangThaiDonHang(int maDonHang, TrangThaiGiaoHang trangThai){
+
         DonHang donHang = donHangRepository.findById(maDonHang).orElseThrow() ;
         donHang.setTrangThai(trangThai);
     }
     @Override
     @Transactional
     public List<DonHangTrangThaiResponeDTO> getDonHangTheoTrangThai(String tenDangNhap , TrangThaiGiaoHang trangThaiGiaoHang) {
-
-        List<DonHang> donHangs = donHangRepository.findByNguoiDung_TenDangNhapAndTrangThai( tenDangNhap, trangThaiGiaoHang) ;
-
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
+        List<DonHang> donHangs = donHangRepository.findByNguoiDungAndTrangThai( nguoiDung, trangThaiGiaoHang) ;
+        if(donHangs == null ) return null ;
         List<DonHangTrangThaiResponeDTO> result = new ArrayList<>() ;
         for(DonHang donHang : donHangs){
-            DonHangTrangThaiResponeDTO donHangTrangThaiResponeDTO = modelMapper.map(donHang , DonHangTrangThaiResponeDTO.class) ;
-            List<ChiTietDonHang> chiTietDonHangs = donHang.getDanhSachChiTietDonHang() ;
-            List<SachTrongDonDTO> sachTrongDonDTOS = new ArrayList<>() ;
-            for(ChiTietDonHang chiTietDonHang : chiTietDonHangs){
-                SachTrongDonDTO sachTrongDonDTO = modelMapper.map(chiTietDonHang , SachTrongDonDTO.class) ;
-                sachTrongDonDTO.setMaSach(chiTietDonHang.getSach().getMaSach());
-                sachTrongDonDTO.setTenSach(chiTietDonHang.getSach().getTenSach());
-                sachTrongDonDTOS.add(sachTrongDonDTO) ;
-
+            DonHangTrangThaiResponeDTO donHangTrangThaiResponeDTO = modelMapper.map(donHang, DonHangTrangThaiResponeDTO.class) ;
+            donHangTrangThaiResponeDTO.setHoTen(nguoiDung.getHoDem() + nguoiDung.getTen());
+            donHangTrangThaiResponeDTO.setSoDienThoai(nguoiDung.getSoDienThoai());
+            List<SachTrongDonDTO> sachTrongDonDTO = new ArrayList<>() ;
+            for(ChiTietDonHang chiTietDonHang : donHang.getDanhSachChiTietDonHang()){
+                SachTrongDonDTO sachTrongDon = modelMapper.map(chiTietDonHang,SachTrongDonDTO.class) ;
+                sachTrongDon.setTenSach(chiTietDonHang.getSach().getTenSach());
+                sachTrongDon.setMaSach(chiTietDonHang.getSach().getMaSach());
+                sachTrongDonDTO.add(sachTrongDon) ;
             }
-            donHangTrangThaiResponeDTO.setSachTrongDonDTOS(sachTrongDonDTOS);
+            donHangTrangThaiResponeDTO.setSachTrongDonDTOS(sachTrongDonDTO);
             result.add(donHangTrangThaiResponeDTO) ;
 
         }
@@ -155,20 +158,24 @@ public class OrderServiceImpl implements OrderService {
 
 
             for(ChiTietDonHang chiTietDonHang : donHang.getDanhSachChiTietDonHang()){
-                Sach sach = sachRepository.findByMaSach(chiTietDonHang.getSach().getMaSach()).orElseThrow() ;
+                // lock
+                Sach sach = sachRepository.findByIdForUpdate(chiTietDonHang.getSach().getMaSach()).orElseThrow() ;
                 if(sach.getSoLuong() >= chiTietDonHang.getSoLuong()){
                     sach.setSoLuong(sach.getSoLuong() - chiTietDonHang.getSoLuong());
                 }else {
                     throw new RuntimeException("Số lượng sachs khòng đủ để đặt hàng") ;
                 }
             }
-            donHang.setTrangThai(TrangThaiGiaoHang.CHO_XAC_NHAN);
+            System.out.println("["+ TimeLogUtil.toTimeSystemLog() +"]"+" user:" + tenDangNhap +":đặt lại đơn hàng:"+maDonHang);
+            donHang.setTrangThai(TrangThaiGiaoHang.DA_XAC_NHAN);
         }else if(donHang.getTrangThai().equals(TrangThaiGiaoHang.CHO_XAC_NHAN)){
             List<ChiTietDonHang> chiTietDonHangs = donHang.getDanhSachChiTietDonHang() ;
             for(ChiTietDonHang chiTietDonHang : chiTietDonHangs){
-                Sach sach = sachRepository.findByMaSach(chiTietDonHang.getSach().getMaSach()).orElseThrow() ;
+                // lock
+                Sach sach = sachRepository.findByIdForUpdate(chiTietDonHang.getSach().getMaSach()).orElseThrow() ;
                 sach.setSoLuong(sach.getSoLuong() + chiTietDonHang.getSoLuong());
             }
+            System.out.println("["+ TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+":hủy đơn:"+maDonHang);
             donHang.setTrangThai(TrangThaiGiaoHang.DA_HUY);
         }else {
             throw new RuntimeException("khong thể thao tác với trạng thái này , thao tác không hợp lệ") ;
@@ -266,16 +273,12 @@ public class OrderServiceImpl implements OrderService {
         }
         Integer maDonHang =  processOrder(message); // nó sẽ chạy chung 1 transition với handleMessage chứ k chạy cái transis=tion của riêng nó .
 
-
         LogOrder entity = new LogOrder() ;
         entity.setCreateAt(LocalDateTime.now());
         String  maGiam = ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()) ;
-        System.out.println("ma giam la:"+maGiam);
         if(maGiam.equals("null")){  // trường hơp không dunmgf mã giảm giá
             entity.setStatus(StatusLogOrder.CONFIRMED);
         }else {
-
-
             entity.setStatus(StatusLogOrder.PENDING);
             entity.setVoucherID(Integer.parseInt(ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()))) ;
         }
@@ -287,26 +290,24 @@ public class OrderServiceImpl implements OrderService {
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        System.out.println("tạo đơn và log thành công");
-
-                        // gửi thống kê
-                        thongKeBanHangService.onStatsToday();
-
 
                         String maGiam = ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()) ;
                         String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString()) ;
                         String request_id = ParseJacksonUtil.toString(message.getValue().get("request_id").toString()) ;
 
                         if(!maGiam.equals("null")) {
-                            System.out.println("có vào khác null");
                             // push vào queue delay -> hoànd kho nếu k thể xá nhận đơn hang
                             returnOrderTimeoutBatchService.addOrderTimeout(maDonHang);
                             int value = Integer.parseInt(maGiam) ;
                             maGiamGiaService.dungMaGiamGiaUser(tenDangNhap , value ,request_id );
-                        }
 
+                            System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+":chờ xử lý mã giảm giá");
+                        }
+                        // gửi thống kê
+                        thongKeBanHangService.onStatsToday();
                         //ACK
                         redisTemplate.opsForStream().acknowledge("order-stream" ,"order-group" , message.getId()) ;
+                        if(maGiam.equals("null")) System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+":đặt đơn hàng thành công");
                     }
                 }
         );
@@ -402,6 +403,12 @@ public class OrderServiceImpl implements OrderService {
         String key = "stats:"+ LocalDateTime.now().format(dateTimeFormatter) ;
         redisTemplate.execute(stats , Arrays.asList(key) , 1 , totalBook , donHang.getTongGia()) ;
 
+        // nếu k mã giảm giá thì confirmd luôn
+        if(maGiam.equals("null")){
+            donHang.setTrangThai(TrangThaiGiaoHang.DA_XAC_NHAN);
+        }
+        // luwu don hang
+        donHangRepository.save(donHang) ;
         return donHang.getMaDonHang() ;
     }
 
@@ -426,34 +433,6 @@ public class OrderServiceImpl implements OrderService {
                 idBooks.add(item.getMaSach());
             }
         }
-//        // check prnding
-//        PendingMessagesSummary pendingMessagesSummary = redisTemplate.opsForStream().pending(
-//                "order-dead-letter",
-//                "order-dead-letter-group"
-//        );
-//        if(pendingMessagesSummary.getTotalPendingMessages() !=0){
-//            PendingMessages pendingMessages = redisTemplate.opsForStream().pending(
-//                    "order-dead-letter",
-//                    Consumer.from("order-dead-letter-group" , "consumer-1"),
-//                    Range.unbounded() , 10
-//            ) ;
-//
-//            for(PendingMessage pendingMessage1 : pendingMessages){
-//                if(pendingMessage1.getTotalDeliveryCount())
-//                List<MapRecord<String,Object ,Object>> messageClaim = redisTemplate.opsForStream().claim(
-//                        "order-dead-letter" ,
-//                        "order-dead-letter-group",
-//                        "consumer-1" ,
-//                        Duration.ofSeconds(5) ,
-//                        pendingMessage1.getId()
-//                );
-//                for(MapRecord<String , Object , Object> message : messageClaim){
-//
-//                }
-//            }
-//
-//
-//        }
         List<Sach> saches = sachRepository.findByMaSachIn(idBooks) ;
         if(saches == null) return ;
 

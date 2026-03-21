@@ -36,10 +36,32 @@ public class ThongKeBanHangServiceImpl implements ThongKeBanHangService {
         if(orders == null || books == null || revenue == null) return ;
 
         StatTodayDTO statTodayDTO = new StatTodayDTO();
+
         statTodayDTO.setRevenue(revenue);
         statTodayDTO.setOrders(orders);
         statTodayDTO.setBooks(books);
 
         messagingTemplate.convertAndSend("/topic/stats" , statTodayDTO);
+    }
+
+    @Override
+    public StatTodayDTO getStatToday() {
+        String key = "stats:" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        try {
+            orders = Integer.parseInt(redisTemplate.opsForHash().get(key, "orders").toString());
+            books = Integer.parseInt(redisTemplate.opsForHash().get(key, "books").toString());
+            revenue = Double.parseDouble(redisTemplate.opsForHash().get(key, "revenue").toString());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            throw ex;
+        }
+        if(orders == null || books == null || revenue == null) return null;
+
+        StatTodayDTO statTodayDTO = new StatTodayDTO();
+
+        statTodayDTO.setRevenue(revenue);
+        statTodayDTO.setOrders(orders);
+        statTodayDTO.setBooks(books);
+        return statTodayDTO ;
     }
 }

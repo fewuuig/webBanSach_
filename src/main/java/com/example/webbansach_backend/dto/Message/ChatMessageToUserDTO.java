@@ -1,4 +1,4 @@
-package com.example.webbansach_backend.dto;
+package com.example.webbansach_backend.dto.Message;
 
 import lombok.Getter;
 import lombok.Setter;

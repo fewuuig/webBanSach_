@@ -16,8 +16,9 @@ public class DonHangController {
     private OrderServiceImpl orderService ;
 
     @PutMapping("/{id}/trang-thai")
-    public ResponseEntity<?> capNhatTrangThaiGiaoHang(@PathVariable int id, @RequestBody TrangThaiDonHangRequestDTO capNhatTrangThaiRequestDTO){
-        orderService.capNhatTrangThaiDonHang(id , capNhatTrangThaiRequestDTO.getTrangThai());
+    public ResponseEntity<?> capNhatTrangThaiGiaoHang(@PathVariable int id, @RequestParam(value = "trangThai") TrangThaiGiaoHang trangThaiGiaoHang){
+        orderService.capNhatTrangThaiDonHang(id , trangThaiGiaoHang);
+        System.out.println(trangThaiGiaoHang);
         return ResponseEntity.noContent().build(); // trả về 204 update k cần trả về dữ liệu (status : 204) - success
     }
     @GetMapping("/trang-thai")

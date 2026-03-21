@@ -7,10 +7,12 @@ import java.util.List;
 
 @Data
 public class DonHangTrangThaiResponeDTO {
+    private String soDienThoai ;
+    private String hoTen ;
     private int maDonHang ;
     private double chiPhiGiaoHang ;
     private String diaChiNhanHang ;
     private TrangThaiGiaoHang trangThai ;
-    List<SachTrongDonDTO> sachTrongDonDTOS ;
     private double tongGia ;
+    List<SachTrongDonDTO> sachTrongDonDTOS ;
 }

@@ -10,4 +10,5 @@ public class ProfileUserResponeDTO {
     private  char gioiTinh ;
     private String hoDem ;
     private String ten ;
+    private String anhDaiDien ;
 }

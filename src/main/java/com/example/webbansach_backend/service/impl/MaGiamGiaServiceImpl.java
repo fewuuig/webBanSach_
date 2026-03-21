@@ -13,6 +13,7 @@ import com.example.webbansach_backend.mapper.MaGiamGiaUserMapper;
 import com.example.webbansach_backend.service.MaGiamGiaService;
 import com.example.webbansach_backend.service.OrderService;
 import com.example.webbansach_backend.utils.ParseJacksonUtil;
+import com.example.webbansach_backend.utils.TimeLogUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -151,7 +152,7 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
         String key2 = "voucher:user:"+maGiam+":"+tenDangNhap ; // key use đã dùng
         String key3 = "voucher-stream" ; // key stream
         List<String> keys= Arrays.asList(key1,key2,key3);
-        System.out.println(tenDangNhap);
+
         Long result = redisTemplate.execute(stockVoucher ,keys , maGiamGia.getGioiHanSoLuongDungUser() , maGiam , tenDangNhap , request_id);
         if(result == 0){
             throw new RuntimeException("kho không đủ") ;
@@ -171,6 +172,7 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
         if(result == -4) throw new RuntimeException("Dữ liệu không phải số") ;
         if(result == -5) throw new RuntimeException("dữ liệu userUsed lỗi") ;
         if(result == -6) throw new RuntimeException("ARGV lỗi") ;
+
     }
 
 @Caching(
@@ -360,11 +362,14 @@ public void updateVoucherStatusAuto(){
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
+                        String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("username").toString()) ;
+                        int maGiam = Integer.parseInt(message.getValue().get("voucherID").toString()) ;
                         // xóa khỏi danh sách quêue order timeout khi nó đã thành công xác thực đơn
                         if(finalMaDonHang != null) redisTemplate.opsForZSet().remove("order_timeout_queue" , finalMaDonHang) ;
 
-                        System.out.println("dùng mã giảm giá thành công .");
+                        System.out.println("["+ TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+":dùng mã giảm giá:"+maGiam);
                         redisTemplate.opsForStream().acknowledge("voucher-stream", "voucher-group" , message.getId()) ;
+                        System.out.println("["+ TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+":đặt hàng thành công");
                     }
                 }
         );
@@ -411,17 +416,9 @@ public void updateVoucherStatusAuto(){
         maGiamGia.setSoMaDaDung(maGiamGia.getSoMaDaDung() + 1);
 
         // set status đơn hàng
-        DonHang donHang = donHangRepository.findByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString())).orElseThrow(()-> new RuntimeException("không tìm thấy sách")) ;
+        DonHang donHang = donHangRepository.findByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()))
+                .orElseThrow(()-> new RuntimeException("không tìm thấy ddn hang")) ;
         donHang.setTrangThai(TrangThaiGiaoHang.DA_XAC_NHAN);
-
-        TransactionSynchronizationManager.registerSynchronization(
-                new TransactionSynchronization() {
-                    @Override
-                    public void afterCommit() {
-                        System.out.println("commit DB thành công ");
-                    }
-                }
-        );
 
         return donHang.getMaDonHang() ;
     }

@@ -6,6 +6,7 @@ import com.example.webbansach_backend.dto.ProfileUserResponeDTO;
 import com.example.webbansach_backend.mapper.ProfileUserMapper;
 import com.example.webbansach_backend.service.ProfileUserService;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -22,6 +23,8 @@ public class ProfileUserServiceImpl implements ProfileUserService {
     private NguoiDungRepository nguoiDungRepository ;
     @Autowired
     private ProfileUserMapper profileUserMapper ;
+    @Autowired
+    private ModelMapper modelMapper ;
     @Override
     public ProfileUserResponeDTO getProfileUser(String tenDangNhap) {
         String key = "profile:user:"+tenDangNhap ;
@@ -31,7 +34,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
         }
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
 
-        ProfileUserResponeDTO profileUserResponeDTO = profileUserMapper.toDTO(nguoiDung) ;
+        ProfileUserResponeDTO profileUserResponeDTO = modelMapper.map(nguoiDung , ProfileUserResponeDTO.class) ;
 
         redisTemplate.opsForValue().set(key,profileUserResponeDTO , Duration.ofHours(12));
         return profileUserResponeDTO ;

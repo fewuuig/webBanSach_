@@ -1,4 +1,4 @@
-package com.example.webbansach_backend.dto;
+package com.example.webbansach_backend.dto.Message;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;

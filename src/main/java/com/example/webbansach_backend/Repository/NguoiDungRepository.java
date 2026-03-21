@@ -49,4 +49,6 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
         FROM NguoiDung nd
     """)
     List<String> findAllUsername() ;
+    boolean existsByTenDangNhapIn(List<String> tenDangNhap) ;
+
 }

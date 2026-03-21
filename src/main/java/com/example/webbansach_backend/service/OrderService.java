@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface OrderService {
-    void placeOrderFromCart(String tenDangNhap , DatHangFromCartRequestDTO datHangFromCartRequestDTO) throws JsonProcessingException;
     public void placeOder( String tenDangNhap , DatHangRequestDTO datHangRequestDTO) throws JsonProcessingException;
     void capNhatTrangThaiDonHang(int maDonHang, TrangThaiGiaoHang trangThai) ;
     List<DonHangTrangThaiResponeDTO> getDonHangTheoTrangThai( String tenDangNhap,TrangThaiGiaoHang trangThaiGiaoHang);

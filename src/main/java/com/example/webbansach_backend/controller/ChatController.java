@@ -1,18 +1,14 @@
 package com.example.webbansach_backend.controller;
 
-import com.example.webbansach_backend.Entity.ChatMessage;
-import com.example.webbansach_backend.dto.ChatMessageToSupporterDTO;
-import com.example.webbansach_backend.dto.ChatMessageToUserDTO;
+import com.example.webbansach_backend.dto.Message.*;
 import com.example.webbansach_backend.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -24,33 +20,25 @@ public class ChatController {
     private SimpMessagingTemplate messagingTemplate ;
     @Autowired
     private ChatService chatService ;
-    // lấy lên danh sách các user : tenDangNhap , anhDaiDien , để làm danh sách chat
     @GetMapping("/chat/users")
     public ResponseEntity<?> getListUserChat(){
         return ResponseEntity.ok(chatService.getAllUser()) ;
     }
-    @MessageMapping("/chat.send-to-supporter")
-    public void sendMessageToSupport(ChatMessageToSupporterDTO message , Principal principal){
-        message.setTimestamp(LocalDateTime.now());
-        message.setSender(principal.getName());
-
-        // gưỉ đến tất cả supporter(Manager)
-        Set<String> usernameOfManager = chatService.getUsernameOfManager() ;
-        System.out.println(usernameOfManager.toString());
-        usernameOfManager.forEach(usernameManager->{
-            messagingTemplate.convertAndSendToUser(usernameManager , "/queue/support" , message);
-        });
-        messagingTemplate.convertAndSendToUser(principal.getName() , "/queue/support" , message);
+    @GetMapping("chat/list-users")
+    public ResponseEntity<?> getGetListUserChat2(){
+        return ResponseEntity.ok(chatService.getUserListChat()) ;
     }
-    @MessageMapping("/chat.send-to-user")
-    public void sendMessageToUser(ChatMessageToUserDTO message , Principal principal){
-        message.setTimestamp(LocalDateTime.now());
 
-        Set<String> usernameOfManager = chatService.getUsernameOfManager() ;
-        message.setSender(principal.getName());
-
-        messagingTemplate.convertAndSendToUser(message.getSendToUser() , "/queue/support" , message);
-        messagingTemplate.convertAndSendToUser(message.getSender() , "/queue/support" , message);
-
+    @MessageMapping("/chat/users/dm")
+    public ResponseEntity<?> insertDBAndSend(@RequestBody MessageRequestDTO messageRequestDTO){
+        chatService.insertDBAndSend(messageRequestDTO) ;
+        return ResponseEntity.noContent().build() ;
+    }
+    @GetMapping("chat/users/dm/messages")
+    public ResponseEntity<?> getMessageOfUser(@RequestParam("sender") String sender ,
+                                              @RequestParam("sendToUser") String sendToUser,
+                                              @RequestParam("page") int page ,
+                                              @RequestParam("size") int size){
+        return ResponseEntity.ok(chatService.getMessageOfUser(sender , sendToUser , page , size)) ;
     }
 }

@@ -32,7 +32,7 @@ end
 
 local items = cjson.decode(ARGV[2])
 
--- fix double JSON
+
 if type(items) == "string" then
     items = cjson.decode(items)
 end

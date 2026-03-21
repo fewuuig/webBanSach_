@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.modelmapper.internal.bytebuddy.matcher.FilterableList;
 
 import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
@@ -105,7 +106,11 @@ public class NguoiDung {
                 ", danhSachDonHang=" + danhSachDonHang +
                 '}';
     }
+    @OneToMany( mappedBy = "nguoiDung",fetch = FetchType.LAZY , cascade = {CascadeType.MERGE , CascadeType.DETACH ,CascadeType.PERSIST ,CascadeType.REFRESH})
+    private List<RoomNguoiDung> roomNguoiDungs = new ArrayList<>() ;
 
+    @OneToMany( mappedBy = "nguoiDung", fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+    private List<Message> messages = new ArrayList<>() ;
     public boolean getDaKiHoat() {
         return this.daKichHoat ;
     }

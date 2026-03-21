@@ -20,14 +20,16 @@ public class EndPoint {
             "/tai-khoan/dang-ky",
             "/tai-khoan/dang-nhap",
             "/tai-khoan/refresh-token",
-            "/tai-khoan/logout"
+            "/tai-khoan/logout" ,
+            "/chat/users/dm"
     };
     public static final String[] ADMIN_GET_ENDPOINS = {
             "/nguoi-dung" ,
             "/nguoi-dung/**"
     } ;
     public static final String[] ADMIN_POST_ENDPOINS = {
-            "/them-sach"
+            "/them-sach" ,
+            "/stats/statToday"
     } ;
     public  static final String[] USER_GET_ENDPINTS = {
             "/cart/view-cart",
@@ -41,7 +43,9 @@ public class EndPoint {
             "/tai-khoan/lay-thong-tin",
             "/vouchers/user" ,
             "/profile/info" ,
-            "/chat/users"
+            "/chat/list-users" ,
+            "chat/users",
+            "chat/users/dm/messages"
 
     } ;
     public  static final String[] USER_DELETE_ENDPINTS = {
@@ -59,6 +63,7 @@ public class EndPoint {
     public  static final String[] USER_PUT_ENDPINTS = {
             "/don-hang/{maDonHang}/huy-don",
             "/don-hang/{maDonHang}/dat-lai",
+            "/don-hang/{id}/trang-thai",
             "/vouchers/update/{maGiam}"
     } ;
 }

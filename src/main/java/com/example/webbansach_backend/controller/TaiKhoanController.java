@@ -39,8 +39,6 @@ public class TaiKhoanController {
     @Autowired
     private RefreshTokenService refreshTokenService ;
     @Autowired
-    private NguoiDungService nguoiDungService ;
-    @Autowired
     private AccountService accountService ;
     @CrossOrigin(origins = "*")
     @PostMapping("/dang-ky")
@@ -91,11 +89,6 @@ public class TaiKhoanController {
         refreshTokenService.delete(logout.getRefreshToken());
         System.out.println("Đăng xuất thành công");
         return ResponseEntity.ok("Đăng xuất thành công") ;
-    }
-    @GetMapping("/lay-thong-tin")
-    public ResponseEntity<?> getThongTintaiKhoan(){
-        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
-        return ResponseEntity.ok(nguoiDungService.getThongTin(tenDangNhap)) ;
     }
 
     @GetMapping("/check-username")

@@ -6,4 +6,5 @@ public interface ThongKeBanHangService {
     // sách bán trong ngày .
     // lợi nhuận tháng này
     void  onStatsToday() ;
+    StatTodayDTO getStatToday() ;
 }

@@ -10,5 +10,6 @@ import java.util.List;
 public class NguoiDungChatResponeDTO {
     private String tenDangNhap ;
     private String  anhDaiDien ;
+    private int roomId ;
 //    List<String> message
 }

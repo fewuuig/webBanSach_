@@ -41,45 +41,49 @@ public class BookServiceImpl implements BookService {
         return ids.stream().map(id ->keyInfo+id).toList() ;
     }
 
-
     @Override
-    public Page<BookResponeDTO> getBookKeyWordAndPageAndSize(String keyWord , int page ,int size ){
-        Page<Sach> pageResult = sachRepository.findByTenSachContaining(keyWord ,PageRequest.of(page,size, Sort.by("maSach").descending())) ;
-        System.out.println("cso nhảy vô đây");
-        // lấy nội dung từng quyển sách
-        List<Sach> saches = pageResult.getContent() ;
-
-        // lấy id sách
-        List<Integer> ids = saches.stream().map(Sach::getMaSach).toList() ;
-
-        // keys
-        // id : maSach
-        List<String> keys = new ArrayList<>() ;
-        for(Integer id : ids){
-            keys.add("book_inf:"+id) ;
-        }
-
-        // lấy hết sách từ cahe lên
-        List<BookResponeDTO> result = new ArrayList<>() ;
-        List<Object> caches= redisTemplate.opsForValue().multiGet(keys) ;
-
-        for(int i= 0; i< saches.size() ; i++){
-            Object cache =  caches.get(i) ;
-            if(cache != null){
-                result.add((BookResponeDTO) cache);
-            }else {
-                BookResponeDTO bookResponeDTO = bookMapper.toDTO(saches.get(i)) ;
-                redisTemplate.opsForValue().set(keys.get(i) ,bookResponeDTO , 30 , TimeUnit.MINUTES );
-                result.add(bookResponeDTO);
-            }
-        }
-
-        return new PageImpl<>(
-                result ,
-                PageRequest.of(page, size) ,
-                pageResult.getTotalElements()
-        );
+    public Page<BookResponeDTO> getBookKeyWordAndPageAndSize(String keyWord, int page, int size) {
+        return null;
     }
+
+    //    @Override
+//    public Page<BookResponeDTO> getBookKeyWordAndPageAndSize(String keyWord , int page ,int size ){
+//        Page<Sach> pageResult = sachRepository.findByTenSachContaining(keyWord ,PageRequest.of(page,size, Sort.by("maSach").descending())) ;
+//        System.out.println("cso nhảy vô đây");
+//        // lấy nội dung từng quyển sách
+//        List<Sach> saches = pageResult.getContent() ;
+//
+//        // lấy id sách
+//        List<Integer> ids = saches.stream().map(Sach::getMaSach).toList() ;
+//
+//        // keys
+//        // id : maSach
+//        List<String> keys = new ArrayList<>() ;
+//        for(Integer id : ids){
+//            keys.add("book_inf:"+id) ;
+//        }
+//
+//        // lấy hết sách từ cahe lên
+//        List<BookResponeDTO> result = new ArrayList<>() ;
+//        List<Object> caches= redisTemplate.opsForValue().multiGet(keys) ;
+//
+//        for(int i= 0; i< saches.size() ; i++){
+//            Object cache =  caches.get(i) ;
+//            if(cache != null){
+//                result.add((BookResponeDTO) cache);
+//            }else {
+//                BookResponeDTO bookResponeDTO = bookMapper.toDTO(saches.get(i)) ;
+//                redisTemplate.opsForValue().set(keys.get(i) ,bookResponeDTO , 30 , TimeUnit.MINUTES );
+//                result.add(bookResponeDTO);
+//            }
+//        }
+//
+//        return new PageImpl<>(
+//                result ,
+//                PageRequest.of(page, size) ,
+//                pageResult.getTotalElements()
+//        );
+//    }
     private Page<BookResponeDTO> getBookPage(int maTheLoai , int page , int size , String zKey , String keyBookInfo){
         // bắt đâyuf trang
         int start = page*size ;
@@ -106,7 +110,6 @@ public class BookServiceImpl implements BookService {
         for(Object bookDTO : cacheBooks){
             if(bookDTO != null ){
                 order.put(bookIdList.get(index) ,(BookResponeDTO) bookDTO) ;
-//                bookResponeDTOS.add((BookResponeDTO) book) ;
             }else {
                 idNotFind.add(bookIdList.get(index)) ; // chuyển sang string
             }
@@ -118,8 +121,6 @@ public class BookServiceImpl implements BookService {
             List<Sach> saches = sachRepository.findByMaSachIn(idNotFind) ;
 
             for(Sach sach : saches){
-//                BookResponeDTO bookResponeDTO = bookMapper.toDTO(sach) ;
-//                bookResponeDTOS.add(bookResponeDTO) ;
                 order.put(sach.getMaSach() ,bookMapper.toDTO(sach) ) ;
                 redisTemplate.opsForValue().set(keyBookInfo+ sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
             }
