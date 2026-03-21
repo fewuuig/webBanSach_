@@ -192,11 +192,9 @@ public class ChatServiceImpl implements ChatService {
             return listMessage ;
         }  ;
 
-        // lâý hết tin nhắn lên
+        // lâý hết tin nhắn của lên
         Page<Message> messages = messageRepository.findByRoom_RoomId(exists.get().getRoomId() ,
                                                    PageRequest.of(page -1 , size , Sort.by("createdAt").descending())) ;
-        // đảo tin nhắn về đúng thyuws tfuwjn tăng dần
-
 
         // convert message
         List<MessageResponeDTO> messageResponeDTO = new ArrayList<>() ;
