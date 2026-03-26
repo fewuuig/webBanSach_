@@ -6,14 +6,12 @@ import com.example.webbansach_backend.Entity.SachYeuThich;
 import com.example.webbansach_backend.Repository.NguoiDungRepository;
 import com.example.webbansach_backend.Repository.SachRepository;
 import com.example.webbansach_backend.Repository.SachYeuThichRepository;
-import com.example.webbansach_backend.controller.sachController;
 import com.example.webbansach_backend.dto.WishLoveDTO;
 import com.example.webbansach_backend.service.WishLoveService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

@@ -17,7 +17,8 @@ public class DonHangController {
 
     @PutMapping("/{id}/trang-thai")
     public ResponseEntity<?> capNhatTrangThaiGiaoHang(@PathVariable int id, @RequestParam(value = "trangThai") TrangThaiGiaoHang trangThaiGiaoHang){
-        orderService.capNhatTrangThaiDonHang(id , trangThaiGiaoHang);
+        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
+        orderService.capNhatTrangThaiDonHang(tenDangNhap ,id , trangThaiGiaoHang);
         System.out.println(trangThaiGiaoHang);
         return ResponseEntity.noContent().build(); // trả về 204 update k cần trả về dữ liệu (status : 204) - success
     }

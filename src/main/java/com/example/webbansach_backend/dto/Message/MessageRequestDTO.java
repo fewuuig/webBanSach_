@@ -11,4 +11,13 @@ public class MessageRequestDTO {
     private String content ;
     private String sender ;
     private String sendToUser ;
+
+    @Override
+    public String toString() {
+        return "MessageRequestDTO{" +
+                "content='" + content + '\'' +
+                ", sender='" + sender + '\'' +
+                ", sendToUser='" + sendToUser + '\'' +
+                '}';
+    }
 }

@@ -1,9 +1,7 @@
 package com.example.webbansach_backend.handler;
 
 import com.example.webbansach_backend.dto.ErrorResponeDTO;
-import com.example.webbansach_backend.exception.NotFoundException;
-import com.example.webbansach_backend.exception.OutOfStockException;
-import com.example.webbansach_backend.exception.VoucherStateException;
+import com.example.webbansach_backend.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,5 +27,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponeDTO> handleVoucherStateException(VoucherStateException ex){
         ErrorResponeDTO errorResponeDTO = new ErrorResponeDTO(ex.getMessage() , HttpStatus.CONFLICT.value(), System.currentTimeMillis()) ;
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponeDTO) ;
+    }
+    @ExceptionHandler(DuplicationDisableException.class)
+    public ResponseEntity<ErrorResponeDTO> handleDuplicationDisableException(DuplicationDisableException ex){
+        ErrorResponeDTO errorResponeDTO = new ErrorResponeDTO(ex.getMessage() , HttpStatus.CONFLICT.value() ,System.currentTimeMillis()) ;
+        return ResponseEntity.status(HttpStatus.CONFLICT.value()).body(errorResponeDTO);
+    }
+    @ExceptionHandler(DisableException.class)
+    public ResponseEntity<ErrorResponeDTO> handleDisableException(DisableException ex){
+        ErrorResponeDTO errorResponeDTO = new ErrorResponeDTO(ex.getMessage() , HttpStatus.CONFLICT.value() ,System.currentTimeMillis()) ;
+        return ResponseEntity.status(HttpStatus.CONFLICT.value()).body(errorResponeDTO);
     }
 }

@@ -29,7 +29,7 @@ public class Sach {
     private String tenTacGia ;
 
     @Column(name="isbn" , length = 256)
-    private String ISBN  ;
+    private String isbn  ;
 
     @Column(name="mo_ta" , columnDefinition = "TEXT")
     private String moTa ;
@@ -80,5 +80,7 @@ public class Sach {
     private List<GioHangSach> gioHangSaches ;
     @OneToMany(mappedBy = "sach", cascade = CascadeType.ALL)
     Set<MaGiamGiaSach> maGiamGiaSaches = new HashSet<>();
+    @OneToMany(mappedBy = "sach" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private List<SachTheLoai> sachTheLoais = new ArrayList<>() ;
 
 }

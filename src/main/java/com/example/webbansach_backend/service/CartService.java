@@ -1,5 +1,6 @@
 package com.example.webbansach_backend.service;
 
+import ch.qos.logback.core.model.INamedModel;
 import com.example.webbansach_backend.Entity.GioHang;
 import com.example.webbansach_backend.dto.AddToCartRequestDTO;
 import com.example.webbansach_backend.dto.ViewCartDTO;
@@ -16,4 +17,5 @@ public interface CartService {
     void clearBookFromCart(String tenDangNhap) ;
     GioHang checkGioHang(String tenDangNhap) ;
     List<ViewCartDTO> getSachDatTuGio( List<Long> danhSachSanPhamChon) ;
+    void deleteItemOrderFromCart( String tenDangNhap,Set<Long> ids ) ;
 }

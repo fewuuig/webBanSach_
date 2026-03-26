@@ -4,6 +4,7 @@ import com.example.webbansach_backend.Entity.NguoiDung;
 import com.example.webbansach_backend.Entity.Quyen;
 import com.example.webbansach_backend.Repository.NguoiDungRepository;
 import com.example.webbansach_backend.Repository.QuyenRepository;
+import com.example.webbansach_backend.exception.DisableException;
 import com.example.webbansach_backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,9 @@ import java.util.stream.Collectors;
 public class  UserServiceImpl implements UserService {
 
     private NguoiDungRepository nguoiDungRepository ;
-    private QuyenRepository quyenRepository ;
     @Autowired
     public UserServiceImpl(NguoiDungRepository nguoiDungRepository , QuyenRepository quyenRepository){
         this.nguoiDungRepository = nguoiDungRepository ;
-        this.quyenRepository = quyenRepository ;
     }
 
     @Override
@@ -38,13 +37,10 @@ public class  UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(username).orElseThrow(()->new RuntimeException("Khôg tìm thấy người dùng")) ;
+            NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(username).
+                    orElseThrow(()->new RuntimeException("Khôg tìm thấy người dùng")) ;
 
-
-            if(nguoiDung == null) {
-                throw new UsernameNotFoundException("User not found");
-            }
-
+            if(!nguoiDung.getDaKiHoat()) throw new DisableException("Tài khoản đã bị khóa") ;
             return new User(nguoiDung.getTenDangNhap() , nguoiDung.getMatKhau() , rolesToAuthorities(nguoiDung.getDanhSachQuyen()));
     }
     private Collection<? extends GrantedAuthority> rolesToAuthorities(Collection<Quyen> quyens){

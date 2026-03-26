@@ -25,12 +25,18 @@ public class EndPoint {
     };
     public static final String[] ADMIN_GET_ENDPOINS = {
             "/nguoi-dung" ,
-            "/nguoi-dung/**"
+            "/nguoi-dung/**",
+            "/profile/info/user-other"
     } ;
     public static final String[] ADMIN_POST_ENDPOINS = {
             "/them-sach" ,
-            "/stats/statToday"
+            "/stats/statToday",
+            "/book/add-new-book"
     } ;
+    public static final String[] ADMIN_PUT_ENDPOINS ={
+            "/tai-khoan/disable",
+    };
+
     public  static final String[] USER_GET_ENDPINTS = {
             "/cart/view-cart",
             "/wish-love/danh-sach-yeu-thich",

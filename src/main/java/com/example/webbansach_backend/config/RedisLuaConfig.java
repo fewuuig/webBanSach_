@@ -51,7 +51,7 @@ public class RedisLuaConfig {
     @Bean
     public DefaultRedisScript<Long> messageUserToUserMq(){
         DefaultRedisScript<Long> script = new DefaultRedisScript<>() ;
-        script.setLocation(new ClassPathResource("/lua/messageMQ/messageMQ.lua"));
+        script.setLocation(new ClassPathResource("/lua/message/messageMQ.lua"));
         script.setResultType(Long.class);
         return script ;
     }

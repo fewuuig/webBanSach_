@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface ChatService {
-    Set<String> getUsernameOfManager() ;
     List<NguoiDungChatResponeDTO> getAllUser() ;
-    void insertDBAndSend(MessageRequestDTO message) ;
-    List<MessageResponeDTO> getMessageOfUser(String sender , String sendToUser , int page , int szie) ;
     List<NguoiDungChatResponeDTO> getUserListChat();
 }

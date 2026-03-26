@@ -3,6 +3,7 @@ package com.example.webbansach_backend.service.impl;
 import com.example.webbansach_backend.Entity.NguoiDung;
 import com.example.webbansach_backend.Repository.NguoiDungRepository;
 import com.example.webbansach_backend.dto.ProfileUserResponeDTO;
+import com.example.webbansach_backend.exception.NotFoundException;
 import com.example.webbansach_backend.mapper.ProfileUserMapper;
 import com.example.webbansach_backend.service.ProfileUserService;
 import jakarta.transaction.Transactional;
@@ -32,7 +33,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
         if(cached != null){
             return cached ;
         }
-        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()->new NotFoundException("not find:"+tenDangNhap)) ;
 
         ProfileUserResponeDTO profileUserResponeDTO = modelMapper.map(nguoiDung , ProfileUserResponeDTO.class) ;
 

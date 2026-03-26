@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RepositoryRestResource(path = "sach")
 public interface SachRepository extends JpaRepository<Sach,Integer> {
@@ -33,4 +32,5 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
              "LEFT JOIN FETCH s.maGiamGiaSaches " +
              "WHERE s.maSach IN :danhSachMaSach ")
      List<Sach> findByMaSachInFetch(@Param("danhSachMaSach") List<Integer> danhSachMaSach) ;
+     boolean existsByIsbn(String isbn) ;
 }

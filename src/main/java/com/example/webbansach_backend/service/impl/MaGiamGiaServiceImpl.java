@@ -54,8 +54,6 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
     @Autowired
     private SachRepository sachRepository ;
     @Autowired
-    private ModelMapper modelMapper ;
-    @Autowired
     private MaGiamGiaNguoiDungRepository maGiamGiaNguoiDungRepository ;
     @Autowired
     private MaGiamGiaRepository maGiamGiaRepository ;
@@ -243,6 +241,7 @@ public void capNhatMaGiamGiaSach(int maGiam , UpdateMaGiamGiaDTO updateMaGiamGia
     }
 }
 
+// când xem lại chỗ này
 @Scheduled(cron ="0 * * * * ?" )
 @Transactional
 public void updateVoucherStatusAuto(){

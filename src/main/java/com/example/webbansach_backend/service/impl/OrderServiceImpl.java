@@ -40,13 +40,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 
 public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private GioHangSachRepository gioHangSachRepository ;
     @Autowired
     private CartService cartService ;
     @Autowired
@@ -76,17 +75,14 @@ public class OrderServiceImpl implements OrderService {
     private ThongKeBanHangService thongKeBanHangService ;
     @Autowired
     private ReturnOrderTimeoutBatchService returnOrderTimeoutBatchService ;
-    @Autowired
-    @Qualifier("stats")
-    private DefaultRedisScript<Long>  stats ;
-    @Autowired
-    private DonHangMapper donHangMapper ;
 
-    // rào chắn chống truy cập quá mức vào DB
+
+
+    // atomic
     @Override
+    @Transactional
     public void placeOder( String tenDangNhap,DatHangRequestDTO datHangRequestDTO) throws JsonProcessingException {
         // sẽ két hợp với việc chjoongs spam API đối vs 1 user để k bị đặt hàng chùng - > trải nghiêm tệ đối với user
-
         // keys
         ObjectMapper objectMapper = new ObjectMapper() ;
         String itemJson = objectMapper.writeValueAsString(datHangRequestDTO.getItems()) ;
@@ -114,14 +110,26 @@ public class OrderServiceImpl implements OrderService {
         if(result == -9) throw new RuntimeException("số lượng mua không hợp lệ") ;
         System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+"đặt đơn hàng");
 
+        // đặt thanhf công thì xóa khỏi giỏ hàng
+        Set<Long> ids = datHangRequestDTO.getDanhSachSanPhamChon() ;
+        cartService.deleteItemOrderFromCart(tenDangNhap , ids);
+
     }
     // tính năng của admin
     @Override
     @Transactional
-    public void capNhatTrangThaiDonHang(int maDonHang, TrangThaiGiaoHang trangThai){
+    public void capNhatTrangThaiDonHang( String tenDangNhap,int maDonHang, TrangThaiGiaoHang trangThai){
+        NguoiDung nguoiDung= nguoiDungRepository.findByTenDangNhap(tenDangNhap).
+                orElseThrow(()->new RuntimeException("NGuoi dung không tồn tại")) ;
+        nguoiDung.getDanhSachQuyen().forEach(quyen->{
+            if(quyen.getTenQuyen().equals("ADMIN") || quyen.getTenQuyen().equals("STAFF")){
+                DonHang donHang = donHangRepository.findById(maDonHang).orElseThrow() ;
+                donHang.setTrangThai(trangThai);
+                return ;
+            }
+        });
+        throw new RuntimeException("unauthirized:"+tenDangNhap) ;
 
-        DonHang donHang = donHangRepository.findById(maDonHang).orElseThrow() ;
-        donHang.setTrangThai(trangThai);
     }
     @Override
     @Transactional
@@ -149,18 +157,17 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     @Transactional
-    // chỗ này cần idempotent
-    // lock
-    // đây là moi trường đa luồng
+    // multithread
     public void thaoTacDonHang(String tenDangNhap , int maDonHang){
-        DonHang donHang = donHangRepository.findByNguoiDung_TenDangNhapAndMaDonHang(tenDangNhap , maDonHang).orElseThrow(()->new RuntimeException("Don hàng không tồn tại")) ;
+        int totalBook = 0 ;
+        DonHang donHang = donHangRepository.findByNguoiDung_TenDangNhapAndMaDonHang(tenDangNhap , maDonHang).
+                orElseThrow(()->new RuntimeException("Don hàng không tồn tại")) ;
         if(donHang.getTrangThai().equals(TrangThaiGiaoHang.DA_HUY)){
-
-
             for(ChiTietDonHang chiTietDonHang : donHang.getDanhSachChiTietDonHang()){
                 // lock
                 Sach sach = sachRepository.findByIdForUpdate(chiTietDonHang.getSach().getMaSach()).orElseThrow() ;
                 if(sach.getSoLuong() >= chiTietDonHang.getSoLuong()){
+                    totalBook =+ chiTietDonHang.getSoLuong() ;
                     sach.setSoLuong(sach.getSoLuong() - chiTietDonHang.getSoLuong());
                 }else {
                     throw new RuntimeException("Số lượng sachs khòng đủ để đặt hàng") ;
@@ -180,6 +187,15 @@ public class OrderServiceImpl implements OrderService {
         }else {
             throw new RuntimeException("khong thể thao tác với trạng thái này , thao tác không hợp lệ") ;
         }
+        int finalTotalBook = totalBook;
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        thongKeBanHangService.statWhenPlaceOrder(finalTotalBook,donHang);
+                    }
+                }
+        );
 
     }
     @PostConstruct
@@ -229,7 +245,7 @@ public class OrderServiceImpl implements OrderService {
                         "order-stream" ,
                         "order-group" ,
                         "consumer-1" ,
-                        Duration.ofSeconds(3) ,
+                        Duration.ofSeconds(5) ,
                         pendingMessage.getId()
                 );
                 // lưu vào stream dead-letter để sưe lý sau
@@ -263,7 +279,6 @@ public class OrderServiceImpl implements OrderService {
 
         }
     }
-    @Transactional
     public void handleMessage(MapRecord<String , Object , Object> message ) throws JsonProcessingException {
         boolean exist = logOrderRepository.existsByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()));
         // idempotent DB
@@ -290,11 +305,9 @@ public class OrderServiceImpl implements OrderService {
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-
                         String maGiam = ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()) ;
                         String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString()) ;
                         String request_id = ParseJacksonUtil.toString(message.getValue().get("request_id").toString()) ;
-
                         if(!maGiam.equals("null")) {
                             // push vào queue delay -> hoànd kho nếu k thể xá nhận đơn hang
                             returnOrderTimeoutBatchService.addOrderTimeout(maDonHang);
@@ -399,9 +412,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // thống kê doanh số bán hàng
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd") ;
-        String key = "stats:"+ LocalDateTime.now().format(dateTimeFormatter) ;
-        redisTemplate.execute(stats , Arrays.asList(key) , 1 , totalBook , donHang.getTongGia()) ;
+        thongKeBanHangService.statWhenPlaceOrder(totalBook ,donHang);
 
         // nếu k mã giảm giá thì confirmd luôn
         if(maGiam.equals("null")){
@@ -414,7 +425,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Scheduled(fixedDelay = 5000) // 5s bù kho một lần
-    public void compensateStockBook() throws JsonProcessingException {
+    public void compensateStockRedisBook() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper() ;
 
         List<MapRecord<String, Object, Object>> messages = redisTemplate.opsForStream().read(
@@ -460,13 +471,6 @@ public class OrderServiceImpl implements OrderService {
         );
 
     }
-    // 5 phút thử bù lại kho
-    @Transactional
-    @Scheduled(fixedDelay = 5000)
-    public void retryCompensateStockBook(){
-
-    }
-
 
 }
 

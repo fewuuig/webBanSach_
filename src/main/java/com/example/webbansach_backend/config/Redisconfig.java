@@ -2,6 +2,7 @@ package com.example.webbansach_backend.config;
 
 import com.example.webbansach_backend.dto.Message.MessageResponeDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,11 +44,29 @@ public class Redisconfig {
    public RedisTemplate<String , MessageResponeDTO> redisOperations(RedisConnectionFactory factory){
       ObjectMapper objectMapper = new ObjectMapper() ;
       objectMapper.registerModule(new JavaTimeModule()) ;
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
       Jackson2JsonRedisSerializer<MessageResponeDTO> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,MessageResponeDTO.class) ;
 
       RedisTemplate<String , MessageResponeDTO> template = new RedisTemplate<String, MessageResponeDTO>() ;
       template.setConnectionFactory(factory);
       template.setDefaultSerializer(serializer);
+      template.setValueSerializer(serializer);
+      template.setHashKeySerializer(new StringRedisSerializer());
+      template.setHashValueSerializer(new StringRedisSerializer());
+      template.setKeySerializer(new StringRedisSerializer());
+      return template ;
+   }
+   @Bean
+   public RedisTemplate<String , Object> redisOperationsObj(RedisConnectionFactory factory){
+      ObjectMapper objectMapper = new ObjectMapper() ;
+      objectMapper.registerModule(new JavaTimeModule()) ;
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // cấm không cho sang dạng nano (s)
+      Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,Object.class) ;
+
+      RedisTemplate<String , Object> template = new RedisTemplate<String, Object>() ;
+      template.setConnectionFactory(factory);
+      template.setDefaultSerializer(serializer);
+      template.setValueSerializer(serializer);
       template.setKeySerializer(new StringRedisSerializer());
       return template ;
    }
