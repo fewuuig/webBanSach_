@@ -54,8 +54,6 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
     @Autowired
     private SachRepository sachRepository ;
     @Autowired
-    private ModelMapper modelMapper ;
-    @Autowired
     private MaGiamGiaNguoiDungRepository maGiamGiaNguoiDungRepository ;
     @Autowired
     private MaGiamGiaRepository maGiamGiaRepository ;
@@ -190,7 +188,7 @@ public void themMaGiamGia(MaGiamGiaRequestDTO maGiamGiaRequestDTO){
     if(maGiamGiaRequestDTO.getDoiTuongApDungMa()== DoiTuongApDungMa.SACH){
         if(maGiamGiaRequestDTO.getDanhSachMaSach() != null && !maGiamGiaRequestDTO.getDanhSachMaSach().isEmpty() ){
             maGiamGiaRepository.save(maGiamGia) ;
-            List<Sach> saches = sachRepository.findByMaSachIn(maGiamGiaRequestDTO.getDanhSachMaSach()) ;
+            List<Sach> saches = sachRepository.findByMaSachInAndIsActive(maGiamGiaRequestDTO.getDanhSachMaSach() ,true) ;
             if(saches.isEmpty() || saches.size()!= maGiamGiaRequestDTO.getDanhSachMaSach().size()) throw new NotFoundException("Sách không tồn tại / thiếu sách") ;
             List<MaGiamGiaSach> maGiamGiaSaches = new ArrayList<>() ;
             for(Sach sach : saches ){
@@ -243,6 +241,7 @@ public void capNhatMaGiamGiaSach(int maGiam , UpdateMaGiamGiaDTO updateMaGiamGia
     }
 }
 
+// când xem lại chỗ này
 @Scheduled(cron ="0 * * * * ?" )
 @Transactional
 public void updateVoucherStatusAuto(){

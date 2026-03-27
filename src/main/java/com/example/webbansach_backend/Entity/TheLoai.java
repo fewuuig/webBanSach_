@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 @Getter
 @Setter
@@ -28,4 +29,7 @@ public class TheLoai {
             inverseJoinColumns = @JoinColumn(name = "ma_sach")
     )
     private List<Sach> danhSachQuyenSach ;
+    @OneToMany(mappedBy = "theLoai" , cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
+    private List<SachTheLoai> sachTheLoais = new ArrayList<>() ;
+
 }

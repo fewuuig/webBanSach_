@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TheLoaiRepository extends JpaRepository<TheLoai,Integer> {
     @EntityGraph( attributePaths="danhSachQuyenSach")
@@ -15,4 +16,6 @@ public interface TheLoaiRepository extends JpaRepository<TheLoai,Integer> {
           FROM TheLoai tl
      """ )
     List<TheLoai> findByTheLoai() ;
+
+    Optional<TheLoai> findByMaTheLoai(int maTheLoai) ;
 }

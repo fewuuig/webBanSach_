@@ -43,5 +43,16 @@ public class Message {
     private NguoiDung nguoiDung ;
 
 
-
+    @Override
+    public String toString() {
+        return "Message{" +
+                "messageId=" + messageId +
+                ", content='" + content + '\'' +
+                ", type=" + type +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", room=" + room +
+                ", nguoiDung=" + nguoiDung +
+                '}';
+    }
 }

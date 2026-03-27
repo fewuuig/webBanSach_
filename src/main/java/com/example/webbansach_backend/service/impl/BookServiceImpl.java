@@ -1,189 +1,184 @@
 package com.example.webbansach_backend.service.impl;
 
-import com.example.webbansach_backend.Entity.Sach;
-import com.example.webbansach_backend.Repository.SachRepository;
+import com.example.webbansach_backend.Entity.*;
+import com.example.webbansach_backend.Repository.*;
+import com.example.webbansach_backend.dto.book.AddBookRequestDTO;
 import com.example.webbansach_backend.dto.book.BookResponeDTO;
+import com.example.webbansach_backend.dto.book.BookUpdateDTO;
+import com.example.webbansach_backend.exception.NotFoundException;
 import com.example.webbansach_backend.mapper.BookMapper;
 import com.example.webbansach_backend.service.BookService;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.example.webbansach_backend.utils.CheckRoleUItil;
 import jakarta.transaction.Transactional;
+import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-// chống dame băngd rate limit
+
 @Service
 public class BookServiceImpl implements BookService {
-    @Autowired
-    private RedisTemplate<String , Object> redisTemplate ;
     @Autowired
     private SachRepository sachRepository ;
     @Autowired
     private BookMapper bookMapper ;
     @Autowired
+    private TheLoaiRepository theLoaiRepository ;
+    @Autowired
+    private SachTheLoaiRepository sachTheLoaiRepository ;
+    @Autowired
+    private HinhAnhRepository hinhAnhRepository ;
+    @Autowired
+    private RedisTemplate<String , Object> redisTemplate ;
+    @Autowired
+    private NguoiDungRepository nguoiDungRepository ;
+    @Autowired
     @Qualifier("paginate")
     private DefaultRedisScript<List> paginate ;
+    @Autowired
+    @Qualifier("addBook")
+    private DefaultRedisScript<Long> addBook ;
+    @Autowired
+    @Qualifier("deleteBook")
+    private DefaultRedisScript<Long> deleteBook ;
+    @Override
+    @Transactional
+    public void addNewBook( String tenDangNhap,AddBookRequestDTO addBookRequestDTO){
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).
+                orElseThrow(()->new RuntimeException("không đủ quyền để thực hiện tính năng này")) ;
+        if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("NGuoi dùng k đủ quyền để thêm sách") ;
 
+        boolean exists = sachRepository.existsByIsbn(addBookRequestDTO.getIsbn()) ;
+        if(exists) throw new RuntimeException("Sách đã tồn tại") ;
+
+        // tạo thực thể
+        Sach sachEntity = bookMapper.toEntity(addBookRequestDTO);
+        sachEntity.setActive(true);
+        // tìm thể loại
+        TheLoai theLoai = theLoaiRepository.findByMaTheLoai(addBookRequestDTO.getMaTheLoai()).
+                    orElseThrow(()-> new RuntimeException("Not find category:"+addBookRequestDTO.getMaTheLoai())) ;
+
+        // tạo thể sach loại
+        SachTheLoai sachTheLoai = new SachTheLoai() ;
+        sachTheLoai.setSach(sachEntity);
+        sachTheLoai.setTheLoai(theLoai);
+
+        // tạo danh sách hình ảnh
+        List<HinhAnh> hinhAnhs = new ArrayList<>();
+        addBookRequestDTO.getHinhAnhDTOS().forEach(picture->{
+            HinhAnh hinhAnh = new HinhAnh() ;
+            hinhAnh.setDuLieuAnh(picture.getDuLieuAnh());
+            hinhAnh.setTenHinhAnh(picture.getTenHinhAnh());
+            hinhAnh.setSach(sachEntity);
+            hinhAnhs.add(hinhAnh) ;
+        });
+        // save
+        sachRepository.save(sachEntity) ;
+        sachTheLoaiRepository.save(sachTheLoai) ;
+        hinhAnhRepository.saveAll(hinhAnhs) ;
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        // them vào các key zset , value
+                        redisTemplate.execute(addBook,
+                                List.of("page_book_id" , "page_book_id_category:"+theLoai.getMaTheLoai(),"book:"+ sachEntity.getMaSach()),
+                                sachEntity.getMaSach() ,sachEntity.getSoLuong()) ;
+                        // => lua chỉ mất 1 round trip
+                    }
+                }
+        );
+
+    }
+
+    // client tke theo kiểu chọn thể loại + tích checkbox id book=> gửi về 2id đó
+    @Override
+    @Transactional
+    public void deleteBook(String tenDangNhap, List<Integer> ids , int maTheLoai) {
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
+        if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("NGuoi dùng k đủ quyền để thêm sách") ;
+        sachRepository.updateIsActive(ids);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                // delete book cx cần xóa hết trong zset {page , category }
+                List<String> idString = ids.stream().map(Object::toString).toList() ;
+
+                // redis cho phép chuyền 1 array char vào
+                redisTemplate.execute( deleteBook,List.of("page_book_id","page_book_id_category:"+maTheLoai,"book_info:") , idString.toArray()) ;
+                System.out.println("deleted:"+ids);
+            }
+        });
+    }
+    @Override
+    @Transactional
+    public void updateBook(String tenDangNhap , BookUpdateDTO bookUpdateDTO){
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
+        if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("người dùng k đủ quyền để cập nhật sách") ;
+
+        Sach sach = sachRepository.findByMaSachAndIsActive(bookUpdateDTO.getMaSach(),true).orElseThrow() ;
+         bookMapper.updateFromDTO(bookUpdateDTO ,sach); ;
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                System.out.println("updated:book:"+bookUpdateDTO.getMaSach());
+                redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach()) ;
+            }
+        });
+
+    }
+    @Override
+    @Transactional
+    public List<BookResponeDTO> getAllBook(){
+        // tận dụng lại key phân trang . lấy tất cả lên
+        List<Object> ids = redisTemplate.execute(paginate , List.of("page_book_id"),0 , -1) ;
+
+        List<Integer> idBooks = convertIdToNumber(ids) ;
+
+        List<String> keyInfo = convertKeyBookInfo( idBooks ,"book_info:") ;
+
+        List<Object> cached = redisTemplate.opsForValue().multiGet(keyInfo);
+        List<Integer> idNotFind = new ArrayList<>() ;
+        List<BookResponeDTO> bookResponeDTOS = new ArrayList<>() ;
+        int index = 0;
+        for(Object obj : cached){
+            if(obj != null ){
+                bookResponeDTOS.add((BookResponeDTO) obj) ;
+            }else {
+                idNotFind.add(idBooks.get(index)) ;
+            }
+            index ++ ;
+        }
+        if(!idNotFind.isEmpty()){
+            List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idNotFind, true) ;
+
+            for(Sach sach : saches){
+                System.out.println("lookup:"+sach.getMaSach());
+                bookResponeDTOS.add(bookMapper.toDTO(sach)) ;
+                redisTemplate.opsForValue().set("book_info:"+sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
+            }
+        }
+
+        bookResponeDTOS.sort(Comparator.comparing(BookResponeDTO::getTenSach));
+        return bookResponeDTOS ;
+    }
+
+    public List<BookResponeDTO> getSachNew(){
+        List<Sach> saches=sachRepository.findSachNew() ;
+        if(saches == null) return null ;
+        else return saches.stream().map(bookMapper::toDTO).toList() ;
+    }
+    private List<String> convertKeyBookInfo(List<Integer> ids , String keyInfo){
+        return ids.stream().map(id ->keyInfo+id).toList() ;
+    }
     private List<Integer> convertIdToNumber(List<Object> ids){
         return ids.stream().map(id->Integer.parseInt(id.toString())).toList() ;
     }
 
-    private List<String> convertKeyBookInfo(List<Integer> ids , String keyInfo){
-        return ids.stream().map(id ->keyInfo+id).toList() ;
-    }
-
-    @Override
-    public Page<BookResponeDTO> getBookKeyWordAndPageAndSize(String keyWord, int page, int size) {
-        return null;
-    }
-
-    //    @Override
-//    public Page<BookResponeDTO> getBookKeyWordAndPageAndSize(String keyWord , int page ,int size ){
-//        Page<Sach> pageResult = sachRepository.findByTenSachContaining(keyWord ,PageRequest.of(page,size, Sort.by("maSach").descending())) ;
-//        System.out.println("cso nhảy vô đây");
-//        // lấy nội dung từng quyển sách
-//        List<Sach> saches = pageResult.getContent() ;
-//
-//        // lấy id sách
-//        List<Integer> ids = saches.stream().map(Sach::getMaSach).toList() ;
-//
-//        // keys
-//        // id : maSach
-//        List<String> keys = new ArrayList<>() ;
-//        for(Integer id : ids){
-//            keys.add("book_inf:"+id) ;
-//        }
-//
-//        // lấy hết sách từ cahe lên
-//        List<BookResponeDTO> result = new ArrayList<>() ;
-//        List<Object> caches= redisTemplate.opsForValue().multiGet(keys) ;
-//
-//        for(int i= 0; i< saches.size() ; i++){
-//            Object cache =  caches.get(i) ;
-//            if(cache != null){
-//                result.add((BookResponeDTO) cache);
-//            }else {
-//                BookResponeDTO bookResponeDTO = bookMapper.toDTO(saches.get(i)) ;
-//                redisTemplate.opsForValue().set(keys.get(i) ,bookResponeDTO , 30 , TimeUnit.MINUTES );
-//                result.add(bookResponeDTO);
-//            }
-//        }
-//
-//        return new PageImpl<>(
-//                result ,
-//                PageRequest.of(page, size) ,
-//                pageResult.getTotalElements()
-//        );
-//    }
-    private Page<BookResponeDTO> getBookPage(int maTheLoai , int page , int size , String zKey , String keyBookInfo){
-        // bắt đâyuf trang
-        int start = page*size ;
-        // kết thúc trang
-        int end = start + size - 1 ;
-        // lấy id sách cần cho việc phân trang
-
-        List<Object> bookIds = new ArrayList<>() ;
-        if(maTheLoai == -1) {
-            bookIds = redisTemplate.execute(paginate, Arrays.asList(zKey), start, end);
-        }
-        else bookIds = redisTemplate.execute(paginate , Arrays.asList(zKey+maTheLoai) ,start ,end) ;
-        // chuyển sang list int
-        List<Integer> bookIdList = convertIdToNumber(bookIds) ;
-
-        List<Integer> idNotFind = new ArrayList<>() ; // id sách không tìm thấy
-
-        List<String> keyInfo = convertKeyBookInfo(bookIdList , keyBookInfo)  ; // key info book
-
-        List<Object> cacheBooks = redisTemplate.opsForValue().multiGet(keyInfo) ;  // lâys list info book
-        int index = 0 ;
-        // duy trì thứu tự của các quyển sách khi phân trang
-        Map<Integer , BookResponeDTO> order = new TreeMap<>() ;
-        for(Object bookDTO : cacheBooks){
-            if(bookDTO != null ){
-                order.put(bookIdList.get(index) ,(BookResponeDTO) bookDTO) ;
-            }else {
-                idNotFind.add(bookIdList.get(index)) ; // chuyển sang string
-            }
-            index ++ ;
-        }
-
-        if(!idNotFind.isEmpty()){
-            System.out.println("lookup DB ");
-            List<Sach> saches = sachRepository.findByMaSachIn(idNotFind) ;
-
-            for(Sach sach : saches){
-                order.put(sach.getMaSach() ,bookMapper.toDTO(sach) ) ;
-                redisTemplate.opsForValue().set(keyBookInfo+ sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
-            }
-
-        }else System.out.println("redis cache đã có dưx liệu");
-        // chuyển Map sang list
-        List<BookResponeDTO> bookResponeDTOS =  new ArrayList<>(order.values()) ;
-        Collections.reverse(bookResponeDTOS);
-
-
-        long totalElement = 0 ;
-        if (maTheLoai == -1)  totalElement = redisTemplate.opsForZSet().size(zKey) ;
-        else totalElement = redisTemplate.opsForZSet().size(zKey+maTheLoai) ;
-
-        return new PageImpl<>(bookResponeDTOS , PageRequest.of(page ,size) , totalElement) ;
-
-    }
-
-    @Override
-    public Page<BookResponeDTO> getBookPageAndSize( int page ,int size ){
-       return getBookPage(-1 , page , size ,"page_book_id" , "book_info:") ;
-
-    }
-
-    // lấy sachs lên theo thể loại
-    public Page<BookResponeDTO> getBookCategoryAndPageAndSize(int maTheLoai , int page , int size){
-        // phân trang
-        return getBookPage(maTheLoai , page , size ,"page_book_id_category:" , "book_info:" ) ;
-    }
-
-
-    // ở đay có thể làm hot key redis cluster
-    @Override
-    public BookResponeDTO getInfoBook(int maSach){
-        String key = "book_info:" +maSach ;
-        // check cache truowcs
-        Object cached = redisTemplate.opsForValue().get(key) ;
-
-
-        if (cached!= null){
-            try {
-                cached = (BookResponeDTO) cached ;
-            }catch(Exception ex){
-                System.out.println("trả về null");
-                return null ;
-            }
-            System.out.println("lấy từ cache");
-            return  (BookResponeDTO) cached ;
-        }
-        System.out.println("tìm kiếm lại");
-
-        // nếu không có trong cache thì tìm DB
-        Sach sach = sachRepository.findByMaSach(maSach).orElse(null) ;
-
-        if(sach == null ){
-            // cho nó luư 5 phút sau check lại nếu có người call API
-            redisTemplate.opsForValue().set(key , "NULL" , 5 , TimeUnit.MINUTES);
-            return null ;
-        }else {
-            // lưu tạm 1 tiêng
-            BookResponeDTO bookResponeDTO = bookMapper.toDTO(sach) ;
-            redisTemplate.opsForValue().set(key , bookResponeDTO , 1 , TimeUnit.HOURS);
-            return bookResponeDTO ;
-        }
-    }
 }

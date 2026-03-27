@@ -51,7 +51,21 @@ public class RedisLuaConfig {
     @Bean
     public DefaultRedisScript<Long> messageUserToUserMq(){
         DefaultRedisScript<Long> script = new DefaultRedisScript<>() ;
-        script.setLocation(new ClassPathResource("/lua/messageMQ/messageMQ.lua"));
+        script.setLocation(new ClassPathResource("/lua/message/messageMQ.lua"));
+        script.setResultType(Long.class);
+        return script ;
+    }
+    @Bean
+    public DefaultRedisScript<Long> addBook(){
+        DefaultRedisScript<Long> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/book/addBook.lua"));
+        script.setResultType(Long.class);
+        return script ;
+    }
+    @Bean
+    public DefaultRedisScript<Long> deleteBook(){
+        DefaultRedisScript<Long> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/book/deleteBook.lua"));
         script.setResultType(Long.class);
         return script ;
     }

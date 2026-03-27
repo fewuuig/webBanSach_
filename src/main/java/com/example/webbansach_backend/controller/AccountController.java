@@ -2,18 +2,15 @@ package com.example.webbansach_backend.controller;
 
 import com.example.webbansach_backend.Entity.NguoiDung;
 import com.example.webbansach_backend.Entity.RefreshToken;
-import com.example.webbansach_backend.Repository.RefreshTokenRepository;
 import com.example.webbansach_backend.dto.Logout;
 import com.example.webbansach_backend.dto.RefreshTokenRequestDTO;
+import com.example.webbansach_backend.dto.account.DisableAccountRequestDTO;
 import com.example.webbansach_backend.security.JwtRespone;
 import com.example.webbansach_backend.security.LoginRequest;
 import com.example.webbansach_backend.service.*;
 
 import com.example.webbansach_backend.service.impl.JwtService;
-import com.example.webbansach_backend.service.impl.RefreshTokenServiceImpl;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,9 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tai-khoan")
-public class TaiKhoanController {
+public class AccountController {
     @Autowired
-    private DangKyService dangKyService ;
+    private AccountService accountService ;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -38,18 +35,16 @@ public class TaiKhoanController {
     private JwtService jwtService ;
     @Autowired
     private RefreshTokenService refreshTokenService ;
-    @Autowired
-    private AccountService accountService ;
     @CrossOrigin(origins = "*")
     @PostMapping("/dang-ky")
     private ResponseEntity<?> dangKy(@Validated @RequestBody NguoiDung nguoiDung){
-        ResponseEntity<?> response = dangKyService.dangKyTaiKhoan(nguoiDung) ;
+        ResponseEntity<?> response = accountService.dangKyTaiKhoan(nguoiDung) ;
 
         return response ;
     }
     @GetMapping(value = "/kich-hoat")
     private ResponseEntity<?> kichHoatTaiKhoan(@RequestParam("email") String email,@RequestParam("ma-kich-hoat") String maKichHoat){
-        ResponseEntity<?> response =  dangKyService.kichHoatTaiKhoan(email , maKichHoat);
+        ResponseEntity<?> response =  accountService.kichHoatTaiKhoan(email , maKichHoat);
         return response ;
     }
 
@@ -59,7 +54,6 @@ public class TaiKhoanController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername() , loginRequest.getPassword())
             ) ;
-            System.out.println("xác thưc thành công");
             // nếu xác thưicj tài khoản thamhf cồn thì tạo token
             if(authentication.isAuthenticated()){
                 NguoiDung nguoiDung = userService.findByUsername(loginRequest.getUsername()) ;
@@ -98,6 +92,13 @@ public class TaiKhoanController {
     @GetMapping("/check-email")
     public ResponseEntity<?> checkEmail(@RequestParam("email") String email){
           return ResponseEntity.ok(accountService.checkEmail(email) );
+    }
+
+    @PutMapping("/disable")
+    public ResponseEntity<?> disableAccount(@RequestBody DisableAccountRequestDTO disable){
+        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
+        accountService.disableAccount(tenDangNhap , disable.getTenDangNhap());
+        return ResponseEntity.noContent().build() ;
     }
 
 }

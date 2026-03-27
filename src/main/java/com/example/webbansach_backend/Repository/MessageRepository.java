@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message , Long> {
@@ -18,4 +19,5 @@ public interface MessageRepository extends JpaRepository<Message , Long> {
         WHERE ms.room.roomId =:roomId
     """)
     Page<Message> findByRoom_RoomId(@Param("roomId") int roomId , Pageable pageable) ;
+    boolean existsByCreatedAtAndContent(Instant timestamp , String content) ; // index for content
 }

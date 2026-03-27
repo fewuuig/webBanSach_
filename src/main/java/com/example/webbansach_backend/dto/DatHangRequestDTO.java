@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,6 +14,7 @@ import java.util.List;
 public class DatHangRequestDTO {
     List<OrderItem> items ;
     private Integer maGiam ;
+    private Set<Long> danhSachSanPhamChon ;
     private int maDiaChiGiaoHang;
     private int maHinhThucThanhToan ;
     private int maHinhThucGiaoHang ;

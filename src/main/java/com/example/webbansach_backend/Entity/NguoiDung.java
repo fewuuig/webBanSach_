@@ -61,15 +61,6 @@ public class NguoiDung {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SachYeuThich> danhSachSachYeuThich  = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY , cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST , CascadeType.REFRESH})
-    @JoinTable(
-            name = "nguoidung_quyen",
-            joinColumns = @JoinColumn(name = "ma_nguoi_dung"),
-            inverseJoinColumns = @JoinColumn(name = "ma_quyen")
-    )
-    private List<Quyen> danhSachQuyen ;
-
     @OneToMany(mappedBy = "nguoiDung" , fetch = FetchType.LAZY ,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST , CascadeType.REFRESH})
@@ -85,27 +76,9 @@ public class NguoiDung {
     @OneToMany(mappedBy = "nguoiDung" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<DiaChiGiaoHang> diaChiGiaoHangs = new ArrayList<>() ;
 
-   @OneToMany( mappedBy = "nguoiDung", fetch = FetchType.LAZY , cascade = {CascadeType.DETACH , CascadeType.REFRESH , CascadeType.PERSIST , CascadeType.MERGE})
-   private Set<MaGiamGiaNguoiDung> maGiamGiaNguoiDungs = new HashSet<>() ;
-    @Override
-    public String toString() {
-        return "NguoiDung{" +
-                "maNguoiDung=" + maNguoiDung +
-                ", hoDem='" + hoDem + '\'' +
-                ", ten='" + ten + '\'' +
-                ", tenDangNhap='" + tenDangNhap + '\'' +
-                ", matKhau='" + matKhau + '\'' +
-                ", gioiTinh=" + gioiTinh +
-                ", email='" + email + '\'' +
-                ", soDienThoai='" + soDienThoai + '\'' +
-                ", daKichHoat=" + daKichHoat +
-                ", ma_kich_hoat='" + maKichHoat + '\'' +
-                ", danhSachDanhGia=" + danhSachDanhGia +
-                ", danhSachSachYeuThich=" + danhSachSachYeuThich +
-                ", danhSachQuyen=" + danhSachQuyen +
-                ", danhSachDonHang=" + danhSachDonHang +
-                '}';
-    }
+    @OneToMany( mappedBy = "nguoiDung", fetch = FetchType.LAZY , cascade = {CascadeType.DETACH , CascadeType.REFRESH , CascadeType.PERSIST , CascadeType.MERGE})
+    private Set<MaGiamGiaNguoiDung> maGiamGiaNguoiDungs = new HashSet<>() ;
+
     @OneToMany( mappedBy = "nguoiDung",fetch = FetchType.LAZY , cascade = {CascadeType.MERGE , CascadeType.DETACH ,CascadeType.PERSIST ,CascadeType.REFRESH})
     private List<RoomNguoiDung> roomNguoiDungs = new ArrayList<>() ;
 
@@ -114,4 +87,7 @@ public class NguoiDung {
     public boolean getDaKiHoat() {
         return this.daKichHoat ;
     }
+
+    @OneToMany( mappedBy = "nguoiDung", fetch = FetchType.LAZY )
+    private List<NguoiDungQuyen> nguoiDungQuyens = new ArrayList<>() ;
 }

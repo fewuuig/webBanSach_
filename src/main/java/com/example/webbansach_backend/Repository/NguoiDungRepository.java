@@ -21,9 +21,7 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
 
 
     NguoiDung findByEmail(String email) ;
-    @Query("SELECT nd FROM NguoiDung nd " +
-            "JOIN FETCH nd.danhSachQuyen " +
-            "WHERE nd.tenDangNhap = :tenDangNhap")
+
     Optional<NguoiDung> findByTenDangNhap(@Param("tenDangNhap") String tenDangNhap) ;
 
     @Query("SELECT nd FROM NguoiDung nd " +
@@ -31,13 +29,6 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
             "LEFT JOIN fetch mggnd.maGiamGia " +
             "WHERE nd.tenDangNhap =: tenDangNhap")
     Optional<NguoiDung> findByTenDangNhapFetchMaGiamNguoiDungAndMaGiam(@Param("tenDangNhap") String tenDangNhap) ;
-    @Query("""
-          SELECT DISTINCT nd.tenDangNhap
-          FROM NguoiDung nd
-          JOIN  nd.danhSachQuyen q
-          WHERE q.tenQuyen = :tenQuyen
-    """)
-    Set<String> findAllUsernameManager(@Param("tenQuyen") String tenQuyen) ;
 
     @Query("""
         SELECT nd.email

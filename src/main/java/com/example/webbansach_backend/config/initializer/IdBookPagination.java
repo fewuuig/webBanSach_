@@ -25,9 +25,13 @@ public class IdBookPagination implements ApplicationRunner {
         List<TheLoai> theLoais = theLoaiRepository.findByTheLoai()  ;
         for(TheLoai tl : theLoais){
             for(Sach s : tl.getDanhSachQuyenSach()){
-                String key = "page_book_id";
-                redisTemplate.opsForZSet().add(key , s.getMaSach() , s.getMaSach() ) ;
-                redisTemplate.opsForZSet().add("page_book_id_category:"+tl.getMaTheLoai() , s.getMaSach() , s.getMaSach());
+                if(s.isActive()){
+                    String key = "page_book_id";
+                    redisTemplate.opsForZSet().add(key , s.getMaSach() , s.getMaSach() ) ;
+                    redisTemplate.opsForZSet().add("page_book_id_category:"+tl.getMaTheLoai() ,
+                            s.getMaSach() ,
+                            s.getMaSach());
+                }
             }
         }
 

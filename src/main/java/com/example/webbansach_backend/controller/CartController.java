@@ -45,9 +45,7 @@ public class CartController {
     }
     @DeleteMapping("/delete-book")
     private ResponseEntity<?> deleteBook(@RequestBody DeleteBookToCartRequestDTO deleteBookToCartRequestDTO){
-        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName();
         cartService.deleteBook( deleteBookToCartRequestDTO.getDanhSachSanPhamChon());
-        System.out.println("xóa sách khỏi giỏ hàng thành công " + deleteBookToCartRequestDTO.getDanhSachSanPhamChon());
         return ResponseEntity.ok("xóa sách khỏi giỏ hàng thành công") ;
     }
     @DeleteMapping("/clear-book_cart")

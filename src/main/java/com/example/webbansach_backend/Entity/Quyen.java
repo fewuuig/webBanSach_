@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 @Getter
 @Setter
@@ -18,12 +19,7 @@ public class Quyen {
     @Column(name = "ten_quyen")
     private String tenQuyen ;
 
-    @ManyToMany(fetch = FetchType.LAZY , cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST , CascadeType.REFRESH})
-    @JoinTable(
-            name = "nguoidung_quyen",
-            joinColumns = @JoinColumn(name = "ma_quyen"),
-            inverseJoinColumns = @JoinColumn(name = "ma_nguoi_dung")
-    )
-    private List<NguoiDung> danhSachNguoiDung ;
+
+    @OneToMany( mappedBy = "quyen", fetch = FetchType.LAZY)
+    private List<NguoiDungQuyen> nguoiDungQuyens = new ArrayList<>() ;
 }

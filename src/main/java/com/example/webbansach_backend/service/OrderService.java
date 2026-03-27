@@ -12,7 +12,7 @@ import java.util.Set;
 
 public interface OrderService {
     public void placeOder( String tenDangNhap , DatHangRequestDTO datHangRequestDTO) throws JsonProcessingException;
-    void capNhatTrangThaiDonHang(int maDonHang, TrangThaiGiaoHang trangThai) ;
+    void capNhatTrangThaiDonHang( String tenDangNhap,int maDonHang, TrangThaiGiaoHang trangThai) ;
     List<DonHangTrangThaiResponeDTO> getDonHangTheoTrangThai( String tenDangNhap,TrangThaiGiaoHang trangThaiGiaoHang);
     void thaoTacDonHang(String tenDangNhap , int maDonHang) ;
 

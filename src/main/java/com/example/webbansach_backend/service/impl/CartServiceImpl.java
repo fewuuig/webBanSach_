@@ -12,20 +12,22 @@ import com.example.webbansach_backend.converter.ViewCartConverter;
 import com.example.webbansach_backend.dto.AddToCartRequestDTO;
 import com.example.webbansach_backend.dto.ViewCartDTO;
 import com.example.webbansach_backend.service.CartService;
+import com.example.webbansach_backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-@Transactional
+
 @Service
 public class CartServiceImpl implements CartService {
     @Autowired
     private ViewCartConverter viewCartConverter ;
-    @Autowired
-    private ModelMapper modelMapper ;
     @Autowired
     private GioHangRepository gioHangRepository ;
     @Autowired
@@ -46,11 +48,13 @@ public class CartServiceImpl implements CartService {
     }
 
     // thêm sách vào giỏ hàng
+    @Transactional
+
     @Override
     public void addToCart(String tenDangNhap , AddToCartRequestDTO addToCartRequestDTO){
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()-> new RuntimeException("Người dùng không tồn tại")) ;
         GioHang gioHang = getOrCreateCart(nguoiDung) ;
-        Sach sach = sachRepository.findByMaSach(addToCartRequestDTO.getMaSach()).orElseThrow(()->new RuntimeException("Sách không tồn tại")) ;
+        Sach sach = sachRepository.findByMaSachAndIsActive(addToCartRequestDTO.getMaSach(),true).orElseThrow(()->new RuntimeException("Sách không tồn tại")) ;
         // kiểm tra để tránh trường hợp thêm sản phẩm trùng vào giỏ hàng
         Optional<GioHangSach> exsist = gioHang.getGioHangSaches()
                 .stream().filter(i->i.getSach().getMaSach()==addToCartRequestDTO.getMaSach()).findFirst() ;
@@ -86,6 +90,7 @@ public class CartServiceImpl implements CartService {
     }
 
     // cập nhật số lượng
+    @Transactional
     @Override
     public void updateQuantity(String tenDangNhap , int maSach , int soLuong ){
         GioHangSach gioHangSach = gioHangSachRepository.findByGioHang_NguoiDung_TenDangNhapAndSach_MaSach(tenDangNhap , maSach).orElseThrow() ;
@@ -96,7 +101,8 @@ public class CartServiceImpl implements CartService {
         }
 
     }
-    // xóa 1 quyển sahs khỏi giỏ hàng
+
+    @Transactional
     @Override
     public void deleteBook(List<Long> danhSachSanPhamChon){
         if(danhSachSanPhamChon == null || danhSachSanPhamChon.isEmpty()){
@@ -122,4 +128,15 @@ public class CartServiceImpl implements CartService {
         List<GioHangSach> gioHangSaches = gioHangSachRepository.findByMaGioHangSachIn(danhSachSanPhamChon) ;
         return  gioHangSaches.stream().map(viewCartConverter::toViewCart).toList() ;
     }
+    public void deleteItemOrderFromCart( String tenDangNhap,Set<Long> ids ){
+        GioHang gioHang = gioHangRepository.findByNguoiDung_TenDangNhap(tenDangNhap).
+                orElseThrow(()->new RuntimeException("Not find cart of "+tenDangNhap)) ;
+        System.out.println(gioHang.getMaGioHang());
+        for(GioHangSach gioHangSach : gioHang.getGioHangSaches()){
+            System.out.println(gioHangSach.getMaGioHangSach());
+        }
+        gioHang.getGioHangSaches().removeIf(item -> ids.contains(item.getMaGioHangSach())) ;
+        gioHangRepository.save(gioHang) ;
+    }
+
 }

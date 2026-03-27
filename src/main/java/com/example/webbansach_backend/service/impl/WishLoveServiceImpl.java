@@ -6,14 +6,12 @@ import com.example.webbansach_backend.Entity.SachYeuThich;
 import com.example.webbansach_backend.Repository.NguoiDungRepository;
 import com.example.webbansach_backend.Repository.SachRepository;
 import com.example.webbansach_backend.Repository.SachYeuThichRepository;
-import com.example.webbansach_backend.controller.sachController;
 import com.example.webbansach_backend.dto.WishLoveDTO;
 import com.example.webbansach_backend.service.WishLoveService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +28,7 @@ public class WishLoveServiceImpl implements WishLoveService {
 
     @Override
     public void addWishLoveList(String tenDangNhap, int maSach) {
-        Sach sach = sachRepository.findByMaSach(maSach).orElseThrow() ;
+        Sach sach = sachRepository.findByMaSachAndIsActive(maSach,true).orElseThrow() ;
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
 //        Optional<SachYeuThich> exists = nguoiDung.getDanhSachSachYeuThich().stream().filter(i->i.getSach().getMaSach() == maSach).findFirst() ;
        Optional<SachYeuThich> exists = sachYeuThichRepository.findByNguoiDung_TenDangNhapAndSach_MaSach(tenDangNhap,maSach) ;

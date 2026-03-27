@@ -14,7 +14,9 @@ public class EndPoint {
             "/danh-gia/{maSach}/danhSachDanhGia" ,
             "/books/**" ,
             "/tai-khoan/check-username",
-            "/tai-khoan/check-email"
+            "/tai-khoan/check-email",
+            "/book/search/filter",
+            "/book/book-new-carousel"
     };
     public static final String[] PUBLIC_POST_ENDPOINS = {
             "/tai-khoan/dang-ky",
@@ -25,12 +27,20 @@ public class EndPoint {
     };
     public static final String[] ADMIN_GET_ENDPOINS = {
             "/nguoi-dung" ,
-            "/nguoi-dung/**"
+            "/nguoi-dung/**",
+            "/profile/info/user-other" ,
+            "/book/all"
     } ;
     public static final String[] ADMIN_POST_ENDPOINS = {
             "/them-sach" ,
-            "/stats/statToday"
+            "/stats/statToday",
+            "/book/add-new-book"
     } ;
+    public static final String[] ADMIN_PUT_ENDPOINS ={
+            "/tai-khoan/disable",
+            "/book/update"
+    };
+
     public  static final String[] USER_GET_ENDPINTS = {
             "/cart/view-cart",
             "/wish-love/danh-sach-yeu-thich",
@@ -45,7 +55,7 @@ public class EndPoint {
             "/profile/info" ,
             "/chat/list-users" ,
             "chat/users",
-            "chat/users/dm/messages"
+            "chat/users/dm/messages" ,
 
     } ;
     public  static final String[] USER_DELETE_ENDPINTS = {

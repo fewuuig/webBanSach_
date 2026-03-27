@@ -26,7 +26,7 @@ public class DanhGiaSanPhamServiceImpl implements DanhGiaSanPhamService {
     @Override
     public void addDanhGiaSanPham(String tenDangNhap, String content, int maSach) {
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
-        Sach sach = sachRepository.findByMaSach(maSach).orElseThrow();
+        Sach sach = sachRepository.findByMaSachAndIsActive(maSach,true).orElseThrow();
 
         DanhGia danhGia = new DanhGia() ;
         danhGia.setNhanXet(content);
@@ -38,7 +38,7 @@ public class DanhGiaSanPhamServiceImpl implements DanhGiaSanPhamService {
 
     @Override
     public List<DanhGiaResponeDTO> getDanhGiaMotQuyenSach(int maSach) {
-        Sach sach = sachRepository.findByMaSach(maSach).orElseThrow() ;
+        Sach sach = sachRepository.findByMaSachAndIsActive(maSach,true).orElseThrow() ;
         List<DanhGiaResponeDTO> danhGiaResponeDTOS = new ArrayList<>() ;
         for(DanhGia danhGia : sach.getDanhSachDanhGia() ){
             DanhGiaResponeDTO danhGiaResponeDTO = new DanhGiaResponeDTO() ;

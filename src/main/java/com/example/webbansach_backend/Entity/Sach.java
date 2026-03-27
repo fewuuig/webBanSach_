@@ -29,7 +29,7 @@ public class Sach {
     private String tenTacGia ;
 
     @Column(name="isbn" , length = 256)
-    private String ISBN  ;
+    private String isbn  ;
 
     @Column(name="mo_ta" , columnDefinition = "TEXT")
     private String moTa ;
@@ -46,6 +46,9 @@ public class Sach {
     @Column(name="trung_binh_xep_hang")
     private double trungBinhXepHang ;
 
+    @Column(name = "is_active")
+    private boolean isActive ;
+
     @ManyToMany(fetch = FetchType.LAZY , cascade = {
             CascadeType.PERSIST , CascadeType.MERGE,
             CascadeType.DETACH , CascadeType.REFRESH
@@ -59,10 +62,7 @@ public class Sach {
     private List<TheLoai> danhSachTheLoai ;
 
     //Đoan nay coi nhu cascade.All
-    @OneToMany(mappedBy = "sach" ,fetch = FetchType.LAZY , cascade = {
-            CascadeType.DETACH ,CascadeType.MERGE ,
-            CascadeType.PERSIST , CascadeType.REFRESH,CascadeType.REMOVE
-    })
+    @OneToMany(mappedBy = "sach" ,fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private List<HinhAnh> danhSachHinhAnh ;
 
     @OneToMany(mappedBy = "sach" ,fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
@@ -76,9 +76,11 @@ public class Sach {
     @OneToMany(mappedBy = "sach" ,fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private List<SachYeuThich> danhSachSachYeuThich ;
 
-    @OneToMany(mappedBy = "sach" , fetch = FetchType.LAZY )
+    @OneToMany(mappedBy = "sach" , fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
     private List<GioHangSach> gioHangSaches ;
     @OneToMany(mappedBy = "sach", cascade = CascadeType.ALL)
     Set<MaGiamGiaSach> maGiamGiaSaches = new HashSet<>();
+    @OneToMany(mappedBy = "sach" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private List<SachTheLoai> sachTheLoais = new ArrayList<>() ;
 
 }

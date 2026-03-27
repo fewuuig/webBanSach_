@@ -1,11 +1,15 @@
 package com.example.webbansach_backend.service;
 
+import com.example.webbansach_backend.dto.book.AddBookRequestDTO;
 import com.example.webbansach_backend.dto.book.BookResponeDTO;
-import org.springframework.data.domain.Page;
+import com.example.webbansach_backend.dto.book.BookUpdateDTO;
+
+import java.util.List;
 
 public interface BookService {
-    BookResponeDTO getInfoBook(int maSach) ;
-    Page<BookResponeDTO> getBookKeyWordAndPageAndSize(String keyWord , int page , int size ) ;
-    Page<BookResponeDTO> getBookPageAndSize( int page ,int size ) ;
-    Page<BookResponeDTO> getBookCategoryAndPageAndSize(int maTheLoai , int page , int size) ;
+    void addNewBook(String tenDangNhap,AddBookRequestDTO addBookRequestDTO) ;
+    void deleteBook(String tenDangNhap, List<Integer> ids , int maTheLoai)  ;
+    void updateBook(String tenDangNhap , BookUpdateDTO bookUpdateDTO) ;
+    List<BookResponeDTO> getAllBook();
+    List<BookResponeDTO> getSachNew();
 }

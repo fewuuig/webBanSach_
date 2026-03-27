@@ -1,0 +1,2 @@
+ALTER TABLE sach
+ADD COLUMN is_active Boolean DEFAULT  TRUE;

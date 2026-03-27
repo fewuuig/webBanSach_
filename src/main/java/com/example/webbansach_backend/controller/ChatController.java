@@ -1,6 +1,8 @@
 package com.example.webbansach_backend.controller;
 
 import com.example.webbansach_backend.dto.Message.*;
+import com.example.webbansach_backend.service.ChatMQService;
+import com.example.webbansach_backend.service.ChatMQVer2Service;
 import com.example.webbansach_backend.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,10 @@ import java.util.Set;
 @Controller
 public class ChatController {
     @Autowired
-    private SimpMessagingTemplate messagingTemplate ;
-    @Autowired
     private ChatService chatService ;
+
+    @Autowired
+    private ChatMQVer2Service chatMQVer2Service ;
     @GetMapping("/chat/users")
     public ResponseEntity<?> getListUserChat(){
         return ResponseEntity.ok(chatService.getAllUser()) ;
@@ -31,7 +34,8 @@ public class ChatController {
 
     @MessageMapping("/chat/users/dm")
     public ResponseEntity<?> insertDBAndSend(@RequestBody MessageRequestDTO messageRequestDTO){
-        chatService.insertDBAndSend(messageRequestDTO) ;
+//        chatService.insertDBAndSend(messageRequestDTO) ;
+        chatMQVer2Service.addMessageToStream(messageRequestDTO);
         return ResponseEntity.noContent().build() ;
     }
     @GetMapping("chat/users/dm/messages")
@@ -39,6 +43,6 @@ public class ChatController {
                                               @RequestParam("sendToUser") String sendToUser,
                                               @RequestParam("page") int page ,
                                               @RequestParam("size") int size){
-        return ResponseEntity.ok(chatService.getMessageOfUser(sender , sendToUser , page , size)) ;
+        return ResponseEntity.ok(chatMQVer2Service.getMessageOfUser(sender , sendToUser , page , size)) ;
     }
 }

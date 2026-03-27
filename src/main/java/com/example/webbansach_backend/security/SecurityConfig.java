@@ -58,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST , EndPoint.PUBLIC_POST_ENDPOINS ).permitAll()
                         .requestMatchers(HttpMethod.GET , EndPoint.ADMIN_GET_ENDPOINS).hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.POST ,EndPoint.ADMIN_POST_ENDPOINS).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT ,EndPoint.ADMIN_PUT_ENDPOINS).hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET , EndPoint.USER_GET_ENDPINTS).hasAnyAuthority("ADMIN" , "USER" , "STAFF")
                         .requestMatchers(HttpMethod.DELETE, EndPoint.USER_DELETE_ENDPINTS).hasAnyAuthority("ADMIN" , "USER","STAFF")
                         .requestMatchers(HttpMethod.POST, EndPoint.USER_POST_ENDPINTS).hasAnyAuthority("USER" , "ADMIN" , "STAFF")
@@ -78,7 +79,6 @@ public class SecurityConfig {
 
         http.addFilterBefore(authenticationFilter , UsernamePasswordAuthenticationFilter.class) ;
         http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) ;
-//        http.authenticationProvider(daoAuthenticationProvider()) ;
         http.httpBasic(Customizer.withDefaults());
         http.csrf(csrf->csrf.disable());
         return http.build() ;

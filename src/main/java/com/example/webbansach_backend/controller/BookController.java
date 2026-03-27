@@ -1,44 +1,58 @@
 package com.example.webbansach_backend.controller;
 
+import com.example.webbansach_backend.Repository.customer.SachCustomRepository;
+import com.example.webbansach_backend.dto.book.AddBookRequestDTO;
+import com.example.webbansach_backend.dto.book.BookUpdateDTO;
 import com.example.webbansach_backend.service.BookService;
-import lombok.Getter;
+import com.example.webbansach_backend.service.PaginateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/books")
+import java.util.List;
+import java.util.Map;
+
 @RestController
+@RequestMapping("/book")
 public class BookController {
     @Autowired
     private BookService bookService ;
+    @Autowired
+    private PaginateService paginateService ;
 
-    @GetMapping("/{maSach}")
-    public ResponseEntity<?> getInfoBook(@PathVariable("maSach") int maSach){
-        return ResponseEntity.ok(bookService.getInfoBook(maSach)) ;
+    @PostMapping("/add-new-book")
+    public ResponseEntity<?> addNewBook(@RequestBody AddBookRequestDTO addBookRequestDTO){
+        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
+        bookService.addNewBook( tenDangNhap,addBookRequestDTO);
+        return ResponseEntity.noContent().build() ;
     }
-    @GetMapping("/keyword-page-size")
-    public ResponseEntity<?> getPageBook(@RequestParam("keyWord") String keyWord,
-                                        @RequestParam("page") int page ,
-                                        @RequestParam("size") int size){
-        return ResponseEntity.ok(bookService.getBookKeyWordAndPageAndSize(keyWord, page, size)) ;
+    @GetMapping("/search/filter")
+    public ResponseEntity<?> bookFilter(@RequestParam Map<String , Object> params ,
+                                        @PageableDefault(page= 0 , size =10) Pageable pageable){
+        return ResponseEntity.ok(paginateService.searchFilter(params ,pageable)) ;
     }
-    @GetMapping("/page-size")
-    public ResponseEntity<?> getPageAndSize(
-            @RequestParam("page") int page ,
-            @RequestParam("size") int size
-    ){
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-        return ResponseEntity.ok(bookService.getBookPageAndSize(page , size)) ;
+    @PutMapping("/update")
+    public ResponseEntity<?> updateBook(@RequestBody BookUpdateDTO bookUpdateDTO){
+        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
+        bookService.updateBook(tenDangNhap , bookUpdateDTO);
+        return ResponseEntity.noContent().build();
     }
-    @GetMapping("/category-page-size")
-    public ResponseEntity<?> getBookCategoryAndPageAndSize(@RequestParam("maTheLoai") int maTheLoai,
-                                                           @RequestParam("page") int page ,
-                                                           @RequestParam("size") int size){
-        return ResponseEntity.ok(bookService.getBookCategoryAndPageAndSize(maTheLoai , page , size)) ;
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllBook(){
+        return ResponseEntity.ok(bookService.getAllBook()) ;
     }
-
-
-
-
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteBooks(@RequestBody List<Integer> ids , @RequestParam int maTheLoai){
+        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
+        bookService.deleteBook(tenDangNhap ,ids , maTheLoai);
+        return ResponseEntity.noContent().build() ;
+    }
+    @GetMapping("/book-new-carousel")
+    public ResponseEntity<?> deleteBooks(){
+        return ResponseEntity.ok(bookService.getSachNew()) ;
+    }
 }

@@ -13,8 +13,5 @@ public class MessageResponeDTO {
     private String sender ;
     private Instant timestamp ;
 
-    @Override
-    public String toString() {
-        return content +" "+ sender + " " + timestamp ;
-    }
+
 }
