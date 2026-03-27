@@ -16,7 +16,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +41,12 @@ public class  UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
             NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(username).
                     orElseThrow(()->new RuntimeException("Khôg tìm thấy người dùng")) ;
-
+            List<Quyen> quyen = new ArrayList<>() ;
+            nguoiDung.getNguoiDungQuyens().forEach(ndq->{
+               quyen.add(ndq.getQuyen()) ;
+            });
             if(!nguoiDung.getDaKiHoat()) throw new DisableException("Tài khoản đã bị khóa") ;
-            return new User(nguoiDung.getTenDangNhap() , nguoiDung.getMatKhau() , rolesToAuthorities(nguoiDung.getDanhSachQuyen()));
+            return new User(nguoiDung.getTenDangNhap() , nguoiDung.getMatKhau() , rolesToAuthorities(quyen));
     }
     private Collection<? extends GrantedAuthority> rolesToAuthorities(Collection<Quyen> quyens){
         return quyens.stream().map(quyen->new SimpleGrantedAuthority(quyen.getTenQuyen())).collect(Collectors.toList()) ;

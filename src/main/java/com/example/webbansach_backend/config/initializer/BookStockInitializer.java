@@ -25,7 +25,7 @@ public class BookStockInitializer implements ApplicationRunner {
         // đưa số sách còn trong kho lên redis lên redis
         for(Sach sach : saches){
             String key = "book:"+sach.getMaSach()  ; // book:{maSach} quantity
-            redisTemplate.opsForValue().set(key , sach.getSoLuong(), Duration.ofHours(12));
+            redisTemplate.opsForValue().set(key , sach.getSoLuong());
         }
     }
 }

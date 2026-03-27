@@ -13,10 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -32,7 +29,10 @@ public class JwtService {
         Map<String , Object> claims = new HashMap<>() ;
         claims.put("role" , true) ;
         NguoiDung nguoiDung = userService.findByUsername(username) ;
-        List<Quyen> quyen = nguoiDung.getDanhSachQuyen() ;
+        List<Quyen> quyen = new ArrayList<>() ;
+        nguoiDung.getNguoiDungQuyens().forEach(ndq->{
+            quyen.add(ndq.getQuyen()) ;
+        });
         boolean isAdmin = false ;
         boolean isStaff = false ;
         boolean isUser = false ;

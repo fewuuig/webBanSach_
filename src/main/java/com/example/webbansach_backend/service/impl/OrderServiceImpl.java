@@ -12,6 +12,7 @@ import com.example.webbansach_backend.exception.OutOfStockException;
 import com.example.webbansach_backend.exception.VoucherStateException;
 import com.example.webbansach_backend.mapper.DonHangMapper;
 import com.example.webbansach_backend.service.*;
+import com.example.webbansach_backend.utils.CheckRoleUItil;
 import com.example.webbansach_backend.utils.ParseJacksonUtil;
 import com.example.webbansach_backend.utils.TimeLogUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -121,15 +122,9 @@ public class OrderServiceImpl implements OrderService {
     public void capNhatTrangThaiDonHang( String tenDangNhap,int maDonHang, TrangThaiGiaoHang trangThai){
         NguoiDung nguoiDung= nguoiDungRepository.findByTenDangNhap(tenDangNhap).
                 orElseThrow(()->new RuntimeException("NGuoi dung không tồn tại")) ;
-        nguoiDung.getDanhSachQuyen().forEach(quyen->{
-            if(quyen.getTenQuyen().equals("ADMIN") || quyen.getTenQuyen().equals("STAFF")){
-                DonHang donHang = donHangRepository.findById(maDonHang).orElseThrow() ;
-                donHang.setTrangThai(trangThai);
-                return ;
-            }
-        });
-        throw new RuntimeException("unauthirized:"+tenDangNhap) ;
-
+        if(!CheckRoleUItil.checkRoleAdminOrUser(nguoiDung)) throw new RuntimeException("Người dùng khôpng đủ quyền để cập nhật đơn hàng") ;
+        DonHang donHang = donHangRepository.findById(maDonHang).orElseThrow() ;
+        donHang.setTrangThai(trangThai) ;
     }
     @Override
     @Transactional
@@ -164,9 +159,9 @@ public class OrderServiceImpl implements OrderService {
                 orElseThrow(()->new RuntimeException("Don hàng không tồn tại")) ;
         if(donHang.getTrangThai().equals(TrangThaiGiaoHang.DA_HUY)){
             for(ChiTietDonHang chiTietDonHang : donHang.getDanhSachChiTietDonHang()){
-                // lock
+                // permistic_lock
                 Sach sach = sachRepository.findByIdForUpdate(chiTietDonHang.getSach().getMaSach()).orElseThrow() ;
-                if(sach.getSoLuong() >= chiTietDonHang.getSoLuong()){
+                if(sach.getSoLuong() >= chiTietDonHang.getSoLuong() && sach.isActive()){
                     totalBook =+ chiTietDonHang.getSoLuong() ;
                     sach.setSoLuong(sach.getSoLuong() - chiTietDonHang.getSoLuong());
                 }else {
@@ -369,8 +364,9 @@ public class OrderServiceImpl implements OrderService {
         // tạo chi tiết đơn hangf
         for(OrderItem item : items){
             if(item.getSoLuong() <= 0) throw new RuntimeException("số lượng muốn mua không hợp lệ") ;
-            Sach sach = sachRepository.findByIdForUpdate(item.getMaSach()).orElseThrow() ;
-            if(sach.getSoLuong() == 0 || sach.getSoLuong() < item.getSoLuong()){
+            // permistic_lock
+            Sach sach = sachRepository.findByIdForUpdate(item.getMaSach()).orElseThrow(()->new RuntimeException("sách không tông tại")) ;
+            if(sach.getSoLuong() == 0 || sach.getSoLuong() < item.getSoLuong() || !sach.isActive()){
                 throw new RuntimeException("số lượng sách trong kho không hợp lệ / số lượng muốn mua không hợp lệ") ;
             }
             // trừ DB
@@ -444,7 +440,7 @@ public class OrderServiceImpl implements OrderService {
                 idBooks.add(item.getMaSach());
             }
         }
-        List<Sach> saches = sachRepository.findByMaSachIn(idBooks) ;
+        List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idBooks,true) ;
         if(saches == null) return ;
 
         for(Sach sach : saches ){

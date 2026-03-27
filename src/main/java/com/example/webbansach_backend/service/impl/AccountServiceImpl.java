@@ -6,6 +6,7 @@ import com.example.webbansach_backend.Repository.NguoiDungRepository;
 import com.example.webbansach_backend.exception.DuplicationDisableException;
 import com.example.webbansach_backend.service.AccountService;
 import com.example.webbansach_backend.service.EmailService;
+import com.example.webbansach_backend.utils.CheckRoleUItil;
 import com.example.webbansach_backend.utils.ParseJacksonUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,12 +126,8 @@ public class AccountServiceImpl implements AccountService {
             throw new  DuplicationDisableException("tài khoản này đã bị vô hiệu hóa rồi . không thể thực hiện lại");
 
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
-        nguoiDung.getDanhSachQuyen().forEach(role ->{
-            if(role.getTenQuyen().equals("ADMIN")){
-                nguoiDungDisable.setDaKichHoat(false);
-                System.out.println("disable acc:"+tenDangNhapofUser);
-                return ;
-            }
-        });
+        if(CheckRoleUItil.checkRole(nguoiDung)){
+            nguoiDungDisable.setDaKichHoat(false);
+        }else throw new RuntimeException("NGuoi dung k đủ quyền đẻ vô hiệu hóa tài khoản") ;
     }
 }

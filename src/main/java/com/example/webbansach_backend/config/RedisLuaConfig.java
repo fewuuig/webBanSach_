@@ -55,4 +55,18 @@ public class RedisLuaConfig {
         script.setResultType(Long.class);
         return script ;
     }
+    @Bean
+    public DefaultRedisScript<Long> addBook(){
+        DefaultRedisScript<Long> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/book/addBook.lua"));
+        script.setResultType(Long.class);
+        return script ;
+    }
+    @Bean
+    public DefaultRedisScript<Long> deleteBook(){
+        DefaultRedisScript<Long> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/book/deleteBook.lua"));
+        script.setResultType(Long.class);
+        return script ;
+    }
 }

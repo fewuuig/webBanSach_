@@ -28,7 +28,7 @@ public class WishLoveServiceImpl implements WishLoveService {
 
     @Override
     public void addWishLoveList(String tenDangNhap, int maSach) {
-        Sach sach = sachRepository.findByMaSach(maSach).orElseThrow() ;
+        Sach sach = sachRepository.findByMaSachAndIsActive(maSach,true).orElseThrow() ;
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
 //        Optional<SachYeuThich> exists = nguoiDung.getDanhSachSachYeuThich().stream().filter(i->i.getSach().getMaSach() == maSach).findFirst() ;
        Optional<SachYeuThich> exists = sachYeuThichRepository.findByNguoiDung_TenDangNhapAndSach_MaSach(tenDangNhap,maSach) ;

@@ -54,7 +54,7 @@ public class CartServiceImpl implements CartService {
     public void addToCart(String tenDangNhap , AddToCartRequestDTO addToCartRequestDTO){
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()-> new RuntimeException("Người dùng không tồn tại")) ;
         GioHang gioHang = getOrCreateCart(nguoiDung) ;
-        Sach sach = sachRepository.findByMaSach(addToCartRequestDTO.getMaSach()).orElseThrow(()->new RuntimeException("Sách không tồn tại")) ;
+        Sach sach = sachRepository.findByMaSachAndIsActive(addToCartRequestDTO.getMaSach(),true).orElseThrow(()->new RuntimeException("Sách không tồn tại")) ;
         // kiểm tra để tránh trường hợp thêm sản phẩm trùng vào giỏ hàng
         Optional<GioHangSach> exsist = gioHang.getGioHangSaches()
                 .stream().filter(i->i.getSach().getMaSach()==addToCartRequestDTO.getMaSach()).findFirst() ;

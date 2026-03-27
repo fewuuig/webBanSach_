@@ -1,25 +1,26 @@
 package com.example.webbansach_backend.service.impl;
 
-import com.example.webbansach_backend.Entity.HinhAnh;
-import com.example.webbansach_backend.Entity.Sach;
-import com.example.webbansach_backend.Entity.SachTheLoai;
-import com.example.webbansach_backend.Entity.TheLoai;
-import com.example.webbansach_backend.Repository.HinhAnhRepository;
-import com.example.webbansach_backend.Repository.SachRepository;
-import com.example.webbansach_backend.Repository.SachTheLoaiRepository;
-import com.example.webbansach_backend.Repository.TheLoaiRepository;
+import com.example.webbansach_backend.Entity.*;
+import com.example.webbansach_backend.Repository.*;
 import com.example.webbansach_backend.dto.book.AddBookRequestDTO;
+import com.example.webbansach_backend.dto.book.BookResponeDTO;
+import com.example.webbansach_backend.dto.book.BookUpdateDTO;
+import com.example.webbansach_backend.exception.NotFoundException;
 import com.example.webbansach_backend.mapper.BookMapper;
 import com.example.webbansach_backend.service.BookService;
+import com.example.webbansach_backend.utils.CheckRoleUItil;
 import jakarta.transaction.Transactional;
+import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -35,13 +36,30 @@ public class BookServiceImpl implements BookService {
     private HinhAnhRepository hinhAnhRepository ;
     @Autowired
     private RedisTemplate<String , Object> redisTemplate ;
+    @Autowired
+    private NguoiDungRepository nguoiDungRepository ;
+    @Autowired
+    @Qualifier("paginate")
+    private DefaultRedisScript<List> paginate ;
+    @Autowired
+    @Qualifier("addBook")
+    private DefaultRedisScript<Long> addBook ;
+    @Autowired
+    @Qualifier("deleteBook")
+    private DefaultRedisScript<Long> deleteBook ;
+    @Override
     @Transactional
-    public void addNewBook(AddBookRequestDTO addBookRequestDTO){
+    public void addNewBook( String tenDangNhap,AddBookRequestDTO addBookRequestDTO){
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).
+                orElseThrow(()->new RuntimeException("không đủ quyền để thực hiện tính năng này")) ;
+        if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("NGuoi dùng k đủ quyền để thêm sách") ;
+
         boolean exists = sachRepository.existsByIsbn(addBookRequestDTO.getIsbn()) ;
         if(exists) throw new RuntimeException("Sách đã tồn tại") ;
 
         // tạo thực thể
         Sach sachEntity = bookMapper.toEntity(addBookRequestDTO);
+        sachEntity.setActive(true);
         // tìm thể loại
         TheLoai theLoai = theLoaiRepository.findByMaTheLoai(addBookRequestDTO.getMaTheLoai()).
                     orElseThrow(()-> new RuntimeException("Not find category:"+addBookRequestDTO.getMaTheLoai())) ;
@@ -60,20 +78,107 @@ public class BookServiceImpl implements BookService {
             hinhAnh.setSach(sachEntity);
             hinhAnhs.add(hinhAnh) ;
         });
-
         // save
         sachRepository.save(sachEntity) ;
         sachTheLoaiRepository.save(sachTheLoai) ;
         hinhAnhRepository.saveAll(hinhAnhs) ;
-
         TransactionSynchronizationManager.registerSynchronization(
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        redisTemplate.opsForZSet().add("page_book_id" , sachEntity.getMaSach() , sachEntity.getMaSach()) ;
+                        // them vào các key zset , value
+                        redisTemplate.execute(addBook,
+                                List.of("page_book_id" , "page_book_id_category:"+theLoai.getMaTheLoai(),"book:"+ sachEntity.getMaSach()),
+                                sachEntity.getMaSach() ,sachEntity.getSoLuong()) ;
+                        // => lua chỉ mất 1 round trip
                     }
                 }
         );
 
     }
+
+    // client tke theo kiểu chọn thể loại + tích checkbox id book=> gửi về 2id đó
+    @Override
+    @Transactional
+    public void deleteBook(String tenDangNhap, List<Integer> ids , int maTheLoai) {
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
+        if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("NGuoi dùng k đủ quyền để thêm sách") ;
+        sachRepository.updateIsActive(ids);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                // delete book cx cần xóa hết trong zset {page , category }
+                List<String> idString = ids.stream().map(Object::toString).toList() ;
+
+                // redis cho phép chuyền 1 array char vào
+                redisTemplate.execute( deleteBook,List.of("page_book_id","page_book_id_category:"+maTheLoai,"book_info:") , idString.toArray()) ;
+                System.out.println("deleted:"+ids);
+            }
+        });
+    }
+    @Override
+    @Transactional
+    public void updateBook(String tenDangNhap , BookUpdateDTO bookUpdateDTO){
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
+        if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("người dùng k đủ quyền để cập nhật sách") ;
+
+        Sach sach = sachRepository.findByMaSachAndIsActive(bookUpdateDTO.getMaSach(),true).orElseThrow() ;
+         bookMapper.updateFromDTO(bookUpdateDTO ,sach); ;
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                System.out.println("updated:book:"+bookUpdateDTO.getMaSach());
+                redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach()) ;
+            }
+        });
+
+    }
+    @Override
+    @Transactional
+    public List<BookResponeDTO> getAllBook(){
+        // tận dụng lại key phân trang . lấy tất cả lên
+        List<Object> ids = redisTemplate.execute(paginate , List.of("page_book_id"),0 , -1) ;
+
+        List<Integer> idBooks = convertIdToNumber(ids) ;
+
+        List<String> keyInfo = convertKeyBookInfo( idBooks ,"book_info:") ;
+
+        List<Object> cached = redisTemplate.opsForValue().multiGet(keyInfo);
+        List<Integer> idNotFind = new ArrayList<>() ;
+        List<BookResponeDTO> bookResponeDTOS = new ArrayList<>() ;
+        int index = 0;
+        for(Object obj : cached){
+            if(obj != null ){
+                bookResponeDTOS.add((BookResponeDTO) obj) ;
+            }else {
+                idNotFind.add(idBooks.get(index)) ;
+            }
+            index ++ ;
+        }
+        if(!idNotFind.isEmpty()){
+            List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idNotFind, true) ;
+
+            for(Sach sach : saches){
+                System.out.println("lookup:"+sach.getMaSach());
+                bookResponeDTOS.add(bookMapper.toDTO(sach)) ;
+                redisTemplate.opsForValue().set("book_info:"+sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
+            }
+        }
+
+        bookResponeDTOS.sort(Comparator.comparing(BookResponeDTO::getTenSach));
+        return bookResponeDTOS ;
+    }
+
+    public List<BookResponeDTO> getSachNew(){
+        List<Sach> saches=sachRepository.findSachNew() ;
+        if(saches == null) return null ;
+        else return saches.stream().map(bookMapper::toDTO).toList() ;
+    }
+    private List<String> convertKeyBookInfo(List<Integer> ids , String keyInfo){
+        return ids.stream().map(id ->keyInfo+id).toList() ;
+    }
+    private List<Integer> convertIdToNumber(List<Object> ids){
+        return ids.stream().map(id->Integer.parseInt(id.toString())).toList() ;
+    }
+
 }

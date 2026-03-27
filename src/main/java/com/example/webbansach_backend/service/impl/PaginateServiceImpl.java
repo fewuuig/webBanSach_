@@ -2,6 +2,9 @@ package com.example.webbansach_backend.service.impl;
 
 import com.example.webbansach_backend.Entity.Sach;
 import com.example.webbansach_backend.Repository.SachRepository;
+import com.example.webbansach_backend.Repository.customer.SachCustomRepository;
+import com.example.webbansach_backend.builder.BookSearchBuiler;
+import com.example.webbansach_backend.converter.book.BookSearchBuilderConverter;
 import com.example.webbansach_backend.dto.book.BookResponeDTO;
 import com.example.webbansach_backend.mapper.BookMapper;
 import com.example.webbansach_backend.service.PaginateService;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,9 @@ public class PaginateServiceImpl implements PaginateService {
     @Autowired
     @Qualifier("paginate")
     private DefaultRedisScript<List> paginate ;
+
+    @Autowired
+    private SachCustomRepository sachCustomRepository ;
     private List<Integer> convertIdToNumber(List<Object> ids){
         return ids.stream().map(id->Integer.parseInt(id.toString())).toList() ;
     }
@@ -42,7 +49,6 @@ public class PaginateServiceImpl implements PaginateService {
         // kết thúc trang
         int end = start + size - 1 ;
         // lấy id sách cần cho việc phân trang
-
         List<Object> bookIds = new ArrayList<>() ;
         if(maTheLoai == -1) {
             bookIds = redisTemplate.execute(paginate, Arrays.asList(zKey), start, end);
@@ -57,31 +63,30 @@ public class PaginateServiceImpl implements PaginateService {
 
         List<Object> cacheBooks = redisTemplate.opsForValue().multiGet(keyInfo) ;  // lâys list info book
         int index = 0 ;
-        // duy trì thứu tự của các quyển sách khi phân trang
+        // duy trì thứ tự của các quyển sách khi phân trang
         Map<Integer , BookResponeDTO> order = new TreeMap<>() ;
         for(Object bookDTO : cacheBooks){
             if(bookDTO != null ){
                 order.put(bookIdList.get(index) ,(BookResponeDTO) bookDTO) ;
             }else {
-                idNotFind.add(bookIdList.get(index)) ; // chuyển sang string
+                idNotFind.add(bookIdList.get(index)) ;
             }
             index ++ ;
         }
 
         if(!idNotFind.isEmpty()){
             System.out.println("lookup DB ");
-            List<Sach> saches = sachRepository.findByMaSachIn(idNotFind) ;
+            List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idNotFind,true) ;
 
             for(Sach sach : saches){
                 order.put(sach.getMaSach() ,bookMapper.toDTO(sach) ) ;
-                redisTemplate.opsForValue().set(keyBookInfo+ sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
+                redisTemplate.opsForValue().set(keyBookInfo + sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
             }
 
         }else System.out.println("redis cache đã có dưx liệu");
         // chuyển Map sang list
         List<BookResponeDTO> bookResponeDTOS =  new ArrayList<>(order.values()) ;
         Collections.reverse(bookResponeDTOS);
-
 
         long totalElement = 0 ;
         if (maTheLoai == -1)  totalElement = redisTemplate.opsForZSet().size(zKey) ;
@@ -125,7 +130,7 @@ public class PaginateServiceImpl implements PaginateService {
         System.out.println("tìm kiếm lại");
 
         // nếu không có trong cache thì tìm DB
-        Sach sach = sachRepository.findByMaSach(maSach).orElse(null) ;
+        Sach sach = sachRepository.findByMaSachAndIsActive(maSach ,true).orElse(null) ;
 
         if(sach == null ){
             // cho nó luư 5 phút sau check lại nếu có người call API
@@ -138,5 +143,10 @@ public class PaginateServiceImpl implements PaginateService {
             return bookResponeDTO ;
         }
     }
+    public Page<BookResponeDTO> searchFilter(Map<String , Object> params, Pageable pageable){
+        BookSearchBuiler bookSearchBuiler = BookSearchBuilderConverter.toBookSearchBuiler(params) ;
+        return sachCustomRepository.findBookFilter(bookSearchBuiler , pageable) ;
+    }
+
 
 }
