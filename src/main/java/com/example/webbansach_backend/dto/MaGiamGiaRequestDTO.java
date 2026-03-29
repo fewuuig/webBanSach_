@@ -18,7 +18,6 @@ public class MaGiamGiaRequestDTO {
     private LoaiMaGiamGia loaiMaGiamGia ;
     private DoiTuongApDungMa doiTuongApDungMa ; // đối tượng áp dụng cái mã giảm gía này
     private int gioiHanSoLuongDungUser ; // cqis này là giới hạn lượt dùng đối vơí trường hợp là mã dành cho user
-    private Integer maTheLoai ; // mã áp dụng cho thể loai nào
-    private List<Integer> danhSachMaSach ; // đối với đối tương áp dụng là sách
+
 
 }

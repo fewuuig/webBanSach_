@@ -41,18 +41,18 @@ public class BookController {
         bookService.updateBook(tenDangNhap , bookUpdateDTO);
         return ResponseEntity.noContent().build();
     }
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllBook(){
-        return ResponseEntity.ok(bookService.getAllBook()) ;
-    }
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteBooks(@RequestBody List<Integer> ids , @RequestParam int maTheLoai){
+    public ResponseEntity<?> deleteBooks(@RequestBody List<Integer> ids , @RequestParam("maTheLoai") int maTheLoai){
         String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
         bookService.deleteBook(tenDangNhap ,ids , maTheLoai);
         return ResponseEntity.noContent().build() ;
     }
     @GetMapping("/book-new-carousel")
-    public ResponseEntity<?> deleteBooks(){
+    public ResponseEntity<?> getBookNewCarousel(){
         return ResponseEntity.ok(bookService.getSachNew()) ;
+    }
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<?> getBookCategory(@PathVariable("categoryId") int maTheLoai){
+        return ResponseEntity.ok(bookService.getBookCategory(maTheLoai)) ;
     }
 }

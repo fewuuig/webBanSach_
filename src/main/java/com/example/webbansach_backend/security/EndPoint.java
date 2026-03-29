@@ -29,12 +29,14 @@ public class EndPoint {
             "/nguoi-dung" ,
             "/nguoi-dung/**",
             "/profile/info/user-other" ,
-            "/book/all"
+            "/book/all" ,
+            "/book/category/{categoryId}"
     } ;
     public static final String[] ADMIN_POST_ENDPOINS = {
             "/them-sach" ,
             "/stats/statToday",
-            "/book/add-new-book"
+            "/book/add-new-book",
+            "/vouchers/add-voucher"
     } ;
     public static final String[] ADMIN_PUT_ENDPOINS ={
             "/tai-khoan/disable",

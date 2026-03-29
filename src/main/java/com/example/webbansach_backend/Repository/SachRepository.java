@@ -25,6 +25,13 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
      Optional<Sach> findByMaSachAndIsActive(int maSach , boolean isActive ) ;
      Page<Sach> findAll(Pageable pageable) ;
      List<Sach> findByMaSachInAndIsActive(Collection<Integer> danhSachMaSach ,  boolean isActive) ;
+     @Query(value = """
+          SELECT s.*
+          FROM sach s
+          JOIN sach_theloai stl ON stl.ma_sach = s.ma_sach
+          WHERE s.ma_sach in :maSaches And s.is_active = true and stl.ma_the_loai = :maTheLoai
+    """ , nativeQuery = true)
+     List<Sach> findByMaSachInAndIsActiveAndMaTheLoai(@Param("maSaches") Collection<Integer> danhSachMaSach ,@Param("maTheLoai") int maTheLoai) ;
 
      @Lock(LockModeType.PESSIMISTIC_WRITE)
      @Query("select s from Sach s where s.maSach = :maSach")
@@ -53,4 +60,5 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
           LIMIT 3
      """ , nativeQuery = true)
      List<Sach>  findSachNew() ;
+
 }

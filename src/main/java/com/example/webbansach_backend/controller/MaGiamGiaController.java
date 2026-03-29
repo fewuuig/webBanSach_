@@ -20,15 +20,14 @@ public class MaGiamGiaController {
         String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
         return ResponseEntity.ok(maGiamGiaService.getMaGiamGiaCuaNguoiDung(tenDangNhap)) ;
     }
-//    @PostMapping("/user/use-voucher/{maGiam}")
-//    public ResponseEntity<?> useVoucherOfUser(@PathVariable("maGiam") int maGiam){
-//        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
-//        maGiamGiaService.dungMaGiamGiaUser(tenDangNhap , maGiam);
-//        return ResponseEntity.noContent().build() ;
-//    }
+
     @PutMapping("/update/{maGiam}")
     public ResponseEntity<?> updateVoucher(@PathVariable("maGiam") int maGiam  , @RequestBody UpdateMaGiamGiaDTO updateMaGiamGiaDTO){
         maGiamGiaService.capNhatMaGiamGiaSach(maGiam , updateMaGiamGiaDTO);
         return ResponseEntity.noContent().build() ;
+    }
+    @PostMapping("/add-voucher")
+    public ResponseEntity<?> addVoucher(@RequestBody ){
+        return ResponseEntity.status(HttpStatus.CREATED).body("đã thêm") ;
     }
 }

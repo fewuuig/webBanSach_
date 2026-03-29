@@ -9,6 +9,7 @@ import com.example.webbansach_backend.exception.NotFoundException;
 import com.example.webbansach_backend.mapper.BookMapper;
 import com.example.webbansach_backend.service.BookService;
 import com.example.webbansach_backend.utils.CheckRoleUItil;
+import com.example.webbansach_backend.utils.ParseListUtil;
 import jakarta.transaction.Transactional;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,12 +108,35 @@ public class BookServiceImpl implements BookService {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
-                // delete book cx cần xóa hết trong zset {page , category }
-                List<String> idString = ids.stream().map(Object::toString).toList() ;
+                List<String> idString = ids.stream().map(String::valueOf).toList();
+                System.out.println(idString);
+                // xóa key page_book_id
+                ids.forEach(id->{
+                    redisTemplate.opsForZSet().remove("page_book_id" , id) ;
+                    // xáo key "page_book_id_category:" + maTheLoai
+                    redisTemplate.opsForZSet().remove("page_book_id_category:" + maTheLoai , maTheLoai ,id) ;
+                });
+                // xóa book_info:
+                List<String> idBookInfo = ids.stream().map(id->"book_info:"+id).toList() ;
+                redisTemplate.delete(idBookInfo) ;
 
-                // redis cho phép chuyền 1 array char vào
-                redisTemplate.execute( deleteBook,List.of("page_book_id","page_book_id_category:"+maTheLoai,"book_info:") , idString.toArray()) ;
-                System.out.println("deleted:"+ids);
+
+//                List<String> keys = List.of(
+//                        "page_book_id",
+//                        "page_book_id_category:" + maTheLoai,
+//                        "book_info:"
+//                );
+//
+//                System.out.println("==== DEBUG REDIS LUA ====");
+//                System.out.println("KEYS: " + keys);
+//                System.out.println("ARGV: " + idString);
+//                System.out.println("idString: " +  idString.toArray(new String[0]));
+//                Long result = redisTemplate.execute(
+//                        deleteBook,
+//                        keys,
+//                        idString.toArray()
+//                );
+//                System.out.println("đã xóa : "+result);
             }
         });
     }
@@ -127,6 +151,7 @@ public class BookServiceImpl implements BookService {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
+                // cap nhatr chi can xóa key
                 System.out.println("updated:book:"+bookUpdateDTO.getMaSach());
                 redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach()) ;
             }
@@ -135,13 +160,13 @@ public class BookServiceImpl implements BookService {
     }
     @Override
     @Transactional
-    public List<BookResponeDTO> getAllBook(){
+    public List<BookResponeDTO> getBookCategory(int maTheLoai){
         // tận dụng lại key phân trang . lấy tất cả lên
-        List<Object> ids = redisTemplate.execute(paginate , List.of("page_book_id"),0 , -1) ;
+        List<Object> ids = redisTemplate.execute(paginate , List.of("page_book_id_category:"+maTheLoai),0 , -1) ;
 
-        List<Integer> idBooks = convertIdToNumber(ids) ;
+        List<Integer> idBooks = ParseListUtil.toListNumber(ids) ;
 
-        List<String> keyInfo = convertKeyBookInfo( idBooks ,"book_info:") ;
+        List<String> keyInfo = ParseListUtil.toKeyBookInfo( idBooks ,"book_info:") ;
 
         List<Object> cached = redisTemplate.opsForValue().multiGet(keyInfo);
         List<Integer> idNotFind = new ArrayList<>() ;
@@ -149,6 +174,7 @@ public class BookServiceImpl implements BookService {
         int index = 0;
         for(Object obj : cached){
             if(obj != null ){
+                System.out.println("lấy từ cache");
                 bookResponeDTOS.add((BookResponeDTO) obj) ;
             }else {
                 idNotFind.add(idBooks.get(index)) ;
@@ -156,7 +182,7 @@ public class BookServiceImpl implements BookService {
             index ++ ;
         }
         if(!idNotFind.isEmpty()){
-            List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idNotFind, true) ;
+            List<Sach> saches = sachRepository.findByMaSachInAndIsActiveAndMaTheLoai(idNotFind , maTheLoai) ;
 
             for(Sach sach : saches){
                 System.out.println("lookup:"+sach.getMaSach());
@@ -169,16 +195,10 @@ public class BookServiceImpl implements BookService {
         return bookResponeDTOS ;
     }
 
+
     public List<BookResponeDTO> getSachNew(){
         List<Sach> saches=sachRepository.findSachNew() ;
         if(saches == null) return null ;
         else return saches.stream().map(bookMapper::toDTO).toList() ;
     }
-    private List<String> convertKeyBookInfo(List<Integer> ids , String keyInfo){
-        return ids.stream().map(id ->keyInfo+id).toList() ;
-    }
-    private List<Integer> convertIdToNumber(List<Object> ids){
-        return ids.stream().map(id->Integer.parseInt(id.toString())).toList() ;
-    }
-
 }

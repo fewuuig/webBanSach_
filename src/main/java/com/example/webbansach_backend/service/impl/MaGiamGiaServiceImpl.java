@@ -185,31 +185,6 @@ public void themMaGiamGia(MaGiamGiaRequestDTO maGiamGiaRequestDTO){
     MaGiamGia maGiamGia = maGiamGiaMapper.toEntity(maGiamGiaRequestDTO) ;
 
 
-    if(maGiamGiaRequestDTO.getDoiTuongApDungMa()== DoiTuongApDungMa.SACH){
-        if(maGiamGiaRequestDTO.getDanhSachMaSach() != null && !maGiamGiaRequestDTO.getDanhSachMaSach().isEmpty() ){
-            maGiamGiaRepository.save(maGiamGia) ;
-            List<Sach> saches = sachRepository.findByMaSachInAndIsActive(maGiamGiaRequestDTO.getDanhSachMaSach() ,true) ;
-            if(saches.isEmpty() || saches.size()!= maGiamGiaRequestDTO.getDanhSachMaSach().size()) throw new NotFoundException("Sách không tồn tại / thiếu sách") ;
-            List<MaGiamGiaSach> maGiamGiaSaches = new ArrayList<>() ;
-            for(Sach sach : saches ){
-                MaGiamGiaSach maGiamGiaSach = new MaGiamGiaSach() ;
-                maGiamGiaSach.setSach(sach);
-                maGiamGiaSach.setMaGiamGia(maGiamGia);
-                maGiamGiaSaches.add(maGiamGiaSach) ;
-            }
-            maGiamGiaSachRepository.saveAll(maGiamGiaSaches) ;
-        }else throw new RuntimeException("Sách chưa được chọn đối với mã giảm giá dành cho sách") ;
-    }else if(maGiamGiaRequestDTO.getDoiTuongApDungMa()== DoiTuongApDungMa.THE_LOAI){
-        if(maGiamGiaRequestDTO.getMaTheLoai() != null){
-            maGiamGiaRepository.save(maGiamGia) ;
-        }else throw new RuntimeException("ma thể loại bị null") ;
-
-    }else if(maGiamGiaRequestDTO.getDoiTuongApDungMa() == DoiTuongApDungMa.NGUOI_DUNG){
-        maGiamGiaRepository.save(maGiamGia) ;
-    }else if(maGiamGiaRequestDTO.getDoiTuongApDungMa() == DoiTuongApDungMa.TOAN_HE_THONG){
-        maGiamGiaRepository.save(maGiamGia) ;
-    }
-
 }
 
 //xóa cache toàn bộ

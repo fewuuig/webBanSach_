@@ -406,7 +406,8 @@ public class OrderServiceImpl implements OrderService {
                 else if(totalPrice < maGiamGia.getDonGiaTu()) donHang.setTongGia(totalPrice);
             }
         }
-
+        // tổng với tiền sip
+        donHang.setTongGia(donHang.getTongGia() + donHang.getChiPhiGiaoHang());
         // thống kê doanh số bán hàng
         thongKeBanHangService.statWhenPlaceOrder(totalBook ,donHang);
 
