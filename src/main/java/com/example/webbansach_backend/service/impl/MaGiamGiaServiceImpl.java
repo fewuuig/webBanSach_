@@ -5,6 +5,7 @@ import com.example.webbansach_backend.Entity.*;
 import com.example.webbansach_backend.Enum.*;
 import com.example.webbansach_backend.Repository.*;
 import com.example.webbansach_backend.dto.*;
+import com.example.webbansach_backend.dto.voucher.UpdateVoucherDTO;
 import com.example.webbansach_backend.exception.NotFoundException;
 import com.example.webbansach_backend.exception.OutOfStockException;
 import com.example.webbansach_backend.exception.VoucherStateException;
@@ -72,6 +73,9 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
     private LogOrderRepository logOrderRepository ;
     @Autowired
     private DonHangRepository donHangRepository ;
+    @Autowired
+    @Qualifier("redisTemplateMaGiamGia")
+    private RedisTemplate<String ,MaGiamGiaUserResponeDTO> redisTemplateMaGiamGia ;
 
     // chỗ này chú ý rằng nó sẽ có mã như 1 chuỗi ký tự . VD : "1,2,3" . khi lấy phải trùng y hệt "1,2,3" thì ms lấy đc .
     // "1" hay "2,3" cx k bao giừo lấy đc . vì nó có dạng chuỗi để so khớp cho nhanh nhất có thể
@@ -112,13 +116,10 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
     public MaGiamGiaUserResponeDTO getMaGiamGiaCuaNguoiDung(String tenDangNhap) {
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
         String key = "user:voucher:"+tenDangNhap ;
-        MaGiamGiaUserResponeDTO cached = (MaGiamGiaUserResponeDTO) redisTemplate.opsForValue().get(key) ;
-
+        MaGiamGiaUserResponeDTO cached =  (MaGiamGiaUserResponeDTO)redisTemplateMaGiamGia.opsForValue().get(key) ;
         if(cached != null){
-            System.out.println("ĐÃ truy cập vào cache vào lất DATA lên");
             return cached ;
         }
-        System.out.println("Chưa sưr dụng cache để lấy DATA ");
         // lấy tất cả mã giảm giá lên
         List<MaGiamGia> maGiamGias = maGiamGiaRepository.findMaGiamGiaActive(TrangThaiMaGiamGia.DANG_HOAT_DONG ,DoiTuongApDungMa.NGUOI_DUNG , nguoiDung) ;
 
@@ -128,7 +129,7 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
         maGiamGiaUserResponeDTO.setMaNguoiDung(nguoiDung.getMaNguoiDung());
         maGiamGiaUserResponeDTO.setMaGiamGiaCuaUserResponeDTOS(maGiamGiaCuaUserResponeDTOS);
 
-        redisTemplate.opsForValue().set(key ,maGiamGiaUserResponeDTO , 5 , TimeUnit.MINUTES );
+        redisTemplateMaGiamGia.opsForValue().set(key ,maGiamGiaUserResponeDTO , 5 , TimeUnit.MINUTES );
 
         return maGiamGiaUserResponeDTO ;
     }
@@ -173,20 +174,43 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
 
     }
 
-@Caching(
-        evict = {
-                @CacheEvict(value = "maGiamGiaSach" , allEntries = true , condition = "#maGiamGiaRequestDTO.doiTuongApDungMa == T(com.example.webbansach_backend.Enum.DoiTuongApDungMa).SACH") ,
-                @CacheEvict(value = "maGiamGiaUser" , allEntries = true , condition = "#maGiamGiaRequestDTO.doiTuongApDungMa == T(com.example.webbansach_backend.Enum.DoiTuongApDungMa).NGUOI_DUNG")
-        }
-)
+
 @Override
 @Transactional
 public void themMaGiamGia(MaGiamGiaRequestDTO maGiamGiaRequestDTO){
-    MaGiamGia maGiamGia = maGiamGiaMapper.toEntity(maGiamGiaRequestDTO) ;
-
-
+        MaGiamGia maGiamGia = maGiamGiaMapper.toEntity(maGiamGiaRequestDTO) ;
+        if(maGiamGia.getDoiTuongApDungMa() != DoiTuongApDungMa.NGUOI_DUNG)
+            throw new RuntimeException("Đối tượng áp dụng mã phải là NGUOI_DUNG") ;
+        if(maGiamGia.getLoaiMaGiamGia() == LoaiMaGiamGia.TIEN){
+            if(maGiamGia.getTienGiam() == null || maGiamGia.getTienGiam() <0)
+                throw new RuntimeException("Tiền giảm không đc null/nhỏ hơn 0") ;
+            if(maGiamGia.getPhanTramGiam() != null )
+                throw new RuntimeException("Loại mã giảm là tiền thì không có phần trăm giảm") ;
+        }
+        if(maGiamGia.getLoaiMaGiamGia() == LoaiMaGiamGia.PHAN_TRAM){
+            if( maGiamGia.getPhanTramGiam() == null || maGiamGia.getPhanTramGiam() < 0 ){
+                throw new RuntimeException("Phần trăm giảm gía phải >=0 | khong đc null") ;
+            }
+            if(maGiamGia.getTienGiam() != null)
+                throw new RuntimeException("Loại mã giảm là phần trăm thì không có tiền giảm") ;
+        }
+        maGiamGiaRepository.save(maGiamGia) ;
+        System.out.println("thêm mã giảm giá thàng công");
+        System.out.println(maGiamGia.getTienGiam());
 }
 
+@Transactional
+public void updateVoucher(UpdateVoucherDTO updateVoucherDTO , int maGiam){
+        MaGiamGia maGiamGia = maGiamGiaRepository.findByMaGiam(maGiam).
+                orElseThrow(()-> new RuntimeException("mã gianmr giá không toòn tại")) ;
+        maGiamGiaUserMapper.updateVoucherFromDTO(updateVoucherDTO , maGiamGia);
+
+}
+@Override
+public List<MaGiamGiaCuaUserResponeDTO> getAllVoucher(){
+        List<MaGiamGia> maGiamGias = maGiamGiaRepository.findAll() ;
+        return maGiamGias.stream().map(maGiamGiaUserMapper::toDto).toList();
+}
 //xóa cache toàn bộ
 @CacheEvict(
         value = "maGiamGiaSach" ,
@@ -336,6 +360,7 @@ public void updateVoucherStatusAuto(){
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
+
                         String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("username").toString()) ;
                         int maGiam = Integer.parseInt(message.getValue().get("voucherID").toString()) ;
                         // xóa khỏi danh sách quêue order timeout khi nó đã thành công xác thực đơn
@@ -364,11 +389,15 @@ public void updateVoucherStatusAuto(){
         if(maGiamGia.getTrangThaiMaGiamGia() == TrangThaiMaGiamGia.KHOA || maGiamGia.getTrangThaiMaGiamGia() == TrangThaiMaGiamGia.HET_HAN){
             throw new VoucherStateException("mã giảm giá "+message.getValue().get("voucherID").toString()+ " không còn hoạt động") ;
         }
+        if(maGiamGia.getSoMaDaDung() == maGiamGia.getSoLuong()) throw new RuntimeException("mã giảm giá đã dùng hết");
+        maGiamGia.setSoMaDaDung(maGiamGia.getSoMaDaDung() + 1);
+
 
         Optional<MaGiamGiaNguoiDung> exsist = maGiamGiaNguoiDungRepository.findByMaGiamGia_MaGiamAndNguoiDung_TenDangNhap(maGiam,tenDangNhap);
         if(exsist.isPresent()){
             MaGiamGiaNguoiDung maGiamGiaNguoiDung = exsist.get() ;
-            if(maGiamGiaNguoiDung.getDaDung() == maGiamGiaNguoiDung.getLuotDungToiDa()) return 0;
+            if(maGiamGiaNguoiDung.getDaDung() == maGiamGia.getGioiHanSoLuongDungUser())
+                throw new RuntimeException("user đã hết ượt dùng mã giảm giá");
             exsist.get().setDaDung(maGiamGiaNguoiDung.getDaDung() + 1);
             maGiamGiaNguoiDungRepository.save(maGiamGiaNguoiDung) ;
 
@@ -384,10 +413,6 @@ public void updateVoucherStatusAuto(){
 
             maGiamGiaNguoiDungRepository.save(entity) ;
         }
-
-        if(maGiamGia.getSoMaDaDung() == maGiamGia.getSoLuong()) return 0;
-
-        maGiamGia.setSoMaDaDung(maGiamGia.getSoMaDaDung() + 1);
 
         // set status đơn hàng
         DonHang donHang = donHangRepository.findByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()))

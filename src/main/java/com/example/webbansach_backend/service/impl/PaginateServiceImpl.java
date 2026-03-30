@@ -79,7 +79,7 @@ public class PaginateServiceImpl implements PaginateService {
                 redisTemplate.opsForValue().set(keyBookInfo + sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
             }
 
-        }else System.out.println("redis cache đã có dưx liệu");
+        }else System.out.println("cached");
         // chuyển Map sang list
         List<BookResponeDTO> bookResponeDTOS =  new ArrayList<>(order.values()) ;
         Collections.reverse(bookResponeDTOS);
@@ -144,20 +144,16 @@ public class PaginateServiceImpl implements PaginateService {
         Page<BookResponeDTO> page ;
         page = checkCategory(bookSearchBuiler , pageable) ;
         if(page != null) {
-            System.out.println("có vào filter category ");
             return page;
         }
         page = checkPriceFilter(bookSearchBuiler,pageable) ;
         if(page != null ) {
-            System.out.println("có vào filter price ");
             return page;
         }
         page = checkCategoryAndPrice(bookSearchBuiler , pageable) ;
         if(page != null) {
-            System.out.println("có vào filter cate and price ");
             return page ;
         }
-
         return sachCustomRepository.findBookFilter(bookSearchBuiler , pageable) ;
     }
     private Page<BookResponeDTO> checkCategory(BookSearchBuiler bookSearchBuiler , Pageable pageable){
@@ -166,12 +162,10 @@ public class PaginateServiceImpl implements PaginateService {
                 && bookSearchBuiler.getPriceTo()==null
                 && bookSearchBuiler.getPriceFrom()==null){
             int maTheLoai = bookSearchBuiler.getma_the_loai() ;
-            System.out.println("vào đây");
             Page<BookResponeDTO>  page = getBookPage(maTheLoai ,
                     pageable.getPageNumber(),
                     (int)pageable.getPageSize() ,
                     "page_book_id_category:" ,"book_info:") ;
-            System.out.println("vào đây2");
             if(!page.getContent().isEmpty()){
                 return new PageImpl<>(page.getContent() ,pageable , page.getContent().size()) ;
             }
@@ -199,7 +193,7 @@ public class PaginateServiceImpl implements PaginateService {
             }
 
             // chuyền ids về int
-            if(!ids.isEmpty() ) {
+            if(ids == null ) {
                 List<Integer> idNumber = ParseListUtil.toListNumber(ids);
                 List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(idNumber ,"book_info:") ;
                 List<Object> cached = redisTemplate.opsForValue().multiGet(keyBookInfo) ;
@@ -217,16 +211,14 @@ public class PaginateServiceImpl implements PaginateService {
                 }
 
                 if(!idNotFind.isEmpty()){
-                    System.out.println("lookup DB ");
+                    System.out.println("DB");
                     List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idNotFind,true) ;
-
                     for(Sach sach : saches){
                         order.put(sach.getMaSach() ,bookMapper.toDTO(sach) ) ;
-                        System.out.println("cache lại vào ram");
                         redisTemplate.opsForValue().set("book_info:" + sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
                     }
 
-                }else System.out.println("redis cache đã có dưx liệu");
+                }else System.out.println("cached");
                 // chuyển Map sang list
                 List<BookResponeDTO> bookResponeDTOS =  new ArrayList<>(order.values()) ;
                 Collections.reverse(bookResponeDTOS);
@@ -286,7 +278,7 @@ public class PaginateServiceImpl implements PaginateService {
             }
 
             if(!idNotFind.isEmpty()){
-                System.out.println("lookup DB ");
+                System.out.println("DB ");
                 List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idNotFind,true) ;
 
                 for(Sach sach : saches){
@@ -294,7 +286,7 @@ public class PaginateServiceImpl implements PaginateService {
                     redisTemplate.opsForValue().set("book_info:" + sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
                 }
 
-            }else System.out.println("redis cache đã có dưx liệu");
+            }else System.out.println("cached");
             // chuyển Map sang list
             List<BookResponeDTO> bookResponeDTOS =  new ArrayList<>(order.values()) ;
             Collections.reverse(bookResponeDTOS);

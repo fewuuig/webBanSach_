@@ -12,4 +12,6 @@ public interface BookService {
     void updateBook(String tenDangNhap , BookUpdateDTO bookUpdateDTO) ;
     List<BookResponeDTO> getBookCategory(int maTheLoai) ;
     List<BookResponeDTO> getSachNew();
+    List<BookResponeDTO> getBookDeleted(int maTheLoai) ;
+    void reStoreBook(List<Integer> ids , int maTheLoai ) ;
 }

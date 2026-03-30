@@ -24,5 +24,6 @@ public class MaGiamGiaCuaUserResponeDTO {
     private double donGiaTu ;
     private TrangThaiMaGiamGia trangThaiMaGiamGia ;
     private DoiTuongApDungMa doiTuongApDungMa ;
-
+    private Double phanTramGiam ;
+    private Double tienGiam ;
 }

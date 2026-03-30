@@ -5,10 +5,12 @@ import com.example.webbansach_backend.dto.book.AddBookRequestDTO;
 import com.example.webbansach_backend.dto.book.BookUpdateDTO;
 import com.example.webbansach_backend.service.BookService;
 import com.example.webbansach_backend.service.PaginateService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -54,5 +56,14 @@ public class BookController {
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<?> getBookCategory(@PathVariable("categoryId") int maTheLoai){
         return ResponseEntity.ok(bookService.getBookCategory(maTheLoai)) ;
+    }
+    @GetMapping("/book-deleted/{categoryId}")
+    public ResponseEntity<?> getBookDeleted(@PathVariable("categoryId") int maTheLoai){
+        return ResponseEntity.ok(bookService.getBookDeleted(maTheLoai)) ;
+    }
+    @PutMapping("/restore")
+    public ResponseEntity<?> reStoreBook(@RequestBody List<Integer> ids , @RequestParam("maTheLoai") int maTheLoai){
+        bookService.reStoreBook(ids ,maTheLoai);
+        return ResponseEntity.noContent().build() ;
     }
 }

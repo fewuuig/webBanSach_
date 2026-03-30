@@ -15,20 +15,17 @@ public class DanhSachYeuThichController {
     @GetMapping("/danh-sach-yeu-thich")
     public ResponseEntity<?> getWishLoveList(){
         String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("Xem danh sách yêu thích thành công");
         return ResponseEntity.ok(wishLoveService.getWishLoveList( tenDangNhap));
     }
     @PostMapping("/add-to-wish-love")
     public ResponseEntity<?> addWishLoveList(@RequestBody AddWishLoveRequestDTO addWishLoveRequestDTO){
         String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("Thêm vào danh sách yêu thhichs thanmhf công");
         wishLoveService.addWishLoveList(tenDangNhap , addWishLoveRequestDTO.getMaSach());
-        return ResponseEntity.ok("them sahs vào giỏ hàng thành cong") ;
+        return ResponseEntity.ok("them sách vào giỏ hàng thành cong") ;
     }
     @GetMapping("/check")
     public ResponseEntity<?> checkWishLove(@RequestParam("maSach") int maSach){
         String tenDangNhap =SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("check thành công");
         return ResponseEntity.ok( wishLoveService.check( tenDangNhap,maSach) ) ;
     }
 }

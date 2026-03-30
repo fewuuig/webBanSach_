@@ -74,7 +74,7 @@ public class SachRepositoryCustomImpl implements SachCustomRepository {
         joinTable(bookSearchBuiler , query ,countQuery);
         queryNormal(bookSearchBuiler,where);
         querySpecial(bookSearchBuiler , where);
-        where.append(" s.is_active = true ") ;
+        where.append(" And s.is_active=true ") ;
         query = query.append(where) ;
 
         // query data lên

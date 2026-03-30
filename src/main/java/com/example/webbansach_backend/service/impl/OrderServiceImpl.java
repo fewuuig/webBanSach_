@@ -304,7 +304,7 @@ public class OrderServiceImpl implements OrderService {
                         String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString()) ;
                         String request_id = ParseJacksonUtil.toString(message.getValue().get("request_id").toString()) ;
                         if(!maGiam.equals("null")) {
-                            // push vào queue delay -> hoànd kho nếu k thể xá nhận đơn hang
+                            // push vào queue delay -> hoàn kho nếu k thể xác nhận đơn hang
                             returnOrderTimeoutBatchService.addOrderTimeout(maDonHang);
                             int value = Integer.parseInt(maGiam) ;
                             maGiamGiaService.dungMaGiamGiaUser(tenDangNhap , value ,request_id );

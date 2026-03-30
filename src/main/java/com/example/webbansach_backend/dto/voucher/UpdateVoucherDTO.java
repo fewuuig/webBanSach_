@@ -1,21 +1,15 @@
-package com.example.webbansach_backend.dto;
+package com.example.webbansach_backend.dto.voucher;
 
 import com.example.webbansach_backend.Enum.DoiTuongApDungMa;
 import com.example.webbansach_backend.Enum.LoaiMaGiamGia;
 import com.example.webbansach_backend.Enum.TrangThaiMaGiamGia;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
 @Getter
 @Setter
-public class MaGiamGiaRequestDTO {
+public class UpdateVoucherDTO {
     private String tenMaGiamGia ;
     private LocalDateTime ngayBatDau ;
     private LocalDateTime ngayHetHan ;
@@ -29,4 +23,5 @@ public class MaGiamGiaRequestDTO {
     private TrangThaiMaGiamGia trangThaiMaGiamGia ;
     private int gioiHanSoLuongDungUser ;
     private LoaiMaGiamGia loaiMaGiamGia ;
+
 }

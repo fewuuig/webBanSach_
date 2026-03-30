@@ -30,7 +30,9 @@ public class EndPoint {
             "/nguoi-dung/**",
             "/profile/info/user-other" ,
             "/book/all" ,
-            "/book/category/{categoryId}"
+            "/book/category/{categoryId}",
+            "/book/book-deleted",
+            "/vouchers/all"
     } ;
     public static final String[] ADMIN_POST_ENDPOINS = {
             "/them-sach" ,
@@ -40,7 +42,9 @@ public class EndPoint {
     } ;
     public static final String[] ADMIN_PUT_ENDPOINS ={
             "/tai-khoan/disable",
-            "/book/update"
+            "/book/update" ,
+            "/book/restore",
+            "/vouchers/update-voucher/{maGiam}"
     };
 
     public  static final String[] USER_GET_ENDPINTS = {

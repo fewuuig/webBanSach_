@@ -11,8 +11,8 @@ import org.mapstruct.*;
 public interface MaGiamGiaMapper {
 //    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE ) : khi update entity bỏ qua những fields null
 //    @BeanMapping(ignoreByDefault = true) // chỉ mmap vài fields , còn lại tự cấu hình bằng source , target , constant
-    @Mapping(target = "soMaDaDung" ,  constant = "0")
-    @Mapping(target = "trangThaiMaGiamGia" , expression = "java(com.example.webbansach_backend.Enum.TrangThaiMaGiamGia.DANG_HOAT_DONG)")
+//    @Mapping(target = "soMaDaDung" ,  constant = "0")
+//    @Mapping(target = "trangThaiMaGiamGia" , expression = "java(com.example.webbansach_backend.Enum.TrangThaiMaGiamGia.DANG_HOAT_DONG)")
     @Mapping(target = "maGiam" , ignore = true)
     @Mapping(target = "donHangs" , ignore = true)
     @Mapping(target = "maGiamGiaNguoiDungs" , ignore = true)

@@ -61,4 +61,19 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
      """ , nativeQuery = true)
      List<Sach>  findSachNew() ;
 
+     @Query(value = """
+          SELECT s.*
+          FROM sach s
+          JOIN sach_theloai stl ON stl.ma_sach =s.ma_sach
+          WHERE s.is_active = false and stl.ma_the_loai = :maTheLoai
+     """,nativeQuery = true)
+     List<Sach> findSachDeleted(@Param("maTheLoai") int maTheLoai) ;
+
+     @Modifying
+     @Query(value = """
+          UPDATE sach
+          SET sach.is_active = true
+          WHERE sach.ma_sach IN :ids
+     """,nativeQuery = true)
+     void reStoreBook(@Param("ids") List<Integer> ids) ;
 }

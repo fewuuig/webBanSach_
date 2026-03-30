@@ -10,6 +10,7 @@ import com.example.webbansach_backend.mapper.BookMapper;
 import com.example.webbansach_backend.service.BookService;
 import com.example.webbansach_backend.utils.CheckRoleUItil;
 import com.example.webbansach_backend.utils.ParseListUtil;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,17 +144,16 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void updateBook(String tenDangNhap , BookUpdateDTO bookUpdateDTO){
-        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).
+                orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
         if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("người dùng k đủ quyền để cập nhật sách") ;
 
         Sach sach = sachRepository.findByMaSachAndIsActive(bookUpdateDTO.getMaSach(),true).orElseThrow() ;
-         bookMapper.updateFromDTO(bookUpdateDTO ,sach); ;
+         bookMapper.updateFromDTO(bookUpdateDTO ,sach);
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
-                // cap nhatr chi can xóa key
-                System.out.println("updated:book:"+bookUpdateDTO.getMaSach());
-                redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach()) ;
+                redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach());
             }
         });
 
@@ -195,10 +195,35 @@ public class BookServiceImpl implements BookService {
         return bookResponeDTOS ;
     }
 
-
+    @Override
     public List<BookResponeDTO> getSachNew(){
         List<Sach> saches=sachRepository.findSachNew() ;
         if(saches == null) return null ;
         else return saches.stream().map(bookMapper::toDTO).toList() ;
     }
+    @Override
+    public List<BookResponeDTO> getBookDeleted(int maTheLoai){
+        List<Sach>saches = sachRepository.findSachDeleted(maTheLoai) ;
+        return saches.stream().map(bookMapper::toDTO).toList() ;
+    }
+    @Override
+    @Transactional
+    public void reStoreBook(List<Integer> ids , int maTheLoai ){
+        sachRepository.reStoreBook(ids);
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        // thêm id vào category , page
+                        ids.forEach(id->{
+                            redisTemplate.opsForZSet().add("page_book_id" , id ,id) ;
+                            redisTemplate.opsForZSet().add("page_book_id_category:"+maTheLoai,id ,id ) ;
+                        });
+                    }
+                }
+        );
+    }
+
+
+
 }
