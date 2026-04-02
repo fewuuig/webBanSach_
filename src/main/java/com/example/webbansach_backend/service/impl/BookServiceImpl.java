@@ -114,6 +114,8 @@ public class BookServiceImpl implements BookService {
                 System.out.println(idString);
                 // xóa key page_book_id
                 ids.forEach(id->{
+                    // xóa khỏi image:book:
+                    redisTemplate.delete("image:book:"+id) ;
                     //xóa khỏi zset price
                     redisTemplate.opsForZSet().remove("price" , id) ;
                     // xóa khỏi top:selling
@@ -124,6 +126,7 @@ public class BookServiceImpl implements BookService {
                 });
                 // xóa book_info:
                 List<String> idBookInfo = ids.stream().map(id->"book_info:"+id).toList() ;
+
                 redisTemplate.delete(idBookInfo) ;
             }
         });
@@ -135,15 +138,38 @@ public class BookServiceImpl implements BookService {
                 orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
         if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("người dùng k đủ quyền để cập nhật sách") ;
 
-        Sach sach = sachRepository.findByMaSachAndIsActive(bookUpdateDTO.getMaSach(),true).orElseThrow() ;
+        Sach sach = sachRepository.findByMaSachAndIsActiveFetchImg(bookUpdateDTO.getMaSach(),true).orElseThrow() ;
          bookMapper.updateFromDTO(bookUpdateDTO ,sach);
+
+         // thêm ảnh
+        List<HinhAnh> hinhAnhs = new ArrayList<>() ;
+        if(bookUpdateDTO.getHinhAnhDTOS() != null){
+            bookUpdateDTO.getHinhAnhDTOS().forEach(hinhAnh->{
+                HinhAnh entity = new HinhAnh() ;
+                entity.setSach(sach);
+                entity.setTenHinhAnh(hinhAnh.getTenHinhAnh());
+                entity.setDuLieuAnh(hinhAnh.getDuLieuAnh());
+
+                hinhAnhs.add(entity) ;
+            });
+            sach.getDanhSachHinhAnh().addAll(hinhAnhs) ;
+        }
+        // xóa ảnh nếu có
+        if(bookUpdateDTO.getIdImgDelete()!=null){
+            sach.getDanhSachHinhAnh().removeIf(img ->bookUpdateDTO.getIdImgDelete().contains(img.getMaHinhAnh())) ;
+        }
+        sachRepository.save(sach) ;
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
                 redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach());
+                if(bookUpdateDTO.getIdImgDelete()!=null || bookUpdateDTO.getHinhAnhDTOS() != null ){
+                    redisTemplate.delete("image:book:"+bookUpdateDTO.getMaSach()) ;
+                }
             }
         });
     }
+
     @Override
     @Transactional
     public List<BookResponeDTO> getBookCategory(int maTheLoai){

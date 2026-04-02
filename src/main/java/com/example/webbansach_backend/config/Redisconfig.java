@@ -2,6 +2,7 @@ package com.example.webbansach_backend.config;
 
 import com.example.webbansach_backend.dto.*;
 import com.example.webbansach_backend.dto.Message.MessageResponeDTO;
+import com.example.webbansach_backend.dto.img.HinhAnhResponeDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -88,6 +89,21 @@ public class Redisconfig {
       template.setValueSerializer(serializer);
       template.setHashKeySerializer(new StringRedisSerializer());
       template.setHashValueSerializer(new StringRedisSerializer());
+      template.setKeySerializer(new StringRedisSerializer());
+      return template ;
+   }
+   @Bean
+   public RedisTemplate<String , HinhAnhResponeDTO> redisHinhAnhBook(RedisConnectionFactory factory){
+      ObjectMapper objectMapper = new ObjectMapper() ;
+      objectMapper.registerModule(new JavaTimeModule()) ;
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+      Jackson2JsonRedisSerializer<HinhAnhResponeDTO> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,HinhAnhResponeDTO.class) ;
+
+      RedisTemplate<String , HinhAnhResponeDTO> template = new RedisTemplate<String, HinhAnhResponeDTO>() ;
+      template.setConnectionFactory(factory);
+      template.setDefaultSerializer(serializer);
+      template.setValueSerializer(serializer);
+
       template.setKeySerializer(new StringRedisSerializer());
       return template ;
    }

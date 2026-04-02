@@ -77,15 +77,15 @@ public class DanhGiaSanPhamServiceImpl implements DanhGiaSanPhamService {
     @Override
     public List<DanhGiaResponeDTO> getDanhGiaMotQuyenSachCache(int maSach){
         // thieeys kees key
-        List<DanhGiaResponeDTO> danhGiaResponeDTOS = redisDanhGia.opsForList().range("comment:book:"+maSach , 0 , -1) ;
-        if(!danhGiaResponeDTOS.isEmpty()){
-            System.out.println("cached");
-            return danhGiaResponeDTOS ;
+        List<DanhGiaResponeDTO> cached = redisDanhGia.opsForList().range("comment:book:"+maSach , 0 , -1) ;
+        if(cached !=null &&  !cached.isEmpty()){
+            return cached ;
         }
 
         Sach sach = sachRepository.findByMaSachAndIsActiveFetchDanhGia(maSach,true).
                 orElseThrow(()-> new RuntimeException("sách không còn hoạt động")) ;
         List<DanhGiaResponeDTO> danhGiaResponeDTOS1 = new ArrayList<>() ;
+        if(sach.getDanhSachDanhGia() == null || sach.getDanhSachDanhGia() .isEmpty()) return null;
         for(DanhGia danhGia : sach.getDanhSachDanhGia() ){
             DanhGiaResponeDTO danhGiaResponeDTO = new DanhGiaResponeDTO() ;
             danhGiaResponeDTO.setMaDanhGia(danhGia.getMaDanhGia());

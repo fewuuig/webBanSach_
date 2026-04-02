@@ -20,6 +20,23 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
      Page<Sach> findByDanhSachTheLoai_MaTheLoai(@RequestParam("maTheLoai") int maTheLoai , Pageable pageable) ;
      Page<Sach> findByTenSachContainingAndDanhSachTheLoai_MaTheLoai(@RequestParam("tenSach") String tenSach ,@RequestParam("maTheLoai") int maTheLoai ,Pageable pageable) ;
      Optional<Sach> findByMaSachAndIsActive(int maSach , boolean isActive ) ;
+
+     // fetch ảnh lên
+     @EntityGraph(attributePaths = "danhSachHinhAnh")
+     @Query("""
+          SELECT s
+          FROM Sach s
+          WHERE s.maSach = :maSach AND s.isActive = :isActive
+     """)
+     Optional<Sach> findByMaSachAndIsActiveFetchImg(@Param("maSach") int maSach ,@Param("isActive") boolean isActive ) ;
+
+     @EntityGraph(attributePaths = "danhSachHinhAnh")
+     @Query("""
+          SELECT s
+          FROM Sach s
+          WHERE s.maSach = :maSach
+     """)
+     Optional<Sach> findByMaSachAndFetchImg(@Param("maSach") int maSach ) ;
      // danh sách bình luận
      @EntityGraph(attributePaths = "danhSachDanhGia")
      @Query("""
