@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: uat
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: loog5277@gmail.com
+    password: vqabvcgsgomlvxom
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  tomcat:
+    max-threads: 400
+    accept-count: 3000

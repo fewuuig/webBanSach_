@@ -1,0 +1,30 @@
+spring:
+  data:
+    redis:
+      timeout: 10000
+
+      cluster:
+        nodes:
+          - redis-node-1:6379
+          - redis-node-2:6379
+          - redis-node-3:6379
+          - redis-node-4:6379
+          - redis-node-5:6379
+          - redis-node-6:6379
+
+      lettuce:
+        pool:
+          max-active: 200
+          max-idle: 50
+          min-idle: 10
+          max-wait: 5000ms
+
+        cluster:
+          refresh:
+            adaptive: true
+            period: 10s
+
+  datasource:
+    hikari:
+      maximum-pool-size: 200
+      minimum-idle: 20
