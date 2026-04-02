@@ -32,11 +32,13 @@ public class EndPoint {
             "/book/all" ,
             "/book/category/{categoryId}",
             "/book/book-deleted",
-            "/vouchers/all"
+            "/vouchers/all",
+            "/stats/statToday",
+            "/stats/once-week/{soNgay}"
     } ;
     public static final String[] ADMIN_POST_ENDPOINS = {
             "/them-sach" ,
-            "/stats/statToday",
+
             "/book/add-new-book",
             "/vouchers/add-voucher"
     } ;

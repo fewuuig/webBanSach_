@@ -91,7 +91,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
     public void startConsumer(){
         List<MapRecord<String , Object ,Object>> messages =readMessage("chat-stream" ,
                 Consumer.from("chat-group","consumer-1") ,
-                100 ,
+                150 ,
                 Duration.ofSeconds(3));
         if((messages != null) && !messages.isEmpty())  {
             processSaveBatch(messages) ;
@@ -111,11 +111,9 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
             }
             messageBatch.add(mess) ;
         });
-        try {
-            messageRepository.saveAll(messageBatch) ;
-        }catch (Exception ex) {
-            throw  ex ;
-        }
+
+        messageRepository.saveAll(messageBatch) ;
+
         TransactionSynchronizationManager.registerSynchronization(
                 new TransactionSynchronization() {
                     @Override

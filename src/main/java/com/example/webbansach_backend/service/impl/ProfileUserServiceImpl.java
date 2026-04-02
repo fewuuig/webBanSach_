@@ -37,7 +37,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
 
         ProfileUserResponeDTO profileUserResponeDTO = modelMapper.map(nguoiDung , ProfileUserResponeDTO.class) ;
 
-        redisTemplate.opsForValue().set(key,profileUserResponeDTO , Duration.ofHours(12));
+        redisTemplate.opsForValue().set(key,profileUserResponeDTO , Duration.ofHours(1));
         return profileUserResponeDTO ;
     }
 }

@@ -5,10 +5,7 @@ import jakarta.persistence.LockModeType;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +20,14 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
      Page<Sach> findByDanhSachTheLoai_MaTheLoai(@RequestParam("maTheLoai") int maTheLoai , Pageable pageable) ;
      Page<Sach> findByTenSachContainingAndDanhSachTheLoai_MaTheLoai(@RequestParam("tenSach") String tenSach ,@RequestParam("maTheLoai") int maTheLoai ,Pageable pageable) ;
      Optional<Sach> findByMaSachAndIsActive(int maSach , boolean isActive ) ;
+     // danh sách bình luận
+     @EntityGraph(attributePaths = "danhSachDanhGia")
+     @Query("""
+     SELECT s
+     FROM Sach s
+     WHERE s.maSach = :maSach and s.isActive = :isActive
+     """)
+     Optional<Sach> findByMaSachAndIsActiveFetchDanhGia(@Param("maSach") int maSach ,@Param("isActive") boolean isActive ) ;
      Page<Sach> findAll(Pageable pageable) ;
      List<Sach> findByMaSachInAndIsActive(Collection<Integer> danhSachMaSach ,  boolean isActive) ;
      @Query(value = """
@@ -51,7 +56,7 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
              """,nativeQuery = true)
      void updateIsActive(@Param("ids") List<Integer> ids) ;
 
-     // lấy 3 quyển cho carousel
+     // lấy 3 quyển cho
      @Query(value = """
           SELECT s.*
           FROM sach s

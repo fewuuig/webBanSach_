@@ -1,0 +1,29 @@
+<configuration>
+
+    <!-- LOG CHUNG -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- LOG PERFORMANCE RIÊNG -->
+    <appender name="PERF_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/performance.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- LOGGER RIÊNG -->
+    <logger name="PERF_LOGGER" level="INFO" additivity="false">
+        <appender-ref ref="PERF_FILE"/>
+    </logger>
+
+    <!-- ROOT -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

@@ -1,6 +1,6 @@
 package com.example.webbansach_backend.config;
 
-import com.example.webbansach_backend.dto.MaGiamGiaUserResponeDTO;
+import com.example.webbansach_backend.dto.*;
 import com.example.webbansach_backend.dto.Message.MessageResponeDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -67,6 +67,70 @@ public class Redisconfig {
       Jackson2JsonRedisSerializer<MessageResponeDTO> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,MessageResponeDTO.class) ;
 
       RedisTemplate<String , MessageResponeDTO> template = new RedisTemplate<String, MessageResponeDTO>() ;
+      template.setConnectionFactory(factory);
+      template.setDefaultSerializer(serializer);
+      template.setValueSerializer(serializer);
+      template.setHashKeySerializer(new StringRedisSerializer());
+      template.setHashValueSerializer(new StringRedisSerializer());
+      template.setKeySerializer(new StringRedisSerializer());
+      return template ;
+   }
+   @Bean
+   public RedisTemplate<String , DanhGiaResponeDTO> redisDanhGia(RedisConnectionFactory factory){
+      ObjectMapper objectMapper = new ObjectMapper() ;
+      objectMapper.registerModule(new JavaTimeModule()) ;
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+      Jackson2JsonRedisSerializer<DanhGiaResponeDTO> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,DanhGiaResponeDTO.class) ;
+
+      RedisTemplate<String , DanhGiaResponeDTO> template = new RedisTemplate<String, DanhGiaResponeDTO>() ;
+      template.setConnectionFactory(factory);
+      template.setDefaultSerializer(serializer);
+      template.setValueSerializer(serializer);
+      template.setHashKeySerializer(new StringRedisSerializer());
+      template.setHashValueSerializer(new StringRedisSerializer());
+      template.setKeySerializer(new StringRedisSerializer());
+      return template ;
+   }
+   @Bean
+   public RedisTemplate<String , DiaChiGiaoHangResponeDTO> redisDiaChi(RedisConnectionFactory factory){
+      ObjectMapper objectMapper = new ObjectMapper() ;
+      objectMapper.registerModule(new JavaTimeModule()) ;
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+      Jackson2JsonRedisSerializer<DiaChiGiaoHangResponeDTO> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,DiaChiGiaoHangResponeDTO.class) ;
+
+      RedisTemplate<String , DiaChiGiaoHangResponeDTO> template = new RedisTemplate<String, DiaChiGiaoHangResponeDTO>() ;
+      template.setConnectionFactory(factory);
+      template.setDefaultSerializer(serializer);
+      template.setValueSerializer(serializer);
+      template.setHashKeySerializer(new StringRedisSerializer());
+      template.setHashValueSerializer(new StringRedisSerializer());
+      template.setKeySerializer(new StringRedisSerializer());
+      return template ;
+   }
+   @Bean
+   public RedisTemplate<String , HinhThucGiaoHangResponeDTO> redisHinhThucGiaoHang(RedisConnectionFactory factory){
+      ObjectMapper objectMapper = new ObjectMapper() ;
+      objectMapper.registerModule(new JavaTimeModule()) ;
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+      Jackson2JsonRedisSerializer<HinhThucGiaoHangResponeDTO> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,HinhThucGiaoHangResponeDTO.class) ;
+
+      RedisTemplate<String , HinhThucGiaoHangResponeDTO> template = new RedisTemplate<String, HinhThucGiaoHangResponeDTO>() ;
+      template.setConnectionFactory(factory);
+      template.setDefaultSerializer(serializer);
+      template.setValueSerializer(serializer);
+      template.setHashKeySerializer(new StringRedisSerializer());
+      template.setHashValueSerializer(new StringRedisSerializer());
+      template.setKeySerializer(new StringRedisSerializer());
+      return template ;
+   }
+   @Bean
+   public RedisTemplate<String , HinhThucThanhToanResponeDTO> redisHinhThucThanhToan(RedisConnectionFactory factory){
+      ObjectMapper objectMapper = new ObjectMapper() ;
+      objectMapper.registerModule(new JavaTimeModule()) ;
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+      Jackson2JsonRedisSerializer<HinhThucThanhToanResponeDTO> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,HinhThucThanhToanResponeDTO.class) ;
+
+      RedisTemplate<String , HinhThucThanhToanResponeDTO> template = new RedisTemplate<String, HinhThucThanhToanResponeDTO>() ;
       template.setConnectionFactory(factory);
       template.setDefaultSerializer(serializer);
       template.setValueSerializer(serializer);

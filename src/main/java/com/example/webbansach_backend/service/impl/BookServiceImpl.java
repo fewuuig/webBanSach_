@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -49,6 +50,9 @@ public class BookServiceImpl implements BookService {
     @Autowired
     @Qualifier("deleteBook")
     private DefaultRedisScript<Long> deleteBook ;
+    @Autowired
+    @Qualifier("carousel")
+    private DefaultRedisScript<List> carousel ;
     @Override
     @Transactional
     public void addNewBook( String tenDangNhap,AddBookRequestDTO addBookRequestDTO){
@@ -88,18 +92,15 @@ public class BookServiceImpl implements BookService {
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        // them vào các key zset , value
                         redisTemplate.execute(addBook,
                                 List.of("page_book_id" , "page_book_id_category:"+theLoai.getMaTheLoai(),"book:"+ sachEntity.getMaSach()),
                                 sachEntity.getMaSach() ,sachEntity.getSoLuong()) ;
-                        // => lua chỉ mất 1 round trip
                     }
                 }
         );
 
     }
 
-    // client tke theo kiểu chọn thể loại + tích checkbox id book=> gửi về 2id đó
     @Override
     @Transactional
     public void deleteBook(String tenDangNhap, List<Integer> ids , int maTheLoai) {
@@ -113,6 +114,10 @@ public class BookServiceImpl implements BookService {
                 System.out.println(idString);
                 // xóa key page_book_id
                 ids.forEach(id->{
+                    //xóa khỏi zset price
+                    redisTemplate.opsForZSet().remove("price" , id) ;
+                    // xóa khỏi top:selling
+                    redisTemplate.opsForZSet().remove("top:selling:books" ,id ) ;
                     redisTemplate.opsForZSet().remove("page_book_id" , id) ;
                     // xáo key "page_book_id_category:" + maTheLoai
                     redisTemplate.opsForZSet().remove("page_book_id_category:" + maTheLoai , maTheLoai ,id) ;
@@ -120,24 +125,6 @@ public class BookServiceImpl implements BookService {
                 // xóa book_info:
                 List<String> idBookInfo = ids.stream().map(id->"book_info:"+id).toList() ;
                 redisTemplate.delete(idBookInfo) ;
-
-
-//                List<String> keys = List.of(
-//                        "page_book_id",
-//                        "page_book_id_category:" + maTheLoai,
-//                        "book_info:"
-//                );
-//
-//                System.out.println("==== DEBUG REDIS LUA ====");
-//                System.out.println("KEYS: " + keys);
-//                System.out.println("ARGV: " + idString);
-//                System.out.println("idString: " +  idString.toArray(new String[0]));
-//                Long result = redisTemplate.execute(
-//                        deleteBook,
-//                        keys,
-//                        idString.toArray()
-//                );
-//                System.out.println("đã xóa : "+result);
             }
         });
     }
@@ -156,7 +143,6 @@ public class BookServiceImpl implements BookService {
                 redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach());
             }
         });
-
     }
     @Override
     @Transactional
@@ -194,7 +180,51 @@ public class BookServiceImpl implements BookService {
         bookResponeDTOS.sort(Comparator.comparing(BookResponeDTO::getTenSach));
         return bookResponeDTOS ;
     }
+    @Override
+    public List<BookResponeDTO>  bestSellerCarousel(){
+        // lấy trong zset key : top:selling:books . lấy ra 3 quyển
+        List<Object> bookIds = redisTemplate.execute(carousel , List.of("top:selling:books") ,0 ,2) ;
+        if( bookIds.isEmpty()||bookIds == null){
+            System.out.println("vào đây1");
+            List<Object> ids = redisTemplate.execute(paginate ,List.of("page_book_id") , 0 , 2) ;
+            return convertBookRespDTOCache(ids) ;
+        }
+        // nếu k đủ 3 thì lấy 2 .. 1 cái đầu của page id
+        if(bookIds.size() !=3){
+            List<Object> ids = redisTemplate.execute(paginate ,List.of("page_book_id") ,  0, bookIds.size()==1?1:0) ;
+            // gộp id của bookidsd vào đay
+            bookIds.forEach(id->{
+                assert ids != null;
+                ids.add(id) ;
+            });
+            Set<Object> idFinal = new TreeSet<>(ids) ;
+            System.out.println("size set : " + idFinal.size());
+            if(idFinal.size()==2){
+                for(Object obj : idFinal){
+                    int tmp = (int)obj - 1 ;
+                    idFinal.add(tmp) ;
+                    break ;
+                }
 
+            }else if(idFinal.size() == 1){
+                for(Object obj : idFinal){
+                    int tmp = (int)obj - 1 ;
+                    idFinal.add(tmp) ;
+                    break ;
+                }
+                for(Object obj : idFinal){
+                    int tmp = (int)obj - 1 ;
+                    idFinal.add(tmp) ;
+                    break ;
+                }
+            }
+            ids.clear();
+            ids.addAll(idFinal) ;
+            return convertBookRespDTOCache(ids) ;
+        }
+        System.out.println("vào đây 3");
+        return convertBookRespDTOCache(bookIds) ;
+    }
     @Override
     public List<BookResponeDTO> getSachNew(){
         List<Sach> saches=sachRepository.findSachNew() ;
@@ -223,7 +253,28 @@ public class BookServiceImpl implements BookService {
                 }
         );
     }
+    public List<BookResponeDTO> convertBookRespDTOCache(List<Object> bookIds){
+        List<Integer> bookIdNumber = ParseListUtil.toListNumber(bookIds) ;
+        List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(bookIdNumber ,"top:selling:books") ;
+        List<Object> caches = redisTemplate.opsForValue().multiGet(keyBookInfo);
 
+        List<BookResponeDTO> bookResponeDTOS = new ArrayList<>() ;
+        List<Integer> idNotFind = new ArrayList<>() ;
+        int index = 0 ;
+        for(Object cache : caches){
+            if(cache!= null){
+                bookResponeDTOS.add((BookResponeDTO) cache) ;
+            }else idNotFind.add(bookIdNumber.get(index)) ;
+            index ++ ;
+        }
+        if(!idNotFind.isEmpty()){
+            List<Sach> saches = sachRepository.findByMaSachInAndIsActive( idNotFind,true) ;
+            saches.forEach(sach->{
+                bookResponeDTOS.add(bookMapper.toDTO(sach)) ;
+            });
+        }
+        return bookResponeDTOS ;
+    }
 
 
 }

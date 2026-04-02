@@ -14,4 +14,5 @@ public interface BookService {
     List<BookResponeDTO> getSachNew();
     List<BookResponeDTO> getBookDeleted(int maTheLoai) ;
     void reStoreBook(List<Integer> ids , int maTheLoai ) ;
+    List<BookResponeDTO>  bestSellerCarousel() ;
 }

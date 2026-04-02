@@ -126,12 +126,15 @@ public class OrderServiceImpl implements OrderService {
         DonHang donHang = donHangRepository.findById(maDonHang).orElseThrow() ;
         donHang.setTrangThai(trangThai) ;
     }
+
+    // xem lại chỗ này N + 1 : chi tiết đơn hàng - đơn hànggg
+    // kiẻm trA inddex xem đã đúng chưa . xem còn cách khác khong .
     @Override
     @Transactional
     public List<DonHangTrangThaiResponeDTO> getDonHangTheoTrangThai(String tenDangNhap , TrangThaiGiaoHang trangThaiGiaoHang) {
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
         List<DonHang> donHangs = donHangRepository.findByNguoiDungAndTrangThai( nguoiDung, trangThaiGiaoHang) ;
-        if(donHangs == null ) return null ;
+        if(donHangs.isEmpty() ) return null ;
         List<DonHangTrangThaiResponeDTO> result = new ArrayList<>() ;
         for(DonHang donHang : donHangs){
             DonHangTrangThaiResponeDTO donHangTrangThaiResponeDTO = modelMapper.map(donHang, DonHangTrangThaiResponeDTO.class) ;
@@ -203,11 +206,11 @@ public class OrderServiceImpl implements OrderService {
         }
     }
     @Transactional
-    @Scheduled(fixedDelay = 1000)  //
+    @Scheduled(fixedDelay = 2000)  //
     public void consumeNewMessage() throws JsonProcessingException {
         List<MapRecord<String , Object , Object>> messages = redisTemplate.opsForStream().read(
                 Consumer.from("order-group" , "consumer-1") ,
-                StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)) ,
+                StreamReadOptions.empty().count(50).block(Duration.ofSeconds(2)) ,
                 StreamOffset.create("order-stream" , ReadOffset.lastConsumed())
         ) ;
 
@@ -218,7 +221,7 @@ public class OrderServiceImpl implements OrderService {
             handleMessage(message);
         }
     }
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 1000)
     @Transactional
     public void retryOrder() throws JsonProcessingException {
 
@@ -240,7 +243,7 @@ public class OrderServiceImpl implements OrderService {
                         "order-stream" ,
                         "order-group" ,
                         "consumer-1" ,
-                        Duration.ofSeconds(5) ,
+                        Duration.ofSeconds(10) ,
                         pendingMessage.getId()
                 );
                 // lưu vào stream dead-letter để sưe lý sau
@@ -383,6 +386,9 @@ public class OrderServiceImpl implements OrderService {
             totalBook += item.getSoLuong() ;
             //tiền mua sách
             totalPrice = totalPrice + sach.getGiaBan()*item.getSoLuong() ;
+
+            // thống kê bán chạy
+            redisTemplate.opsForZSet().add("top:selling:books" , item.getMaSach() , item.getSoLuong());
         }
 
         // giảm giá tiền
@@ -410,7 +416,6 @@ public class OrderServiceImpl implements OrderService {
         donHang.setTongGia(donHang.getTongGia() + donHang.getChiPhiGiaoHang());
         // thống kê doanh số bán hàng
         thongKeBanHangService.statWhenPlaceOrder(totalBook ,donHang);
-
         // nếu k mã giảm giá thì confirmd luôn
         if(maGiam.equals("null")){
             donHang.setTrangThai(TrangThaiGiaoHang.DA_XAC_NHAN);

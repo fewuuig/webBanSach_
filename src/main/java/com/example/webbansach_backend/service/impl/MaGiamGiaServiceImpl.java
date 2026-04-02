@@ -172,6 +172,8 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
         if(result == -5) throw new RuntimeException("dữ liệu userUsed lỗi") ;
         if(result == -6) throw new RuntimeException("ARGV lỗi") ;
 
+        // khi user dùng mã giảm giá thì xó mã giảm trong ram đi
+        redisTemplateMaGiamGia.delete("user:voucher:"+tenDangNhap) ;
     }
 
 
