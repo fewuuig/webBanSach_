@@ -29,16 +29,13 @@ public class HinhAnhServiceImpl implements HinhAnhService {
             if(soLuong == 1) return cached.subList(0,1) ;
             return cached;
         }
-
         Sach sach = sachRepository.findByMaSachAndFetchImg(maSach ).orElseThrow(()-> new RuntimeException("sách không còn hoạt dộng")) ;
-
         List<HinhAnhResponeDTO> hinhAnhResponeDTOS =new ArrayList<>() ;
         sach.getDanhSachHinhAnh().forEach(hinhAnh->{
             hinhAnhResponeDTOS.add(hinhAnhMapper.toDTO(hinhAnh)) ;
         });
         redisHinhAnhBook.opsForList().rightPushAll("image:book:"+maSach , hinhAnhResponeDTOS) ;
         redisHinhAnhBook.expire("image:book:"+maSach , Duration.ofHours(1));
-        System.out.println("kq : " + hinhAnhResponeDTOS.size());
         if(soLuong == 1) return hinhAnhResponeDTOS.subList(0,1) ;
         return hinhAnhResponeDTOS ;
     }

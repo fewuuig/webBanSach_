@@ -24,6 +24,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Range;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -90,11 +91,11 @@ public class OrderServiceImpl implements OrderService {
         String key1 = "order-stream" ;
         String key2 = "limit_rate_request:" + tenDangNhap ;
         List<String> keys = Arrays.asList( key1 , key2) ;
-        String request_id = UUID.randomUUID().toString() ;
+//        String request_id = UUID.randomUUID().toString() ;
         // sử lý đătj hàng mà không dùng mã giảm giá
         String maGiam = datHangRequestDTO.getMaGiam() == null ? "null": datHangRequestDTO.getMaGiam().toString() ;
         Long result = redisTemplate.execute(stockOrder ,keys ,
-                request_id,
+                UUID.randomUUID().toString() ,
                 itemJson,
                 maGiam,
                 datHangRequestDTO.getMaDiaChiGiaoHang(),
@@ -111,9 +112,9 @@ public class OrderServiceImpl implements OrderService {
         if(result == -9) throw new RuntimeException("số lượng mua không hợp lệ") ;
         System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+"đặt đơn hàng");
 
-        // đặt thanhf công thì xóa khỏi giỏ hàng
-        Set<Long> ids = datHangRequestDTO.getDanhSachSanPhamChon() ;
-        cartService.deleteItemOrderFromCart(tenDangNhap , ids);
+//        // đặt thanhf công thì xóa khỏi giỏ hàng
+//        Set<Long> ids = datHangRequestDTO.getDanhSachSanPhamChon() ;
+//        cartService.deleteItemOrderFromCart(tenDangNhap , ids);
 
     }
     // tính năng của admin
@@ -210,7 +211,7 @@ public class OrderServiceImpl implements OrderService {
     public void consumeNewMessage() throws JsonProcessingException {
         List<MapRecord<String , Object , Object>> messages = redisTemplate.opsForStream().read(
                 Consumer.from("order-group" , "consumer-1") ,
-                StreamReadOptions.empty().count(50).block(Duration.ofSeconds(2)) ,
+                StreamReadOptions.empty().count(300).block(Duration.ofSeconds(2)) ,
                 StreamOffset.create("order-stream" , ReadOffset.lastConsumed())
         ) ;
 
@@ -234,11 +235,11 @@ public class OrderServiceImpl implements OrderService {
         PendingMessages pendingMessages = redisTemplate.opsForStream().pending(
                 "order-stream" ,
                 Consumer.from("order-group" , "consumer-1") ,
-                Range.unbounded() , 10
+                Range.unbounded() , 100
         ) ;
 
         for(PendingMessage pendingMessage : pendingMessages){
-            if(pendingMessage.getTotalDeliveryCount() >=5){
+            if(pendingMessage.getTotalDeliveryCount() >=6){
                 List<MapRecord<String , Object,Object>> claimed  = redisTemplate.opsForStream().claim(
                         "order-stream" ,
                         "order-group" ,
@@ -265,7 +266,7 @@ public class OrderServiceImpl implements OrderService {
                         "order-stream" ,
                         "order-group" ,
                         "consumer-1" ,
-                        Duration.ofSeconds(10) ,
+                        Duration.ofSeconds(2) ,
                         pendingMessage.getId()
                 );
 
@@ -278,13 +279,14 @@ public class OrderServiceImpl implements OrderService {
         }
     }
     public void handleMessage(MapRecord<String , Object , Object> message ) throws JsonProcessingException {
-        boolean exist = logOrderRepository.existsByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()));
+        String request_Id = message.getValue().get("request_id").toString() ;
+        boolean exist = logOrderRepository.existsByRequestId(request_Id);
         // idempotent DB
         if(exist){
             redisTemplate.opsForStream().acknowledge("order-stream" , "order-group" , message.getId()) ;
             return ;
         }
-        Integer maDonHang =  processOrder(message); // nó sẽ chạy chung 1 transition với handleMessage chứ k chạy cái transis=tion của riêng nó .
+        Integer maDonHang =  processOrder(message);  // nó sẽ chạy chung 1 transition với handleMessage chứ k chạy cái transis=tion của riêng nó .
 
         LogOrder entity = new LogOrder() ;
         entity.setCreateAt(LocalDateTime.now());
@@ -295,7 +297,7 @@ public class OrderServiceImpl implements OrderService {
             entity.setStatus(StatusLogOrder.PENDING);
             entity.setVoucherID(Integer.parseInt(ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()))) ;
         }
-        entity.setRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString())) ;
+        entity.setRequestId(request_Id) ;
         logOrderRepository.save(entity) ;
 
         // chỉ khi thành công mới ACK
@@ -305,12 +307,12 @@ public class OrderServiceImpl implements OrderService {
                     public void afterCommit() {
                         String maGiam = ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()) ;
                         String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString()) ;
-                        String request_id = ParseJacksonUtil.toString(message.getValue().get("request_id").toString()) ;
+
                         if(!maGiam.equals("null")) {
                             // push vào queue delay -> hoàn kho nếu k thể xác nhận đơn hang
                             returnOrderTimeoutBatchService.addOrderTimeout(maDonHang);
                             int value = Integer.parseInt(maGiam) ;
-                            maGiamGiaService.dungMaGiamGiaUser(tenDangNhap , value ,request_id );
+                            maGiamGiaService.dungMaGiamGiaUser(tenDangNhap , value ,request_Id );
 
                             System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+":chờ xử lý mã giảm giá");
                         }
@@ -327,7 +329,10 @@ public class OrderServiceImpl implements OrderService {
 
     public Integer processOrder(MapRecord<String , Object , Object> message) throws JsonProcessingException {
         // Kiểm tra người dùng => choox nayf toi uu bang cach check tu redis nhu check ussername .
-        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString())).orElseThrow() ;
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString())).
+                orElseThrow(()-> new RuntimeException("người dùng đặt hàng khong hợp lệ")) ;
+
+        String request_Id = message.getValue().get("request_id").toString() ;
 
         // parse json -> object List
         String iteamJson = ParseJacksonUtil.toString(message.getValue().get("items").toString()) ;
@@ -359,7 +364,7 @@ public class OrderServiceImpl implements OrderService {
         donHang.setHinhThucThanhToan(hinhThucThanhToan);
         donHang.setHinhThucGiaoHang(hinhThucGiaoHang);
         donHang.setDiaChiNhanHang(diaChi);
-        donHang.setRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()));
+        donHang.setRequestId(request_Id);
         // mã giảm giá
         String maGiam = ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()) ;
         double totalPrice = 0 ;
@@ -370,7 +375,7 @@ public class OrderServiceImpl implements OrderService {
             // permistic_lock
             Sach sach = sachRepository.findByIdForUpdate(item.getMaSach()).orElseThrow(()->new RuntimeException("sách không tông tại")) ;
             if(sach.getSoLuong() == 0 || sach.getSoLuong() < item.getSoLuong() || !sach.isActive()){
-                throw new RuntimeException("số lượng sách trong kho không hợp lệ / số lượng muốn mua không hợp lệ") ;
+                throw new RuntimeException("số lượng sách trong kho không hợp lệ / số lượng muốn mua không hợp lệ/bi khoa") ;
             }
             // trừ DB
             sach.setSoLuong(sach.getSoLuong() - item.getSoLuong());
@@ -432,10 +437,11 @@ public class OrderServiceImpl implements OrderService {
 
         List<MapRecord<String, Object, Object>> messages = redisTemplate.opsForStream().read(
                 Consumer.from("order-dead-letter-group", "consumer-1"),
-                StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)),
+                StreamReadOptions.empty().count(700).block(Duration.ofSeconds(2)),
                 StreamOffset.create("order-dead-letter", ReadOffset.lastConsumed())
         );
         if (messages == null || messages.isEmpty()) return;
+        System.out.println("bù kho order") ;
 
         // lấy ra danh sách id voucher để check dưới DB rồi reconcicle
         Set<Integer> idBooks = new HashSet<>() ;
@@ -466,7 +472,9 @@ public class OrderServiceImpl implements OrderService {
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        messages.forEach(message -> redisTemplate.opsForStream().acknowledge("order-dead-letter", "order-dead-letter-group", message.getId()));
+
+                        RecordId[] recordIds = messages.stream().map(message->message.getId()).toArray(RecordId[]::new);
+                         redisTemplate.opsForStream().acknowledge("order-dead-letter", "order-dead-letter-group",recordIds);
                     }
 
                 }

@@ -21,30 +21,9 @@ public class HinhAnhController {
     private HinhAnhService hinhAnhService;
 
     @GetMapping("/book/{maSach}/{soLuong}")
-    public ResponseEntity<?> getAllImgOfOneBook(
-            @PathVariable("maSach") int maSach,
-            @PathVariable("soLuong") int soLuong){
+    public ResponseEntity<?> getAnh(@PathVariable("maSach") int maSach ,
+                                    @PathVariable("soLuong") int soLuong){
+        return ResponseEntity.ok(hinhAnhService.getAnhCuaMotSach(maSach ,soLuong)) ;
 
-        long start = System.currentTimeMillis();
-
-        try {
-            Object result = hinhAnhService.getAnhCuaMotSach(maSach, soLuong);
-
-            long time = System.currentTimeMillis() - start;
-
-            perfLogger.info("GET /image/book/{}/{} | maSach={} | soLuong={} | time={} ms",
-                    maSach, soLuong, maSach, soLuong, time);
-
-            return ResponseEntity.ok(result);
-
-        } catch (Exception e) {
-
-            long time = System.currentTimeMillis() - start;
-
-            log.error("ERROR GET /image/book/{}/{} | time={} ms | error={}",
-                    maSach, soLuong, time, e.getMessage());
-
-            throw e;
-        }
     }
 }

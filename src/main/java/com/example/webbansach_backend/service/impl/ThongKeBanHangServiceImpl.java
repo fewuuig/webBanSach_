@@ -71,7 +71,7 @@ public class ThongKeBanHangServiceImpl implements ThongKeBanHangService {
             revenue = Double.parseDouble(redisTemplate.opsForHash().get(key, "revenue").toString());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-            throw ex;
+
         }
         if(orders == null || books == null || revenue == null) return null;
 
@@ -106,7 +106,7 @@ public class ThongKeBanHangServiceImpl implements ThongKeBanHangService {
                 statLastWeekDTO.setDate(date);
                 statLastWeekDTO.setRevenue(revenue);
                 revenueOnceWeek.add(statLastWeekDTO) ;
-            }catch (NullPointerException ex){
+            }catch (Exception ex){
                 // nexxt
             }
         }

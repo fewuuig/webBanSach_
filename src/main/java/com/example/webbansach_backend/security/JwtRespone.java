@@ -9,7 +9,4 @@ import lombok.NoArgsConstructor;
 public class JwtRespone {
     private final String accessToken ;
     private final String refreshToken ;
-
-
-
 }

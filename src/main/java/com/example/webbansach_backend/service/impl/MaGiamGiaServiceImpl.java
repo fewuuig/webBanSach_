@@ -174,6 +174,7 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
 
         // khi user dùng mã giảm giá thì xó mã giảm trong ram đi
         redisTemplateMaGiamGia.delete("user:voucher:"+tenDangNhap) ;
+        System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+" dùng mã giảm giá");
     }
 
 
@@ -266,11 +267,11 @@ public void updateVoucherStatusAuto(){
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 200) // 0,1s chạy ngầm 1 lần
+    @Scheduled(fixedDelay = 1000) // 0,1s chạy ngầm 1 lần
     public void consumeNewMessage(){
         List< MapRecord<String , Object , Object> > messages = redisTemplate.opsForStream().read(
                 Consumer.from("voucher-group" , "consumer-1") , // công nhân 1 xin stream gửi mesage
-                StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)) , // mỗi lần lấy tối đa 10 message , đợi tối đa 2s nếu k thấy mesage
+                StreamReadOptions.empty().count(300).block(Duration.ofSeconds(2)) , // mỗi lần lấy tối đa 10 message , đợi tối đa 2s nếu k thấy mesage
                 StreamOffset.create("voucher-stream" , ReadOffset.lastConsumed()) // chỉ lấy những message chưa đưa vào group
 
         );
@@ -289,7 +290,7 @@ public void updateVoucherStatusAuto(){
         PendingMessages pendingMessages = redisTemplate.opsForStream()
                 .pending("voucher-stream" ,
                         Consumer.from("voucher-group" ,"consumer-1") ,
-                        Range.unbounded() , 10) ;
+                        Range.unbounded() , 300) ;
 
         // kiểm tra xem pending nào có idle >= 5s thì cho nó claim laị
         for(PendingMessage pending : pendingMessages){
@@ -395,7 +396,7 @@ public void updateVoucherStatusAuto(){
         maGiamGia.setSoMaDaDung(maGiamGia.getSoMaDaDung() + 1);
 
 
-        Optional<MaGiamGiaNguoiDung> exsist = maGiamGiaNguoiDungRepository.findByMaGiamGia_MaGiamAndNguoiDung_TenDangNhap(maGiam,tenDangNhap);
+        Optional<MaGiamGiaNguoiDung> exsist = maGiamGiaNguoiDungRepository.findByMaGiamGiaAndNguoiDung_TenDangNhap(maGiamGia,tenDangNhap);
         if(exsist.isPresent()){
             MaGiamGiaNguoiDung maGiamGiaNguoiDung = exsist.get() ;
             if(maGiamGiaNguoiDung.getDaDung() == maGiamGia.getGioiHanSoLuongDungUser())
@@ -425,18 +426,18 @@ public void updateVoucherStatusAuto(){
     }
 
     // xử lý những mã voucher bị dead-letter
-    @Scheduled(fixedDelay = 6000)
+    @Scheduled(fixedDelay = 5000)
     @Transactional
     // sao 6s thì compensate
     void compensateVoucherInDeadLetter() {
         // lấy lên danh sách message(voucher cần compensate )
         List<MapRecord<String, Object, Object>> messages = redisTemplate.opsForStream().read(
                 Consumer.from("voucher-dead-letter-group", "consumer-1"),
-                StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)),
+                StreamReadOptions.empty().count(700).block(Duration.ofSeconds(2)),
                 StreamOffset.create("voucher-dead-letter", ReadOffset.lastConsumed())
         );
         if (messages == null || messages.isEmpty()) return;
-
+        System.out.println("vào bù kho voucher");
         // lấy ra danh sách id voucher để check dưới DB rồi reconcicle
         Set<Integer> idVouchers = new HashSet<>();
         for (MapRecord<String, Object, Object> message : messages) {
@@ -458,7 +459,8 @@ public void updateVoucherStatusAuto(){
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        messages.forEach(message ->  redisTemplate.opsForStream().acknowledge("voucher-dead-letter", "voucher-dead-letter-group", message.getId()));
+                        RecordId[] recordIds = messages.stream().map(message->message.getId()).toArray(RecordId[]::new);
+                        redisTemplate.opsForStream().acknowledge("voucher-dead-letter", "voucher-dead-letter-group", recordIds);
                     }
                 }
         );

@@ -91,9 +91,11 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
     public void startConsumer(){
         List<MapRecord<String , Object ,Object>> messages =readMessage("chat-stream" ,
                 Consumer.from("chat-group","consumer-1") ,
-                150 ,
+                500 ,
                 Duration.ofSeconds(3));
         if((messages != null) && !messages.isEmpty())  {
+            System.out.println("meesage : " + messages.size());
+            System.out.println("vào tin nhắn consumer");
             processSaveBatch(messages) ;
         }
     }
@@ -101,6 +103,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
     // ở đây có thẻ sử dung them set cuả redis để chống chùng
     public void processSaveBatch(List<MapRecord<String , Object , Object>> messages  ){
         // taọ danh sách lưu message đã sử lý
+        if(messages.isEmpty()) return ;
         List<Message> messageBatch= new ArrayList<>() ;
         messages.forEach(record ->{
             Message mess = null;
@@ -118,10 +121,13 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
+                        System.out.println("vào ack mes");
+                        RecordId[] recordIds = messages.stream().map(mes->mes.getId()).toArray(RecordId[]::new) ;
                         messages.forEach(mess->{
                             sendMessage(mess);
-                            redisTemplateJs2.opsForStream().acknowledge("chat-stream" , "chat-group" , mess.getId()) ;
+
                         });
+                        redisTemplateJs2.opsForStream().acknowledge("chat-stream" , "chat-group" , recordIds) ;
                     }
                 }
         );
@@ -152,10 +158,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
         int min = Math.min(user1.getMaNguoiDung() , user2.getMaNguoiDung()) ;
         int max = Math.min(user1.getMaNguoiDung() , user2.getMaNguoiDung()) ;
         // block : xem lại chỗ nayf
-        boolean block = redisTemplate.opsForValue().setIfAbsent("room:"+min+":"+max , 1, Duration.ofSeconds(3)) ;
-        if(!block){
-            Thread.sleep(2000);
-        }
+
         Optional<Room> exists = roomRepository.findRoomUser(List.of(user1.getTenDangNhap(), user2.getTenDangNhap())) ;
         if(exists.isPresent()) return exists.get();
 
@@ -212,9 +215,10 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
                 "chat-stream",
                 Consumer.from("chat-group" , "consumer-1"),
                 Range.unbounded(),
-                100
+                500
         ) ;
         if(pendings.isEmpty()) return ;
+        System.out.println("retry message");
 
         pendings.forEach(pending ->{
             if(pending.getTotalDeliveryCount() >=5){
@@ -239,7 +243,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
         List<Message> listMessage = new ArrayList<>() ;
         List<MapRecord<String , Object , Object>> messages = readMessage("chat-dead-letter" ,
                                                                         Consumer.from("chat-dead-letter-group","consumer-1"),
-                                                                        100,
+                                                                        500,
                                                                         Duration.ofSeconds(2)) ;
         // xem lại
         processSaveBatch(messages);

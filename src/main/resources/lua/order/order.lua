@@ -15,15 +15,7 @@
 -- 1 rate limit
 ------------------------------------------------
 
-local limit = redis.call("INCR", KEYS[2])
 
-if limit == 1 then
-    redis.call("EXPIRE", KEYS[2], 10)
-end
-
-if limit > 1 then
-    return -5
-end
 
 
 ------------------------------------------------
@@ -98,12 +90,12 @@ end
 ------------------------------------------------
 -- 5 push order vào stream
 ------------------------------------------------
-
+local requestId =tostring( redis.call('TIME')[1]).."-"..math.random(100000)
 redis.call(
     "XADD",
     KEYS[1],
     "*",
-    "request_id", ARGV[1],
+    "request_id", requestId,
     "tenDangNhap", ARGV[7],
     "items", ARGV[2],
     "maGiam", ARGV[3],

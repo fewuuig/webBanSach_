@@ -56,6 +56,8 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void addNewBook( String tenDangNhap,AddBookRequestDTO addBookRequestDTO){
+        if(addBookRequestDTO.getHinhAnhDTOS().size() == 0 || addBookRequestDTO.getHinhAnhDTOS().isEmpty()) return ;
+        System.out.println("số ảnh là : "+addBookRequestDTO.getHinhAnhDTOS().size());
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).
                 orElseThrow(()->new RuntimeException("không đủ quyền để thực hiện tính năng này")) ;
         if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("NGuoi dùng k đủ quyền để thêm sách") ;
@@ -211,7 +213,6 @@ public class BookServiceImpl implements BookService {
         // lấy trong zset key : top:selling:books . lấy ra 3 quyển
         List<Object> bookIds = redisTemplate.execute(carousel , List.of("top:selling:books") ,0 ,2) ;
         if( bookIds.isEmpty()||bookIds == null){
-            System.out.println("vào đây1");
             List<Object> ids = redisTemplate.execute(paginate ,List.of("page_book_id") , 0 , 2) ;
             return convertBookRespDTOCache(ids) ;
         }
@@ -224,7 +225,6 @@ public class BookServiceImpl implements BookService {
                 ids.add(id) ;
             });
             Set<Object> idFinal = new TreeSet<>(ids) ;
-            System.out.println("size set : " + idFinal.size());
             if(idFinal.size()==2){
                 for(Object obj : idFinal){
                     int tmp = (int)obj - 1 ;
@@ -248,7 +248,6 @@ public class BookServiceImpl implements BookService {
             ids.addAll(idFinal) ;
             return convertBookRespDTOCache(ids) ;
         }
-        System.out.println("vào đây 3");
         return convertBookRespDTOCache(bookIds) ;
     }
     @Override
@@ -281,7 +280,7 @@ public class BookServiceImpl implements BookService {
     }
     public List<BookResponeDTO> convertBookRespDTOCache(List<Object> bookIds){
         List<Integer> bookIdNumber = ParseListUtil.toListNumber(bookIds) ;
-        List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(bookIdNumber ,"top:selling:books") ;
+        List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(bookIdNumber ,"book_info:") ;
         List<Object> caches = redisTemplate.opsForValue().multiGet(keyBookInfo);
 
         List<BookResponeDTO> bookResponeDTOS = new ArrayList<>() ;

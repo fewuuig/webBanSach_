@@ -1,8 +1,11 @@
 package com.example.webbansach_backend.service.impl;
 
 import com.example.webbansach_backend.Entity.NguoiDung;
+import com.example.webbansach_backend.Entity.NguoiDungQuyen;
+import com.example.webbansach_backend.Entity.Quyen;
 import com.example.webbansach_backend.Enum.CheckAccount;
 import com.example.webbansach_backend.Repository.NguoiDungRepository;
+import com.example.webbansach_backend.Repository.QuyenRepository;
 import com.example.webbansach_backend.exception.DuplicationDisableException;
 import com.example.webbansach_backend.service.AccountService;
 import com.example.webbansach_backend.service.EmailService;
@@ -15,6 +18,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +36,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private EmailService emailService ;
+    @Autowired
+    private QuyenRepository quyenRepository ;
 
     // check ussername
     private boolean checkAccount(CheckAccount checkAccount, String target){
@@ -58,9 +65,11 @@ public class AccountServiceImpl implements AccountService {
     public boolean checkEmail(String email){
         return checkAccount(CheckAccount.EMAIL , email) ;
     }
+    @Transactional
     public ResponseEntity<?> dangKyTaiKhoan(NguoiDung nguoiDung){
 
-        try {
+        boolean exists = nguoiDungRepository.existsByTenDangNhap(nguoiDung.getTenDangNhap())  ;
+        if(exists) throw new RuntimeException("tài khoản đã tồn tại") ;
             String endCryptPassword = passwordEncoder.encode(nguoiDung.getMatKhau());
             nguoiDung.setMatKhau(endCryptPassword);
 
@@ -68,17 +77,25 @@ public class AccountServiceImpl implements AccountService {
             nguoiDung.setMaKichHoat(taoMaKichHoat());
             nguoiDung.setDaKichHoat(false);
 
+            // tạo quyền
+            Quyen quyen =  quyenRepository.findByTenQuyen("USER") ;
+            NguoiDungQuyen nguoiDungQuyen = new NguoiDungQuyen() ;
+            nguoiDungQuyen.setQuyen(quyen);
+            nguoiDungQuyen.setNguoiDung(nguoiDung);
+
+            nguoiDung.getNguoiDungQuyens().add(nguoiDungQuyen);
             // lưu người dùng vào DB
             nguoiDungRepository.save(nguoiDung) ;
 
-            System.out.println("Dăng ký thành công ");
-            // gửi email kích hoạt
-            guiEmailKichHoat(nguoiDung.getEmail() , nguoiDung.getMaKichHoat());
-
-            return ResponseEntity.ok( "Dang ký tài khoản thành công") ;
-        }catch (DataIntegrityViolationException ex){
-            return ResponseEntity.badRequest().body("Đăng ký thất bạo do tài khoản đã được sử dụng ") ;
-        }
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    redisTemplate.opsForValue().set("username:"+nguoiDung.getTenDangNhap() , nguoiDung.getTenDangNhap());
+                    // gửi email kích hoạt
+                    guiEmailKichHoat(nguoiDung.getEmail() , nguoiDung.getMaKichHoat());
+                }
+            });
+            return ResponseEntity.ok("đăng ký thành công") ;
     }
 
     public ResponseEntity<?> kichHoatTaiKhoan(String email , String maKichHoat ){

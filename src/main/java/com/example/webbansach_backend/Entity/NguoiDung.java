@@ -88,6 +88,6 @@ public class NguoiDung {
         return this.daKichHoat ;
     }
 
-    @OneToMany( mappedBy = "nguoiDung", fetch = FetchType.LAZY )
+    @OneToMany( mappedBy = "nguoiDung", fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
     private List<NguoiDungQuyen> nguoiDungQuyens = new ArrayList<>() ;
 }

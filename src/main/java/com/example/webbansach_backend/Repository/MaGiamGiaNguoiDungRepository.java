@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface MaGiamGiaNguoiDungRepository extends JpaRepository<MaGiamGiaNguoiDung , Integer> {
     Optional<MaGiamGiaNguoiDung> findByMaGiamGiaAndNguoiDung(MaGiamGia maGiamGia, NguoiDung nguoiDung) ;
     Optional<MaGiamGiaNguoiDung> findByMaGiamGia_MaGiamAndNguoiDung_TenDangNhap(int maGiam , String tenDangNhap) ;
+    Optional<MaGiamGiaNguoiDung> findByMaGiamGiaAndNguoiDung_TenDangNhap(MaGiamGia maGiam , String tenDangNhap) ;
 }
