@@ -222,7 +222,7 @@ public class OrderServiceImpl implements OrderService {
             handleMessage(message);
         }
     }
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 10000)
     @Transactional
     public void retryOrder() throws JsonProcessingException {
 
@@ -235,7 +235,7 @@ public class OrderServiceImpl implements OrderService {
         PendingMessages pendingMessages = redisTemplate.opsForStream().pending(
                 "order-stream" ,
                 Consumer.from("order-group" , "consumer-1") ,
-                Range.unbounded() , 100
+                Range.unbounded() , 200
         ) ;
 
         for(PendingMessage pendingMessage : pendingMessages){
@@ -244,7 +244,7 @@ public class OrderServiceImpl implements OrderService {
                         "order-stream" ,
                         "order-group" ,
                         "consumer-1" ,
-                        Duration.ofSeconds(10) ,
+                        Duration.ofSeconds(30) ,
                         pendingMessage.getId()
                 );
                 // lưu vào stream dead-letter để sưe lý sau
@@ -261,7 +261,7 @@ public class OrderServiceImpl implements OrderService {
                 continue;
             }
 
-            if(pendingMessage.getElapsedTimeSinceLastDelivery().toSeconds() >= 10){
+            if(pendingMessage.getElapsedTimeSinceLastDelivery().toSeconds() >= 30){
                 List<MapRecord<String , Object,Object>> claimed  = redisTemplate.opsForStream().claim(
                         "order-stream" ,
                         "order-group" ,
