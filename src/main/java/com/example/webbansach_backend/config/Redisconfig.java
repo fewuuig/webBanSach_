@@ -15,6 +15,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -40,6 +41,10 @@ public class Redisconfig {
        redisTemplate.afterPropertiesSet();
 
        return redisTemplate ;
+   }
+   @Bean
+   public StringRedisTemplate redisTemplate2(RedisConnectionFactory factory){
+      return new StringRedisTemplate(factory);
    }
    @Bean
    public RedisTemplate<String, MaGiamGiaUserResponeDTO> redisTemplateMaGiamGia(RedisConnectionFactory factory) {
