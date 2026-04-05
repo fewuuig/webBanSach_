@@ -6,6 +6,7 @@ import com.example.webbansach_backend.Entity.Quyen;
 import com.example.webbansach_backend.Enum.CheckAccount;
 import com.example.webbansach_backend.Repository.NguoiDungRepository;
 import com.example.webbansach_backend.Repository.QuyenRepository;
+import com.example.webbansach_backend.dto.account.ChangePassword;
 import com.example.webbansach_backend.exception.DuplicationDisableException;
 import com.example.webbansach_backend.service.AccountService;
 import com.example.webbansach_backend.service.EmailService;
@@ -148,5 +149,15 @@ public class AccountServiceImpl implements AccountService {
             nguoiDungDisable.setDaKichHoat(false);
         }else throw new RuntimeException("NGuoi dung k đủ quyền đẻ vô hiệu hóa tài khoản") ;
     }
+    @Transactional
+    @Override
+    public void changePassword( String tenDangNhap,ChangePassword changePassword){
+        System.out.println("mk cũ : "+ changePassword.getOldPassword());
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
+        if(!passwordEncoder.matches(changePassword.getOldPassword(), nguoiDung.getMatKhau())) throw new RuntimeException("mật khẩu cũ không khớp") ;
+        nguoiDung.setMatKhau(passwordEncoder.encode(changePassword.getNewPassword()));
+
+    }
+
 
 }

@@ -80,12 +80,15 @@ public class EndPoint {
             "/order/place-order",
             "/dia-chi/them-dia-chi-giao-hang" ,
             "/vouchers/user/use-voucher/{maGiam}" ,
-            "/danh-gia/{maSach}/{noiDungDanhGia}"
+            "/danh-gia/{maSach}/{noiDungDanhGia}" ,
+            "/api/test/dm"
     } ;
     public  static final String[] USER_PUT_ENDPINTS = {
             "/don-hang/{maDonHang}/huy-don",
             "/don-hang/{maDonHang}/dat-lai",
             "/don-hang/{id}/trang-thai",
-            "/vouchers/update/{maGiam}"
+            "/vouchers/update/{maGiam}",
+            "/tai-khoan/change-password" ,
+            "/profile/update"
     } ;
 }

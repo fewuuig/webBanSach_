@@ -4,7 +4,9 @@ import com.example.webbansach_backend.Entity.NguoiDung;
 import com.example.webbansach_backend.Entity.RefreshToken;
 import com.example.webbansach_backend.dto.Logout;
 import com.example.webbansach_backend.dto.RefreshTokenRequestDTO;
+import com.example.webbansach_backend.dto.account.ChangePassword;
 import com.example.webbansach_backend.dto.account.DisableAccountRequestDTO;
+import com.example.webbansach_backend.dto.profileUser.UpdateProfileUserDTO;
 import com.example.webbansach_backend.security.JwtRespone;
 import com.example.webbansach_backend.security.LoginRequest;
 import com.example.webbansach_backend.service.*;
@@ -258,5 +260,11 @@ public class AccountController {
         }
     }
 
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassWord(@RequestBody ChangePassword changePassword){
+        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
+        accountService.changePassword(tenDangNhap , changePassword);
+        return ResponseEntity.ok("updated pass") ;
+    }
 
 }

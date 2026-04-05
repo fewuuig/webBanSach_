@@ -90,12 +90,12 @@ end
 ------------------------------------------------
 -- 5 push order vào stream
 ------------------------------------------------
-local requestId =tostring( redis.call('TIME')[1]).."-"..math.random(100000)
+
 redis.call(
     "XADD",
     KEYS[1],
     "*",
-    "request_id", requestId,
+    "request_id", ARGV[1],
     "tenDangNhap", ARGV[7],
     "items", ARGV[2],
     "maGiam", ARGV[3],

@@ -15,12 +15,14 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class Redisconfig {
+
    @Bean
     public RedisTemplate<String , Object> redisTemplate(RedisConnectionFactory factory){
        // khỏi tạo và kết nối đến redis ở Ram ( ở đây ta coi RedisTemplate<K,V> như môtkj công cụ kết nối dể giao dịch ... với RAM server Redis)

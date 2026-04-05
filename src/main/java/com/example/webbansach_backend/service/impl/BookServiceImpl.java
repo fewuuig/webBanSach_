@@ -136,6 +136,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void updateBook(String tenDangNhap , BookUpdateDTO bookUpdateDTO){
+        System.out.println("só lượng sách cập nhật " + bookUpdateDTO.getSoLuong());
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).
                 orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
         if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("người dùng k đủ quyền để cập nhật sách") ;

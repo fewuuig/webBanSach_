@@ -49,8 +49,6 @@ import java.util.stream.Collectors;
 
 public class OrderServiceImpl implements OrderService {
     @Autowired
-    private CartService cartService ;
-    @Autowired
     private DonHangRepository donHangRepository ;
     @Autowired
     private SachRepository sachRepository ;
@@ -77,7 +75,8 @@ public class OrderServiceImpl implements OrderService {
     private ThongKeBanHangService thongKeBanHangService ;
     @Autowired
     private ReturnOrderTimeoutBatchService returnOrderTimeoutBatchService ;
-
+    @Autowired
+    private ObjectMapper objectMapper ;
 
 
     // atomic
@@ -86,16 +85,17 @@ public class OrderServiceImpl implements OrderService {
     public void placeOder( String tenDangNhap,DatHangRequestDTO datHangRequestDTO) throws JsonProcessingException {
         // sẽ két hợp với việc chjoongs spam API đối vs 1 user để k bị đặt hàng chùng - > trải nghiêm tệ đối với user
         // keys
-        ObjectMapper objectMapper = new ObjectMapper() ;
+
+        String requestId = UUID.randomUUID().toString() ;
         String itemJson = objectMapper.writeValueAsString(datHangRequestDTO.getItems()) ;
         String key1 = "order-stream" ;
-        String key2 = "limit_rate_request:" + tenDangNhap ;
-        List<String> keys = Arrays.asList( key1 , key2) ;
+
+        List<String> keys = Arrays.asList( key1 ) ;
 //        String request_id = UUID.randomUUID().toString() ;
         // sử lý đătj hàng mà không dùng mã giảm giá
         String maGiam = datHangRequestDTO.getMaGiam() == null ? "null": datHangRequestDTO.getMaGiam().toString() ;
         Long result = redisTemplate.execute(stockOrder ,keys ,
-                UUID.randomUUID().toString() ,
+                requestId,
                 itemJson,
                 maGiam,
                 datHangRequestDTO.getMaDiaChiGiaoHang(),
@@ -166,7 +166,7 @@ public class OrderServiceImpl implements OrderService {
                 // permistic_lock
                 Sach sach = sachRepository.findByIdForUpdate(chiTietDonHang.getSach().getMaSach()).orElseThrow() ;
                 if(sach.getSoLuong() >= chiTietDonHang.getSoLuong() && sach.isActive()){
-                    totalBook =+ chiTietDonHang.getSoLuong() ;
+                    totalBook += chiTietDonHang.getSoLuong() ;
                     sach.setSoLuong(sach.getSoLuong() - chiTietDonHang.getSoLuong());
                 }else {
                     throw new RuntimeException("Số lượng sachs khòng đủ để đặt hàng") ;
@@ -200,8 +200,8 @@ public class OrderServiceImpl implements OrderService {
     @PostConstruct
     public void initOrderStream(){
         try {
-            redisTemplate.opsForStream().createGroup("order-dead-letter" , ReadOffset.latest() , "order-dead-letter-group") ;
             redisTemplate.opsForStream().createGroup("order-stream" , ReadOffset.latest() , "order-group") ;
+            redisTemplate.opsForStream().createGroup("order-dead-letter" , ReadOffset.latest() , "order-dead-letter-group") ;
         }catch (Exception ignoreException){
             // có rồi thì thôi .
         }
@@ -279,7 +279,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
     public void handleMessage(MapRecord<String , Object , Object> message ) throws JsonProcessingException {
-        String request_Id = message.getValue().get("request_id").toString() ;
+        String request_Id = ParseJacksonUtil.toString(message.getValue().get("request_id").toString()) ;
         boolean exist = logOrderRepository.existsByRequestId(request_Id);
         // idempotent DB
         if(exist){
@@ -332,11 +332,10 @@ public class OrderServiceImpl implements OrderService {
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString())).
                 orElseThrow(()-> new RuntimeException("người dùng đặt hàng khong hợp lệ")) ;
 
-        String request_Id = message.getValue().get("request_id").toString() ;
+        String request_Id = ParseJacksonUtil.toString(message.getValue().get("request_id").toString()) ;
 
         // parse json -> object List
         String iteamJson = ParseJacksonUtil.toString(message.getValue().get("items").toString()) ;
-        ObjectMapper objectMapper = new ObjectMapper() ;
         List<OrderItem>  items= objectMapper.readValue(iteamJson, new TypeReference<List<OrderItem>>(){});
 
         // tạo dơn hàng
@@ -373,7 +372,7 @@ public class OrderServiceImpl implements OrderService {
         for(OrderItem item : items){
             if(item.getSoLuong() <= 0) throw new RuntimeException("số lượng muốn mua không hợp lệ") ;
             // permistic_lock
-            Sach sach = sachRepository.findByIdForUpdate(item.getMaSach()).orElseThrow(()->new RuntimeException("sách không tông tại")) ;
+            Sach sach = sachRepository.findByMaSachAndIsActive(item.getMaSach(), true).orElseThrow(()->new RuntimeException("sách không tông tại")) ;
             if(sach.getSoLuong() == 0 || sach.getSoLuong() < item.getSoLuong() || !sach.isActive()){
                 throw new RuntimeException("số lượng sách trong kho không hợp lệ / số lượng muốn mua không hợp lệ/bi khoa") ;
             }
@@ -433,7 +432,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Scheduled(fixedDelay = 5000) // 5s bù kho một lần
     public void compensateStockRedisBook() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper() ;
+
 
         List<MapRecord<String, Object, Object>> messages = redisTemplate.opsForStream().read(
                 Consumer.from("order-dead-letter-group", "consumer-1"),
@@ -473,8 +472,11 @@ public class OrderServiceImpl implements OrderService {
                     @Override
                     public void afterCommit() {
 
-                        RecordId[] recordIds = messages.stream().map(message->message.getId()).toArray(RecordId[]::new);
-                         redisTemplate.opsForStream().acknowledge("order-dead-letter", "order-dead-letter-group",recordIds);
+//                        RecordId[] recordIds = messages.stream().map(message->message.getId()).toArray(RecordId[]::new);
+                        messages.forEach(mess->{
+                            redisTemplate.opsForStream().acknowledge("order-dead-letter", "order-dead-letter-group",mess.getId());
+                        });
+
                     }
 
                 }

@@ -28,6 +28,7 @@ import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
     @Autowired
     private MessageMapper messageMapper ;
 
+//    @Async("chatExecutor")
     public void addMessageToStream(MessageRequestDTO messageRequestDTO){
         // push vào MQ (redis stream)
         String key = "chat-stream" ;
@@ -75,7 +77,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
                 Instant.now() ,
                 messageId
         );
-        if(result !=1) throw new RuntimeException("send errol message!") ;
+//        if(result !=1) throw new RuntimeException("send errol message!") ;
         // gửi luôn tin nhắn tại đây cho nhanh cx dc , nhưng phải cẩn thận
     }
     @PostConstruct
@@ -86,7 +88,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
         }catch (Exception ex){}
     }
 
-    @Scheduled( fixedDelay=1000)
+    @Scheduled( fixedDelay=100)
     @Transactional
     public void startConsumer(){
         List<MapRecord<String , Object ,Object>> messages =readMessage("chat-stream" ,
@@ -153,24 +155,35 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
         mess.setStatus(MessageStatus.SENDED);
         return mess ;
     }
-
+    private final Map<String , Room > roomChat = new ConcurrentHashMap<>() ;
     public Room getOrCreateRoom(NguoiDung user1 , NguoiDung user2) throws InterruptedException {
         int min = Math.min(user1.getMaNguoiDung() , user2.getMaNguoiDung()) ;
-        int max = Math.min(user1.getMaNguoiDung() , user2.getMaNguoiDung()) ;
+        int max = Math.max(user1.getMaNguoiDung() , user2.getMaNguoiDung()) ;
         // block : xem lại chỗ nayf
+        String key = "room:"+min+":"+max ;
+        return roomChat.computeIfAbsent(key , value->{
+            Room room = new Room() ;
+            room.setType(RoomType.DM);
+            room.setName("dm");
+            roomRepository.save(room) ;
 
-        Optional<Room> exists = roomRepository.findRoomUser(List.of(user1.getTenDangNhap(), user2.getTenDangNhap())) ;
-        if(exists.isPresent()) return exists.get();
+            // lưu roomNGuoiDung
+            roomNguoiDungRepository.saveAll(List.of(createRoomUser(room , user1) , createRoomUser(room, user2))) ;
+            return room ;
+        });
 
-        // tạo room
-        Room room = new Room() ;
-        room.setType(RoomType.DM);
-        room.setName("dm");
-        roomRepository.save(room) ;
-
-        // lưu roomNGuoiDung
-        roomNguoiDungRepository.saveAll(List.of(createRoomUser(room , user1) , createRoomUser(room, user2))) ;
-        return room ;
+//        Optional<Room> exists = roomRepository.findRoomUser(List.of(user1.getTenDangNhap(), user2.getTenDangNhap())) ;
+//        if(exists.isPresent()) return exists.get();
+//
+//        // tạo room
+//        Room room = new Room() ;
+//        room.setType(RoomType.DM);
+//        room.setName("dm");
+//        roomRepository.save(room) ;
+//
+//        // lưu roomNGuoiDung
+//        roomNguoiDungRepository.saveAll(List.of(createRoomUser(room , user1) , createRoomUser(room, user2))) ;
+//        return room ;
 
 
     }
@@ -209,7 +222,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
     }
 
     // retry message
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 10000)
     public void retryMessage(){
         PendingMessages pendings = redisTemplateJs2.opsForStream().pending(
                 "chat-stream",
@@ -229,7 +242,7 @@ public class ChatMQVer2ServiceImpl implements ChatMQVer2Service {
                 redisTemplateJs2.opsForStream().acknowledge("chat-stream" , "chat-stream-group" , pending.getId()) ;
             }
             // tm dk sau thì processBatch
-            if(pending.getElapsedTimeSinceLastDelivery().toSeconds() >=2){
+            if(pending.getElapsedTimeSinceLastDelivery().toSeconds() >=30){
                 List<MapRecord<String , Object , Object>> message=claimMessage(pending);
                 processSaveBatch(message);
             }

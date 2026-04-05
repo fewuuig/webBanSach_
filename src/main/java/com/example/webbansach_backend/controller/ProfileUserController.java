@@ -1,5 +1,6 @@
 package com.example.webbansach_backend.controller;
 
+import com.example.webbansach_backend.dto.profileUser.UpdateProfileUserDTO;
 import com.example.webbansach_backend.service.ProfileUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,12 @@ public class ProfileUserController {
 
             throw e;
         }
+    }
+    @PutMapping("/update")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileUserDTO updateProfileUserDTO){
+        System.out.println("ngày sinh là : " + updateProfileUserDTO.getNgaySinh());
+        String tenDangNhap = SecurityContextHolder.getContext().getAuthentication().getName() ;
+        profileUserService.updateProfileUser(tenDangNhap , updateProfileUserDTO);
+        return ResponseEntity.noContent().build() ;
     }
 }
