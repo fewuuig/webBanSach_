@@ -27,7 +27,17 @@ public interface DonHangRepository extends JpaRepository<DonHang,Integer> {
 //
 //    """ , nativeQuery = true)
 
-    List<DonHang> findByNguoiDungAndTrangThai(NguoiDung nguoiDung , TrangThaiGiaoHang trangThaiGiaoHang) ;
+    @EntityGraph(attributePaths = {
+            "danhSachChiTietDonHang",
+            "danhSachChiTietDonHang.sach"
+    })
+    @Query("""
+        SELECT dh
+        FROM DonHang dh
+        WHERE dh.nguoiDung = :nguoiDung and dh.trangThai = :trangThaiGiaoHang
+    """)
+
+    List<DonHang> findByNguoiDungAndTrangThai(@Param("nguoiDung") NguoiDung nguoiDung ,@Param("trangThaiGiaoHang") TrangThaiGiaoHang trangThaiGiaoHang) ;
     Optional<DonHang> findByNguoiDung_TenDangNhapAndMaDonHang(String tenDangNhap , int maDonHang) ;
     Optional<DonHang> findByRequestId(String requestId) ;
 

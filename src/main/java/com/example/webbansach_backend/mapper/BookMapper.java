@@ -14,5 +14,6 @@ public interface BookMapper {
 
     // cập nhật entity từ DTO  : MappingTarrget + ignore null
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+
     void updateFromDTO(BookUpdateDTO bookUpdateDTO , @MappingTarget Sach sach) ;
 }

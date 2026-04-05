@@ -2,23 +2,31 @@ package com.example.webbansach_backend.dto;
 
 import com.example.webbansach_backend.Enum.DoiTuongApDungMa;
 import com.example.webbansach_backend.Enum.LoaiMaGiamGia;
+import com.example.webbansach_backend.Enum.TrangThaiMaGiamGia;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class MaGiamGiaRequestDTO {
     private String tenMaGiamGia ;
     private LocalDateTime ngayBatDau ;
     private LocalDateTime ngayHetHan ;
     private int soLuong ;
-    private double giamToiDa ;
-    private double donGiaTu ;
+    private int soMaDaDung ;
+    private Double giamToiDa ;
+    private Double donGiaTu ;
+    private DoiTuongApDungMa doiTuongApDungMa ;
+    private Double phanTramGiam ;
+    private Double tienGiam ;
+    private TrangThaiMaGiamGia trangThaiMaGiamGia ;
+    private int gioiHanSoLuongDungUser ;
     private LoaiMaGiamGia loaiMaGiamGia ;
-    private DoiTuongApDungMa doiTuongApDungMa ; // đối tượng áp dụng cái mã giảm gía này
-    private int gioiHanSoLuongDungUser ; // cqis này là giới hạn lượt dùng đối vơí trường hợp là mã dành cho user
-    private Integer maTheLoai ; // mã áp dụng cho thể loai nào
-    private List<Integer> danhSachMaSach ; // đối với đối tương áp dụng là sách
-
 }

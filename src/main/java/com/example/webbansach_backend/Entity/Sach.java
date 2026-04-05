@@ -18,7 +18,7 @@ import java.util.Set;
 @Table(name = "sach")
 public class Sach {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     @Column(name="ma_sach")
     private int maSach ;
 
@@ -62,7 +62,7 @@ public class Sach {
     private List<TheLoai> danhSachTheLoai ;
 
     //Đoan nay coi nhu cascade.All
-    @OneToMany(mappedBy = "sach" ,fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sach" ,fetch = FetchType.LAZY , cascade = CascadeType.ALL ,orphanRemoval = true)
     private List<HinhAnh> danhSachHinhAnh ;
 
     @OneToMany(mappedBy = "sach" ,fetch = FetchType.LAZY ,cascade = CascadeType.ALL)

@@ -15,15 +15,7 @@
 -- 1 rate limit
 ------------------------------------------------
 
-local limit = redis.call("INCR", KEYS[2])
 
-if limit == 1 then
-    redis.call("EXPIRE", KEYS[2], 10)
-end
-
-if limit > 1 then
-    return -5
-end
 
 
 ------------------------------------------------

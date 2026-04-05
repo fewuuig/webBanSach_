@@ -1,10 +1,11 @@
 package com.example.webbansach_backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DiaChiGiaoHangResponeDTO {
     private int  maDiaChi ;
     private String tinhOrCity ;

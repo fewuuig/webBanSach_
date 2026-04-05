@@ -9,12 +9,15 @@ import com.example.webbansach_backend.exception.NotFoundException;
 import com.example.webbansach_backend.mapper.BookMapper;
 import com.example.webbansach_backend.service.BookService;
 import com.example.webbansach_backend.utils.CheckRoleUItil;
+import com.example.webbansach_backend.utils.ParseListUtil;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -47,9 +50,14 @@ public class BookServiceImpl implements BookService {
     @Autowired
     @Qualifier("deleteBook")
     private DefaultRedisScript<Long> deleteBook ;
+    @Autowired
+    @Qualifier("carousel")
+    private DefaultRedisScript<List> carousel ;
     @Override
     @Transactional
     public void addNewBook( String tenDangNhap,AddBookRequestDTO addBookRequestDTO){
+        if(addBookRequestDTO.getHinhAnhDTOS().size() == 0 || addBookRequestDTO.getHinhAnhDTOS().isEmpty()) return ;
+        System.out.println("số ảnh là : "+addBookRequestDTO.getHinhAnhDTOS().size());
         NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).
                 orElseThrow(()->new RuntimeException("không đủ quyền để thực hiện tính năng này")) ;
         if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("NGuoi dùng k đủ quyền để thêm sách") ;
@@ -86,18 +94,15 @@ public class BookServiceImpl implements BookService {
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        // them vào các key zset , value
                         redisTemplate.execute(addBook,
                                 List.of("page_book_id" , "page_book_id_category:"+theLoai.getMaTheLoai(),"book:"+ sachEntity.getMaSach()),
                                 sachEntity.getMaSach() ,sachEntity.getSoLuong()) ;
-                        // => lua chỉ mất 1 round trip
                     }
                 }
         );
 
     }
 
-    // client tke theo kiểu chọn thể loại + tích checkbox id book=> gửi về 2id đó
     @Override
     @Transactional
     public void deleteBook(String tenDangNhap, List<Integer> ids , int maTheLoai) {
@@ -107,41 +112,76 @@ public class BookServiceImpl implements BookService {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
-                // delete book cx cần xóa hết trong zset {page , category }
-                List<String> idString = ids.stream().map(Object::toString).toList() ;
+                List<String> idString = ids.stream().map(String::valueOf).toList();
+                System.out.println(idString);
+                // xóa key page_book_id
+                ids.forEach(id->{
+                    // xóa khỏi image:book:
+                    redisTemplate.delete("image:book:"+id) ;
+                    //xóa khỏi zset price
+                    redisTemplate.opsForZSet().remove("price" , id) ;
+                    // xóa khỏi top:selling
+                    redisTemplate.opsForZSet().remove("top:selling:books" ,id ) ;
+                    redisTemplate.opsForZSet().remove("page_book_id" , id) ;
+                    // xáo key "page_book_id_category:" + maTheLoai
+                    redisTemplate.opsForZSet().remove("page_book_id_category:" + maTheLoai , maTheLoai ,id) ;
+                });
+                // xóa book_info:
+                List<String> idBookInfo = ids.stream().map(id->"book_info:"+id).toList() ;
 
-                // redis cho phép chuyền 1 array char vào
-                redisTemplate.execute( deleteBook,List.of("page_book_id","page_book_id_category:"+maTheLoai,"book_info:") , idString.toArray()) ;
-                System.out.println("deleted:"+ids);
+                redisTemplate.delete(idBookInfo) ;
             }
         });
     }
     @Override
     @Transactional
     public void updateBook(String tenDangNhap , BookUpdateDTO bookUpdateDTO){
-        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
+        System.out.println("só lượng sách cập nhật " + bookUpdateDTO.getSoLuong());
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).
+                orElseThrow(()-> new RuntimeException("user k tồn tại")) ;
         if(!CheckRoleUItil.checkRole(nguoiDung)) throw new RuntimeException("người dùng k đủ quyền để cập nhật sách") ;
 
-        Sach sach = sachRepository.findByMaSachAndIsActive(bookUpdateDTO.getMaSach(),true).orElseThrow() ;
-         bookMapper.updateFromDTO(bookUpdateDTO ,sach); ;
+        Sach sach = sachRepository.findByMaSachAndIsActiveFetchImg(bookUpdateDTO.getMaSach(),true).orElseThrow() ;
+         bookMapper.updateFromDTO(bookUpdateDTO ,sach);
+
+         // thêm ảnh
+        List<HinhAnh> hinhAnhs = new ArrayList<>() ;
+        if(bookUpdateDTO.getHinhAnhDTOS() != null){
+            bookUpdateDTO.getHinhAnhDTOS().forEach(hinhAnh->{
+                HinhAnh entity = new HinhAnh() ;
+                entity.setSach(sach);
+                entity.setTenHinhAnh(hinhAnh.getTenHinhAnh());
+                entity.setDuLieuAnh(hinhAnh.getDuLieuAnh());
+
+                hinhAnhs.add(entity) ;
+            });
+            sach.getDanhSachHinhAnh().addAll(hinhAnhs) ;
+        }
+        // xóa ảnh nếu có
+        if(bookUpdateDTO.getIdImgDelete()!=null){
+            sach.getDanhSachHinhAnh().removeIf(img ->bookUpdateDTO.getIdImgDelete().contains(img.getMaHinhAnh())) ;
+        }
+        sachRepository.save(sach) ;
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
-                System.out.println("updated:book:"+bookUpdateDTO.getMaSach());
-                redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach()) ;
+                redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach());
+                if(bookUpdateDTO.getIdImgDelete()!=null || bookUpdateDTO.getHinhAnhDTOS() != null ){
+                    redisTemplate.delete("image:book:"+bookUpdateDTO.getMaSach()) ;
+                }
             }
         });
-
     }
+
     @Override
     @Transactional
-    public List<BookResponeDTO> getAllBook(){
+    public List<BookResponeDTO> getBookCategory(int maTheLoai){
         // tận dụng lại key phân trang . lấy tất cả lên
-        List<Object> ids = redisTemplate.execute(paginate , List.of("page_book_id"),0 , -1) ;
+        List<Object> ids = redisTemplate.execute(paginate , List.of("page_book_id_category:"+maTheLoai),0 , -1) ;
 
-        List<Integer> idBooks = convertIdToNumber(ids) ;
+        List<Integer> idBooks = ParseListUtil.toListNumber(ids) ;
 
-        List<String> keyInfo = convertKeyBookInfo( idBooks ,"book_info:") ;
+        List<String> keyInfo = ParseListUtil.toKeyBookInfo( idBooks ,"book_info:") ;
 
         List<Object> cached = redisTemplate.opsForValue().multiGet(keyInfo);
         List<Integer> idNotFind = new ArrayList<>() ;
@@ -149,6 +189,7 @@ public class BookServiceImpl implements BookService {
         int index = 0;
         for(Object obj : cached){
             if(obj != null ){
+                System.out.println("lấy từ cache");
                 bookResponeDTOS.add((BookResponeDTO) obj) ;
             }else {
                 idNotFind.add(idBooks.get(index)) ;
@@ -156,7 +197,7 @@ public class BookServiceImpl implements BookService {
             index ++ ;
         }
         if(!idNotFind.isEmpty()){
-            List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idNotFind, true) ;
+            List<Sach> saches = sachRepository.findByMaSachInAndIsActiveAndMaTheLoai(idNotFind , maTheLoai) ;
 
             for(Sach sach : saches){
                 System.out.println("lookup:"+sach.getMaSach());
@@ -168,17 +209,98 @@ public class BookServiceImpl implements BookService {
         bookResponeDTOS.sort(Comparator.comparing(BookResponeDTO::getTenSach));
         return bookResponeDTOS ;
     }
+    @Override
+    public List<BookResponeDTO>  bestSellerCarousel(){
+        // lấy trong zset key : top:selling:books . lấy ra 3 quyển
+        List<Object> bookIds = redisTemplate.execute(carousel , List.of("top:selling:books") ,0 ,2) ;
+        if( bookIds.isEmpty()||bookIds == null){
+            List<Object> ids = redisTemplate.execute(paginate ,List.of("page_book_id") , 0 , 2) ;
+            return convertBookRespDTOCache(ids) ;
+        }
+        // nếu k đủ 3 thì lấy 2 .. 1 cái đầu của page id
+        if(bookIds.size() !=3){
+            List<Object> ids = redisTemplate.execute(paginate ,List.of("page_book_id") ,  0, bookIds.size()==1?1:0) ;
+            // gộp id của bookidsd vào đay
+            bookIds.forEach(id->{
+                assert ids != null;
+                ids.add(id) ;
+            });
+            Set<Object> idFinal = new TreeSet<>(ids) ;
+            if(idFinal.size()==2){
+                for(Object obj : idFinal){
+                    int tmp = (int)obj - 1 ;
+                    idFinal.add(tmp) ;
+                    break ;
+                }
 
+            }else if(idFinal.size() == 1){
+                for(Object obj : idFinal){
+                    int tmp = (int)obj - 1 ;
+                    idFinal.add(tmp) ;
+                    break ;
+                }
+                for(Object obj : idFinal){
+                    int tmp = (int)obj - 1 ;
+                    idFinal.add(tmp) ;
+                    break ;
+                }
+            }
+            ids.clear();
+            ids.addAll(idFinal) ;
+            return convertBookRespDTOCache(ids) ;
+        }
+        return convertBookRespDTOCache(bookIds) ;
+    }
+    @Override
     public List<BookResponeDTO> getSachNew(){
         List<Sach> saches=sachRepository.findSachNew() ;
         if(saches == null) return null ;
         else return saches.stream().map(bookMapper::toDTO).toList() ;
     }
-    private List<String> convertKeyBookInfo(List<Integer> ids , String keyInfo){
-        return ids.stream().map(id ->keyInfo+id).toList() ;
+    @Override
+    public List<BookResponeDTO> getBookDeleted(int maTheLoai){
+        List<Sach>saches = sachRepository.findSachDeleted(maTheLoai) ;
+        return saches.stream().map(bookMapper::toDTO).toList() ;
     }
-    private List<Integer> convertIdToNumber(List<Object> ids){
-        return ids.stream().map(id->Integer.parseInt(id.toString())).toList() ;
+    @Override
+    @Transactional
+    public void reStoreBook(List<Integer> ids , int maTheLoai ){
+        sachRepository.reStoreBook(ids);
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        // thêm id vào category , page
+                        ids.forEach(id->{
+                            redisTemplate.opsForZSet().add("page_book_id" , id ,id) ;
+                            redisTemplate.opsForZSet().add("page_book_id_category:"+maTheLoai,id ,id ) ;
+                        });
+                    }
+                }
+        );
     }
+    public List<BookResponeDTO> convertBookRespDTOCache(List<Object> bookIds){
+        List<Integer> bookIdNumber = ParseListUtil.toListNumber(bookIds) ;
+        List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(bookIdNumber ,"book_info:") ;
+        List<Object> caches = redisTemplate.opsForValue().multiGet(keyBookInfo);
+
+        List<BookResponeDTO> bookResponeDTOS = new ArrayList<>() ;
+        List<Integer> idNotFind = new ArrayList<>() ;
+        int index = 0 ;
+        for(Object cache : caches){
+            if(cache!= null){
+                bookResponeDTOS.add((BookResponeDTO) cache) ;
+            }else idNotFind.add(bookIdNumber.get(index)) ;
+            index ++ ;
+        }
+        if(!idNotFind.isEmpty()){
+            List<Sach> saches = sachRepository.findByMaSachInAndIsActive( idNotFind,true) ;
+            saches.forEach(sach->{
+                bookResponeDTOS.add(bookMapper.toDTO(sach)) ;
+            });
+        }
+        return bookResponeDTOS ;
+    }
+
 
 }

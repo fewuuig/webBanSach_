@@ -11,7 +11,11 @@ import com.example.webbansach_backend.dto.DiaChiGiaoHangResponeDTO;
 import com.example.webbansach_backend.service.DiaChiGiaoHangService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 @Transactional
 @Service
@@ -20,12 +24,25 @@ public class DiaChiGiaoHangServiceImpl implements DiaChiGiaoHangService {
     private NguoiDungRepository nguoiDungRepository ;
     @Autowired
     private DonHangRepository donHangRepository ;
+    @Autowired
+    private RedisTemplate<String ,DiaChiGiaoHangResponeDTO > redisDiaChi ;
 
     @Override
     public List<DiaChiGiaoHangResponeDTO> getDiaChiGiaoHang(String tenDangNhap) {
-        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
+        List<DiaChiGiaoHangResponeDTO> caches = redisDiaChi.opsForList().range("address:ship:user:"+tenDangNhap,0,-1) ;
+        if(!caches.isEmpty()){
+            System.out.println("cache dia chi");
+            return caches ;
+        }
+        NguoiDung nguoiDung = nguoiDungRepository.findByTenDangNhapFetchDiaChi(tenDangNhap).orElseThrow() ;
         List<DiaChiGiaoHang> diaChiGiaoHangs = nguoiDung.getDiaChiGiaoHangs() ;
-        return diaChiGiaoHangs.stream().map(DiaChiGiaoHangResponeDTOConverter::toDiaChiGiaoHangResponeDTO).toList() ;
+        List<DiaChiGiaoHangResponeDTO> diaChiGiaoHangResponeDTOS = new ArrayList<>() ;
+        diaChiGiaoHangs.forEach(diaChi->{
+            diaChiGiaoHangResponeDTOS.add(DiaChiGiaoHangResponeDTOConverter.toDiaChiGiaoHangResponeDTO(diaChi)) ;
+        });
+        redisDiaChi.opsForList().rightPushAll("address:ship:user:"+tenDangNhap,diaChiGiaoHangResponeDTOS) ;
+        redisDiaChi.expire("address:ship:user:"+tenDangNhap , Duration.ofHours(1)) ;
+        return diaChiGiaoHangResponeDTOS ;
     }
 
     @Override
@@ -38,5 +55,7 @@ public class DiaChiGiaoHangServiceImpl implements DiaChiGiaoHangService {
        diaChiGiaoHang.setPhuongOrXa(diaChiGiaoHangRequestDTO.getPhuongOrXa());
        diaChiGiaoHang.setSoNha(diaChiGiaoHangRequestDTO.getSoNha());
        nguoiDung.getDiaChiGiaoHangs().add(diaChiGiaoHang) ;
+        redisDiaChi.opsForList().rightPush("address:ship:user:"+tenDangNhap,DiaChiGiaoHangResponeDTOConverter.toDiaChiGiaoHangResponeDTO(diaChiGiaoHang)) ;
+        redisDiaChi.expire("address:ship:user:"+tenDangNhap , Duration.ofHours(1)) ;
     }
 }

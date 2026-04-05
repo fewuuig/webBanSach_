@@ -131,7 +131,6 @@ public class CartServiceImpl implements CartService {
     public void deleteItemOrderFromCart( String tenDangNhap,Set<Long> ids ){
         GioHang gioHang = gioHangRepository.findByNguoiDung_TenDangNhap(tenDangNhap).
                 orElseThrow(()->new RuntimeException("Not find cart of "+tenDangNhap)) ;
-        System.out.println(gioHang.getMaGioHang());
         for(GioHangSach gioHangSach : gioHang.getGioHangSaches()){
             System.out.println(gioHangSach.getMaGioHangSach());
         }

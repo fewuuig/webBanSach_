@@ -56,6 +56,7 @@ public class ChatServiceImpl implements ChatService {
 
     public List<NguoiDungChatResponeDTO> getUserListChat(){
         List<NguoiDung> nguoiDungs = nguoiDungRepository.findAll() ;
+
         return nguoiDungs.stream().map(nguoiDungMapper::toDTO).toList() ;
     }
 

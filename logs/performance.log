@@ -1,0 +1,1521 @@
+18:06:09 - GET /profile/info | user=viet_mai | time=50 ms
+18:22:27 - GET /profile/info | user=viet_mai | time=38 ms
+20:59:54 - GET /profile/info | user=viet_mai | time=56 ms
+21:00:04 - GET /book/book-new-carousel | time=0 ms
+21:00:04 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=41 ms
+21:00:04 - GET /wish-love/check | user=viet_mai | bookId=250 | time=7 ms
+21:00:04 - GET /wish-love/check | user=viet_mai | bookId=251 | time=13 ms
+21:00:04 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+21:00:04 - GET /wish-love/check | user=viet_mai | bookId=248 | time=5 ms
+21:00:04 - GET /wish-love/check | user=viet_mai | bookId=246 | time=5 ms
+21:00:04 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+21:00:04 - GET /wish-love/check | user=viet_mai | bookId=247 | time=5 ms
+21:00:04 - GET /wish-love/check | user=viet_mai | bookId=244 | time=3 ms
+21:00:26 - GET /profile/info | user=viet_mai | time=19 ms
+21:01:09 - GET /profile/info | user=viet_mai | time=4 ms
+21:01:09 - GET /profile/info | user=viet_mai | time=5 ms
+21:01:50 - GET /profile/info | user=viet_mai | time=3 ms
+21:01:50 - GET /profile/info | user=viet_mai | time=4 ms
+21:01:54 - GET /profile/info | user=viet_mai | time=3 ms
+21:01:54 - GET /profile/info | user=viet_mai | time=4 ms
+21:02:07 - GET /profile/info | user=viet_mai | time=3 ms
+21:02:07 - GET /profile/info | user=viet_mai | time=4 ms
+21:05:14 - GET /profile/info | user=viet_mai | time=39 ms
+21:05:23 - GET /profile/info | user=viet_mai | time=6 ms
+21:05:23 - GET /profile/info | user=viet_mai | time=6 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=41 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:05:31 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:32 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:33 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:34 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:35 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=2 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:36 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=2 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=27 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:37 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:05:38 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:07:05 - GET /profile/info | user=viet_mai | time=40 ms
+21:07:05 - GET /profile/info | user=viet_mai | time=5 ms
+21:07:14 - GET /profile/info | user=viet_mai | time=42 ms
+21:07:14 - GET /profile/info | user=viet_mai | time=6 ms
+21:07:40 - GET /profile/info | user=viet_mai | time=4 ms
+21:07:51 - GET /profile/info | user=viet_mai | time=13 ms
+21:07:51 - GET /profile/info | user=viet_mai | time=4 ms
+21:08:04 - GET /profile/info | user=viet_mai | time=11 ms
+21:08:04 - GET /profile/info | user=viet_mai | time=3 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=17 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:13 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:14 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:15 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:16 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=2 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:17 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:18 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:19 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:09:20 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:21:48 - GET /profile/info | user=viet_mai | time=38 ms
+21:21:48 - GET /profile/info | user=viet_mai | time=5 ms
+21:22:16 - GET /profile/info | user=viet_mai | time=48 ms
+21:22:16 - GET /profile/info | user=viet_mai | time=8 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=19 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=11 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:43 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:44 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:45 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:46 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:22:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:30:21 - GET /profile/info | user=viet_mai | time=43 ms
+21:30:21 - GET /profile/info | user=viet_mai | time=5 ms
+21:30:53 - POST /tai-khoan/refresh-token | user=viet_mai | time=24 ms
+21:30:53 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:30:53 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:30:53 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:30:53 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=11 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=11 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:57 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:30:58 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:30:59 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=3 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:31:00 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:35:34 - GET /profile/info | user=viet_mai | time=41 ms
+21:35:34 - GET /profile/info | user=viet_mai | time=5 ms
+21:36:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=20 ms
+21:36:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:36:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:47 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:48 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:49 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:50 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=5 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:51 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:36:52 - POST /tai-khoan/refresh-token | user=viet_mai | time=4 ms
+21:36:52 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:36:52 - POST /tai-khoan/refresh-token | user=viet_mai | time=6 ms
+21:40:52 - POST /tai-khoan/refresh-token | user=viet_mai | time=17 ms
+21:40:52 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:40:53 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:40:53 - POST /tai-khoan/refresh-token | user=viet_mai | time=11 ms
+21:40:53 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:40:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=10 ms
+21:40:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:40:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:40:54 - POST /tai-khoan/refresh-token | user=viet_mai | time=13 ms
+21:40:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:40:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:40:55 - POST /tai-khoan/refresh-token | user=viet_mai | time=9 ms
+21:40:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=8 ms
+21:40:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:40:56 - POST /tai-khoan/refresh-token | user=viet_mai | time=7 ms
+21:41:54 - GET /book/book-new-carousel | time=0 ms
+21:41:54 - GET /profile/info | user=viet_mai | time=19 ms
+21:41:54 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=14 ms
+21:41:54 - GET /wish-love/check | user=viet_mai | bookId=250 | time=8 ms
+21:41:54 - GET /wish-love/check | user=viet_mai | bookId=248 | time=6 ms
+21:41:54 - GET /wish-love/check | user=viet_mai | bookId=249 | time=6 ms
+21:41:54 - GET /wish-love/check | user=viet_mai | bookId=251 | time=12 ms
+21:41:54 - GET /wish-love/check | user=viet_mai | bookId=247 | time=3 ms
+21:41:54 - GET /wish-love/check | user=viet_mai | bookId=246 | time=6 ms
+21:41:54 - GET /wish-love/check | user=viet_mai | bookId=245 | time=6 ms
+21:41:54 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms
+21:42:08 - GET /profile/info | user=viet_mai | time=3 ms
+21:43:47 - GET /profile/info | user=viet_mai | time=36 ms
+21:43:47 - GET /profile/info | user=viet_mai | time=3 ms
+21:43:56 - GET /book/book-new-carousel | time=0 ms
+21:43:56 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=12 ms
+21:43:56 - GET /profile/info | user=viet_mai | time=4 ms
+21:43:56 - GET /wish-love/check | user=viet_mai | bookId=250 | time=6 ms
+21:43:56 - GET /wish-love/check | user=viet_mai | bookId=248 | time=6 ms
+21:43:56 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+21:43:56 - GET /wish-love/check | user=viet_mai | bookId=251 | time=11 ms
+21:43:56 - GET /wish-love/check | user=viet_mai | bookId=247 | time=5 ms
+21:43:56 - GET /wish-love/check | user=viet_mai | bookId=245 | time=5 ms
+21:43:56 - GET /wish-love/check | user=viet_mai | bookId=244 | time=5 ms
+21:43:56 - GET /wish-love/check | user=viet_mai | bookId=246 | time=5 ms
+21:43:59 - GET /profile/info | user=viet_mai | time=2 ms
+21:44:03 - GET /book/book-new-carousel | time=0 ms
+21:44:03 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=7 ms
+21:44:03 - GET /profile/info | user=viet_mai | time=4 ms
+21:44:03 - GET /wish-love/check | user=viet_mai | bookId=250 | time=7 ms
+21:44:03 - GET /wish-love/check | user=viet_mai | bookId=249 | time=6 ms
+21:44:03 - GET /wish-love/check | user=viet_mai | bookId=251 | time=11 ms
+21:44:03 - GET /wish-love/check | user=viet_mai | bookId=248 | time=5 ms
+21:44:04 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms
+21:44:04 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+21:44:04 - GET /wish-love/check | user=viet_mai | bookId=245 | time=5 ms
+21:44:04 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
+21:44:05 - GET /stats/stat-today | time=8 ms
+21:44:07 - GET /book/book-new-carousel | time=0 ms
+21:44:07 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+21:44:07 - GET /profile/info | user=viet_mai | time=3 ms
+21:44:07 - GET /wish-love/check | user=viet_mai | bookId=250 | time=6 ms
+21:44:07 - GET /wish-love/check | user=viet_mai | bookId=249 | time=6 ms
+21:44:07 - GET /wish-love/check | user=viet_mai | bookId=251 | time=10 ms
+21:44:07 - GET /wish-love/check | user=viet_mai | bookId=248 | time=7 ms
+21:44:07 - GET /wish-love/check | user=viet_mai | bookId=247 | time=6 ms
+21:44:07 - GET /wish-love/check | user=viet_mai | bookId=246 | time=5 ms
+21:44:07 - GET /wish-love/check | user=viet_mai | bookId=245 | time=4 ms
+21:44:07 - GET /wish-love/check | user=viet_mai | bookId=244 | time=6 ms
+21:44:09 - GET /book/category | categoryId=0 | time=3 ms
+21:44:09 - GET /book/book-deleted | categoryId=0 | time=33 ms
+21:44:11 - GET /book/book-new-carousel | time=0 ms
+21:44:11 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:44:11 - GET /profile/info | user=viet_mai | time=4 ms
+21:44:11 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+21:44:11 - GET /wish-love/check | user=viet_mai | bookId=250 | time=4 ms
+21:44:11 - GET /wish-love/check | user=viet_mai | bookId=251 | time=10 ms
+21:44:11 - GET /wish-love/check | user=viet_mai | bookId=248 | time=6 ms
+21:44:11 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
+21:44:11 - GET /wish-love/check | user=viet_mai | bookId=245 | time=4 ms
+21:44:11 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+21:44:11 - GET /wish-love/check | user=viet_mai | bookId=244 | time=6 ms
+21:44:25 - GET /book/book-new-carousel | time=0 ms
+21:44:25 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:44:25 - GET /profile/info | user=viet_mai | time=4 ms
+21:44:25 - GET /wish-love/check | user=viet_mai | bookId=250 | time=5 ms
+21:44:25 - GET /wish-love/check | user=viet_mai | bookId=248 | time=5 ms
+21:44:25 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+21:44:25 - GET /wish-love/check | user=viet_mai | bookId=251 | time=11 ms
+21:44:25 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+21:44:25 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+21:44:25 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+21:44:25 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms
+21:49:30 - GET /book/book-deleted | categoryId=0 | time=3 ms
+21:49:30 - GET /book/category | categoryId=0 | time=4 ms
+21:49:36 - GET /book/book-deleted | categoryId=1 | time=2 ms
+21:49:36 - GET /book/category | categoryId=1 | time=12 ms
+21:49:38 - GET /book/book-deleted | categoryId=3 | time=1 ms
+21:49:38 - GET /book/category | categoryId=3 | time=8 ms
+21:50:57 - GET /book/book-new-carousel | time=0 ms
+21:50:57 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:50:57 - GET /profile/info | user=viet_mai | time=4 ms
+21:50:57 - GET /wish-love/check | user=viet_mai | bookId=250 | time=4 ms
+21:50:57 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+21:50:57 - GET /wish-love/check | user=viet_mai | bookId=249 | time=4 ms
+21:50:57 - GET /wish-love/check | user=viet_mai | bookId=251 | time=11 ms
+21:50:57 - GET /wish-love/check | user=viet_mai | bookId=247 | time=6 ms
+21:50:57 - GET /wish-love/check | user=viet_mai | bookId=245 | time=6 ms
+21:50:57 - GET /wish-love/check | user=viet_mai | bookId=246 | time=6 ms
+21:50:57 - GET /wish-love/check | user=viet_mai | bookId=244 | time=6 ms
+21:50:58 - GET /books/251 | time=3 ms
+21:50:58 - GET /profile/info | user=viet_mai | time=3 ms
+21:50:58 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=251 | time=6 ms
+21:51:00 - GET /book/book-new-carousel | time=0 ms
+21:51:00 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:51:00 - GET /profile/info | user=viet_mai | time=3 ms
+21:51:00 - GET /wish-love/check | user=viet_mai | bookId=250 | time=4 ms
+21:51:00 - GET /wish-love/check | user=viet_mai | bookId=251 | time=7 ms
+21:51:00 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+21:51:00 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+21:51:00 - GET /wish-love/check | user=viet_mai | bookId=247 | time=7 ms
+21:51:00 - GET /wish-love/check | user=viet_mai | bookId=245 | time=4 ms
+21:51:00 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
+21:51:00 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms
+21:51:23 - GET /profile/info | user=viet_mai | time=2 ms
+21:51:46 - GET /book/book-new-carousel | time=0 ms
+21:51:46 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+21:51:46 - GET /profile/info | user=viet_mai | time=5 ms
+21:51:47 - GET /wish-love/check | user=viet_mai | bookId=250 | time=6 ms
+21:51:47 - GET /wish-love/check | user=viet_mai | bookId=251 | time=10 ms
+21:51:47 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+21:51:47 - GET /wish-love/check | user=viet_mai | bookId=248 | time=5 ms
+21:51:47 - GET /wish-love/check | user=viet_mai | bookId=247 | time=6 ms
+21:51:47 - GET /wish-love/check | user=viet_mai | bookId=246 | time=6 ms
+21:51:47 - GET /wish-love/check | user=viet_mai | bookId=244 | time=5 ms
+21:51:47 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+21:51:53 - GET /book/book-new-carousel | time=0 ms
+21:51:53 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:51:53 - GET /profile/info | user=viet_mai | time=4 ms
+21:51:53 - GET /wish-love/check | user=viet_mai | bookId=250 | time=3 ms
+21:51:53 - GET /wish-love/check | user=viet_mai | bookId=249 | time=1 ms
+21:51:53 - GET /wish-love/check | user=viet_mai | bookId=247 | time=3 ms
+21:51:53 - GET /wish-love/check | user=viet_mai | bookId=251 | time=7 ms
+21:51:53 - GET /wish-love/check | user=viet_mai | bookId=248 | time=3 ms
+21:51:53 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+21:51:53 - GET /wish-love/check | user=viet_mai | bookId=245 | time=4 ms
+21:51:53 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms
+21:51:57 - GET /profile/info | user=viet_mai | time=3 ms
+21:52:02 - GET /book/book-new-carousel | time=0 ms
+21:52:02 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:52:02 - GET /profile/info | user=viet_mai | time=3 ms
+21:52:02 - GET /wish-love/check | user=viet_mai | bookId=250 | time=5 ms
+21:52:02 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+21:52:02 - GET /wish-love/check | user=viet_mai | bookId=251 | time=9 ms
+21:52:02 - GET /wish-love/check | user=viet_mai | bookId=248 | time=11 ms
+21:52:02 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+21:52:02 - GET /wish-love/check | user=viet_mai | bookId=244 | time=3 ms
+21:52:02 - GET /wish-love/check | user=viet_mai | bookId=247 | time=3 ms
+21:52:02 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+21:52:03 - GET /cart/view-cart | user=viet_mai | time=23 ms
+21:52:05 - GET /book/book-new-carousel | time=0 ms
+21:52:05 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:52:05 - GET /profile/info | user=viet_mai | time=3 ms
+21:52:05 - GET /wish-love/check | user=viet_mai | bookId=251 | time=7 ms
+21:52:05 - GET /wish-love/check | user=viet_mai | bookId=250 | time=5 ms
+21:52:05 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+21:52:05 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+21:52:05 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+21:52:05 - GET /wish-love/check | user=viet_mai | bookId=246 | time=5 ms
+21:52:05 - GET /wish-love/check | user=viet_mai | bookId=245 | time=5 ms
+21:52:05 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms
+21:52:09 - GET /book/category | categoryId=0 | time=4 ms
+21:52:09 - GET /book/book-deleted | categoryId=0 | time=4 ms
+21:52:10 - GET /book/book-new-carousel | time=0 ms
+21:52:10 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+21:52:10 - GET /profile/info | user=viet_mai | time=3 ms
+21:52:11 - GET /wish-love/check | user=viet_mai | bookId=250 | time=5 ms
+21:52:11 - GET /wish-love/check | user=viet_mai | bookId=249 | time=4 ms
+21:52:11 - GET /wish-love/check | user=viet_mai | bookId=251 | time=10 ms
+21:52:11 - GET /wish-love/check | user=viet_mai | bookId=248 | time=5 ms
+21:52:11 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+21:52:11 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+21:52:11 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms
+21:52:11 - GET /wish-love/check | user=viet_mai | bookId=245 | time=4 ms
+21:52:11 - GET /wish-love/danh-sach-yeu-thich | user=viet_mai | time=7 ms
+21:52:15 - GET /book/book-new-carousel | time=0 ms
+21:52:15 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=7 ms
+21:52:15 - GET /profile/info | user=viet_mai | time=3 ms
+21:52:15 - GET /wish-love/check | user=viet_mai | bookId=249 | time=3 ms
+21:52:15 - GET /wish-love/check | user=viet_mai | bookId=250 | time=3 ms
+21:52:15 - GET /wish-love/check | user=viet_mai | bookId=251 | time=6 ms
+21:52:15 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+21:52:15 - GET /wish-love/check | user=viet_mai | bookId=247 | time=5 ms
+21:52:15 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
+21:52:15 - GET /wish-love/check | user=viet_mai | bookId=245 | time=7 ms
+21:52:15 - GET /wish-love/check | user=viet_mai | bookId=244 | time=5 ms
+21:52:15 - GET /chat/list-users | time=12 ms
+21:52:18 - GET /chat/users/dm/messages | sender=viet_mai | receiver=an_tran | page=1 | size=20 | time=36 ms
+21:52:21 - GET /book/book-new-carousel | time=0 ms
+21:52:21 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:52:21 - GET /profile/info | user=viet_mai | time=4 ms
+21:52:21 - GET /wish-love/check | user=viet_mai | bookId=250 | time=4 ms
+21:52:21 - GET /wish-love/check | user=viet_mai | bookId=249 | time=4 ms
+21:52:21 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+21:52:21 - GET /wish-love/check | user=viet_mai | bookId=251 | time=9 ms
+21:52:21 - GET /wish-love/check | user=viet_mai | bookId=248 | time=3 ms
+21:52:21 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+21:52:21 - GET /wish-love/check | user=viet_mai | bookId=245 | time=4 ms
+21:52:21 - GET /wish-love/check | user=viet_mai | bookId=244 | time=3 ms
+21:52:22 - GET /books/251 | time=1 ms
+21:52:22 - GET /profile/info | user=viet_mai | time=3 ms
+21:52:22 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=251 | time=2 ms
+21:52:29 - GET /book/book-new-carousel | time=0 ms
+21:52:29 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=9 ms
+21:52:29 - GET /profile/info | user=viet_mai | time=4 ms
+21:52:29 - GET /wish-love/check | user=viet_mai | bookId=251 | time=9 ms
+21:52:29 - GET /wish-love/check | user=viet_mai | bookId=250 | time=5 ms
+21:52:29 - GET /wish-love/check | user=viet_mai | bookId=248 | time=3 ms
+21:52:29 - GET /wish-love/check | user=viet_mai | bookId=249 | time=3 ms
+21:52:30 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+21:52:30 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+21:52:30 - GET /wish-love/check | user=viet_mai | bookId=244 | time=3 ms
+21:52:30 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+21:52:35 - GET /books/250 | time=2 ms
+21:52:35 - GET /profile/info | user=viet_mai | time=3 ms
+21:52:35 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=250 | time=19 ms
+21:52:40 - POST /danh-gia/{maSach}/{noiDungDanhGia} | user=viet_mai | bookId=250 | time=39 ms
+21:52:40 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=250 | time=2 ms
+21:52:43 - GET /books/250 | time=4 ms
+21:52:43 - GET /profile/info | user=viet_mai | time=3 ms
+21:52:43 - GET /profile/info | user=viet_mai | time=4 ms
+21:52:43 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=250 | time=3 ms
+21:52:47 - GET /book/book-new-carousel | time=0 ms
+21:52:47 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:52:47 - GET /wish-love/check | user=viet_mai | bookId=250 | time=2 ms
+21:52:47 - GET /wish-love/check | user=viet_mai | bookId=249 | time=2 ms
+21:52:47 - GET /wish-love/check | user=viet_mai | bookId=248 | time=2 ms
+21:52:47 - GET /wish-love/check | user=viet_mai | bookId=251 | time=5 ms
+21:52:47 - GET /wish-love/check | user=viet_mai | bookId=247 | time=3 ms
+21:52:47 - GET /wish-love/check | user=viet_mai | bookId=246 | time=2 ms
+21:52:47 - GET /wish-love/check | user=viet_mai | bookId=244 | time=3 ms
+21:52:47 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+21:52:48 - GET /books/251 | time=6 ms
+21:52:48 - GET /profile/info | user=viet_mai | time=2 ms
+21:52:48 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=251 | time=2 ms
+21:52:50 - POST /danh-gia/{maSach}/{noiDungDanhGia} | user=viet_mai | bookId=251 | time=13 ms
+21:52:50 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=251 | time=3 ms
+21:52:53 - GET /book/book-new-carousel | time=0 ms
+21:52:53 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+21:52:53 - GET /profile/info | user=viet_mai | time=4 ms
+21:52:53 - GET /wish-love/check | user=viet_mai | bookId=249 | time=4 ms
+21:52:53 - GET /wish-love/check | user=viet_mai | bookId=251 | time=5 ms
+21:52:53 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+21:52:53 - GET /wish-love/check | user=viet_mai | bookId=247 | time=2 ms
+21:52:53 - GET /wish-love/check | user=viet_mai | bookId=250 | time=5 ms
+21:52:53 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
+21:52:53 - GET /wish-love/check | user=viet_mai | bookId=245 | time=7 ms
+21:52:53 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms
+21:52:58 - GET /books/248 | time=2 ms
+21:52:58 - GET /profile/info | user=viet_mai | time=2 ms
+21:52:58 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=248 | time=6 ms
+21:53:02 - GET /book/book-new-carousel | time=0 ms
+21:53:02 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+21:53:02 - GET /profile/info | user=viet_mai | time=4 ms
+21:53:02 - GET /wish-love/check | user=viet_mai | bookId=249 | time=3 ms
+21:53:02 - GET /wish-love/check | user=viet_mai | bookId=250 | time=3 ms
+21:53:02 - GET /wish-love/check | user=viet_mai | bookId=248 | time=2 ms
+21:53:02 - GET /wish-love/check | user=viet_mai | bookId=251 | time=5 ms
+21:53:02 - GET /wish-love/check | user=viet_mai | bookId=247 | time=2 ms
+21:53:02 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
+21:53:02 - GET /wish-love/check | user=viet_mai | bookId=245 | time=4 ms
+21:53:02 - GET /wish-love/check | user=viet_mai | bookId=244 | time=3 ms
+22:07:50 - GET /books/page-size | page=2 | size=8 | user=anonymousUser | time=19 ms
+22:07:50 - GET /wish-love/check | user=viet_mai | bookId=22 | time=2 ms
+22:07:50 - GET /wish-love/check | user=viet_mai | bookId=21 | time=3 ms
+22:07:50 - GET /wish-love/check | user=viet_mai | bookId=20 | time=3 ms
+22:07:50 - GET /wish-love/check | user=viet_mai | bookId=19 | time=2 ms
+22:07:50 - GET /wish-love/check | user=viet_mai | bookId=17 | time=3 ms
+22:07:50 - GET /wish-love/check | user=viet_mai | bookId=18 | time=3 ms
+22:07:50 - GET /wish-love/check | user=viet_mai | bookId=16 | time=3 ms
+22:07:50 - GET /wish-love/check | user=viet_mai | bookId=15 | time=2 ms
+22:07:52 - GET /books/page-size | page=3 | size=8 | user=anonymousUser | time=19 ms
+22:07:52 - GET /wish-love/check | user=viet_mai | bookId=14 | time=3 ms
+22:07:52 - GET /wish-love/check | user=viet_mai | bookId=11 | time=2 ms
+22:07:52 - GET /wish-love/check | user=viet_mai | bookId=13 | time=2 ms
+22:07:52 - GET /wish-love/check | user=viet_mai | bookId=12 | time=2 ms
+22:07:52 - GET /wish-love/check | user=viet_mai | bookId=9 | time=2 ms
+22:07:52 - GET /wish-love/check | user=viet_mai | bookId=10 | time=2 ms
+22:07:52 - GET /wish-love/check | user=viet_mai | bookId=8 | time=3 ms
+22:07:52 - GET /wish-love/check | user=viet_mai | bookId=7 | time=2 ms
+22:07:53 - GET /books/page-size | page=4 | size=8 | user=anonymousUser | time=13 ms
+22:07:53 - GET /wish-love/check | user=viet_mai | bookId=6 | time=2 ms
+22:07:53 - GET /wish-love/check | user=viet_mai | bookId=5 | time=2 ms
+22:07:53 - GET /wish-love/check | user=viet_mai | bookId=4 | time=3 ms
+22:07:53 - GET /wish-love/check | user=viet_mai | bookId=3 | time=2 ms
+22:07:53 - GET /wish-love/check | user=viet_mai | bookId=2 | time=2 ms
+22:07:53 - GET /wish-love/check | user=viet_mai | bookId=1 | time=1 ms
+22:07:55 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=17 ms
+22:07:55 - GET /wish-love/check | user=viet_mai | bookId=250 | time=2 ms
+22:07:55 - GET /wish-love/check | user=viet_mai | bookId=249 | time=2 ms
+22:07:55 - GET /wish-love/check | user=viet_mai | bookId=251 | time=4 ms
+22:07:55 - GET /wish-love/check | user=viet_mai | bookId=248 | time=2 ms
+22:07:55 - GET /wish-love/check | user=viet_mai | bookId=246 | time=2 ms
+22:07:55 - GET /wish-love/check | user=viet_mai | bookId=247 | time=2 ms
+22:07:55 - GET /wish-love/check | user=viet_mai | bookId=245 | time=2 ms
+22:07:55 - GET /wish-love/check | user=viet_mai | bookId=244 | time=2 ms
+22:08:27 - GET /book/book-new-carousel | time=0 ms
+22:08:27 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+22:08:28 - GET /profile/info | user=viet_mai | time=6 ms
+22:08:28 - GET /wish-love/check | user=viet_mai | bookId=250 | time=4 ms
+22:08:28 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+22:08:28 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
+22:08:28 - GET /wish-love/check | user=viet_mai | bookId=249 | time=2 ms
+22:08:28 - GET /wish-love/check | user=viet_mai | bookId=245 | time=2 ms
+22:08:28 - GET /wish-love/check | user=viet_mai | bookId=248 | time=2 ms
+22:08:28 - GET /wish-love/check | user=viet_mai | bookId=251 | time=5 ms
+22:08:28 - GET /wish-love/check | user=viet_mai | bookId=244 | time=3 ms
+22:08:30 - GET /books/page-size | page=4 | size=8 | user=anonymousUser | time=5 ms
+22:08:30 - GET /wish-love/check | user=viet_mai | bookId=6 | time=2 ms
+22:08:30 - GET /wish-love/check | user=viet_mai | bookId=5 | time=2 ms
+22:08:30 - GET /wish-love/check | user=viet_mai | bookId=4 | time=2 ms
+22:08:30 - GET /wish-love/check | user=viet_mai | bookId=1 | time=1 ms
+22:08:30 - GET /wish-love/check | user=viet_mai | bookId=3 | time=2 ms
+22:08:30 - GET /wish-love/check | user=viet_mai | bookId=2 | time=4 ms
+22:08:33 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=9 ms
+22:08:33 - GET /wish-love/check | user=viet_mai | bookId=250 | time=4 ms
+22:08:33 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+22:08:33 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+22:08:33 - GET /wish-love/check | user=viet_mai | bookId=251 | time=7 ms
+22:08:33 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+22:08:33 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+22:08:33 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+22:08:33 - GET /wish-love/check | user=viet_mai | bookId=244 | time=2 ms
+22:08:34 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+22:08:34 - GET /profile/info | user=viet_mai | time=6 ms
+22:08:34 - GET /wish-love/check | user=viet_mai | bookId=251 | time=6 ms
+22:08:34 - GET /wish-love/check | user=viet_mai | bookId=250 | time=4 ms
+22:08:34 - GET /book/book-new-carousel | time=0 ms
+22:08:34 - GET /wish-love/check | user=viet_mai | bookId=249 | time=4 ms
+22:08:34 - GET /wish-love/check | user=viet_mai | bookId=248 | time=5 ms
+22:08:34 - GET /wish-love/check | user=viet_mai | bookId=247 | time=3 ms
+22:08:34 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+22:08:34 - GET /wish-love/check | user=viet_mai | bookId=245 | time=11 ms
+22:08:34 - GET /wish-love/check | user=viet_mai | bookId=244 | time=4 ms

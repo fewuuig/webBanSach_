@@ -69,4 +69,18 @@ public class RedisLuaConfig {
         script.setResultType(Long.class);
         return script ;
     }
+    @Bean
+    public DefaultRedisScript<List> priceFilter(){
+        DefaultRedisScript<List> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/price/priceFilter.lua"));
+        script.setResultType(List.class);
+        return script ;
+    }
+    @Bean
+    public DefaultRedisScript<List> carousel(){
+        DefaultRedisScript<List> script = new DefaultRedisScript<>() ;
+        script.setLocation(new ClassPathResource("/lua/carousel/carousel.lua"));
+        script.setResultType(List.class);
+        return script ;
+    }
 }
