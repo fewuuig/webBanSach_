@@ -13,6 +13,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RepositoryRestResource(path = "don-hang")
 public interface DonHangRepository extends JpaRepository<DonHang,Integer> {
@@ -65,6 +66,8 @@ public interface DonHangRepository extends JpaRepository<DonHang,Integer> {
           WHERE ma_don_hang IN :orderIds
     """ , nativeQuery = true)
     void returnOrderTimeoutIntoStock(@Param("orderIds") List<Object> orderIds ) ;
+
+    List<DonHang> findByRequestIdIn(Set<String> requestIds) ;
 }
 
 

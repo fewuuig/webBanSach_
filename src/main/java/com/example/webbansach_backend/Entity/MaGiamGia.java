@@ -20,7 +20,7 @@ public class MaGiamGia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ma_giam")
-    private int maGiam ;
+    private Integer maGiam ;
 
     @Column(name = "ten_ma_giam_gia" ,  length = 25)
     private String tenMaGiamGia ;
