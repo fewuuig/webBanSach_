@@ -23422,3 +23422,156 @@
 14:10:41 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
 14:10:41 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
 14:10:41 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+14:30:12 - GET /book/book-new-carousel | time=0 ms
+14:30:13 - GET /profile/info | user=viet_mai | time=7 ms
+14:30:13 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=52 ms
+14:30:13 - GET /wish-love/check | user=viet_mai | bookId=252 | time=6 ms
+14:30:13 - GET /wish-love/check | user=viet_mai | bookId=250 | time=6 ms
+14:30:13 - GET /wish-love/check | user=viet_mai | bookId=248 | time=6 ms
+14:30:13 - GET /wish-love/check | user=viet_mai | bookId=249 | time=5 ms
+14:30:13 - GET /wish-love/check | user=viet_mai | bookId=251 | time=7 ms
+14:30:13 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+14:30:13 - GET /wish-love/check | user=viet_mai | bookId=247 | time=3 ms
+14:30:13 - GET /wish-love/check | user=viet_mai | bookId=245 | time=5 ms
+14:30:22 - GET /chat/list-users | time=28 ms
+14:30:23 - GET /chat/users/dm/messages | sender=viet_mai | receiver=an_tran | page=1 | size=20 | time=51 ms
+14:30:27 - GET /book/book-new-carousel | time=0 ms
+14:30:27 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=15 ms
+14:30:27 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+14:30:27 - GET /wish-love/check | user=viet_mai | bookId=249 | time=4 ms
+14:30:27 - GET /wish-love/check | user=viet_mai | bookId=252 | time=5 ms
+14:30:27 - GET /wish-love/check | user=viet_mai | bookId=250 | time=5 ms
+14:30:27 - GET /wish-love/check | user=viet_mai | bookId=251 | time=10 ms
+14:30:27 - GET /wish-love/check | user=viet_mai | bookId=247 | time=5 ms
+14:30:27 - GET /wish-love/check | user=viet_mai | bookId=245 | time=5 ms
+14:30:27 - GET /wish-love/check | user=viet_mai | bookId=246 | time=5 ms
+14:30:29 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=48 ms
+14:30:41 - GET /book/book-new-carousel | time=0 ms
+14:30:41 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=7 ms
+14:30:41 - GET /wish-love/check | user=viet_mai | bookId=250 | time=4 ms
+14:30:41 - GET /wish-love/check | user=viet_mai | bookId=252 | time=3 ms
+14:30:41 - GET /wish-love/check | user=viet_mai | bookId=251 | time=8 ms
+14:30:41 - GET /wish-love/check | user=viet_mai | bookId=249 | time=3 ms
+14:30:41 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+14:30:41 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+14:30:41 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+14:30:41 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+14:30:42 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=15 ms
+14:30:43 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=44 ms
+14:30:44 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=15 ms
+14:30:44 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=23 ms
+14:30:45 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=8 ms
+14:30:47 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=18 ms
+14:30:49 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=13 ms
+14:30:49 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=20 ms
+14:30:49 - GET /don-hang/trang-thai | user=viet_mai | status=DANG_GIAO | time=9 ms
+14:30:50 - GET /don-hang/trang-thai | user=viet_mai | status=DA_GIAO | time=9 ms
+14:30:50 - GET /don-hang/trang-thai | user=viet_mai | status=DA_HUY | time=10 ms
+14:30:51 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=8 ms
+14:31:05 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=17 ms
+14:31:08 - GET /cart/view-cart | user=viet_mai | time=17 ms
+14:31:10 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=10 ms
+14:31:11 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=18 ms
+14:31:12 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=7 ms
+14:31:13 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=27 ms
+14:31:13 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=12 ms
+14:31:36 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=17 ms
+14:31:38 - PUT /don-hang/{id}/trang-thai | user=viet_mai | id=14 | status=DANG_GIAO | time=29 ms
+14:31:39 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=25 ms
+14:31:40 - GET /don-hang/trang-thai | user=viet_mai | status=DANG_GIAO | time=6 ms
+14:31:43 - GET /don-hang/trang-thai | user=viet_mai | status=DA_GIAO | time=6 ms
+14:31:47 - GET /don-hang/trang-thai | user=viet_mai | status=DA_HUY | time=9 ms
+14:31:48 - GET /don-hang/trang-thai | user=viet_mai | status=DA_GIAO | time=8 ms
+14:31:48 - GET /don-hang/trang-thai | user=viet_mai | status=DA_HUY | time=12 ms
+14:31:49 - GET /don-hang/trang-thai | user=viet_mai | status=DA_GIAO | time=7 ms
+14:31:49 - GET /don-hang/trang-thai | user=viet_mai | status=DA_HUY | time=9 ms
+14:32:00 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=6 ms
+14:32:09 - GET /cart/view-cart | user=viet_mai | time=3 ms
+14:32:10 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=9 ms
+14:32:35 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102672 | time=32 ms
+14:32:36 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=9 ms
+14:32:37 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102673 | time=20 ms
+14:32:38 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=9 ms
+14:32:39 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102675 | time=18 ms
+14:32:40 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=8 ms
+14:32:40 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102677 | time=18 ms
+14:32:41 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=9 ms
+14:32:42 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102678 | time=22 ms
+14:32:43 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=10 ms
+14:32:44 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102679 | time=18 ms
+14:32:45 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=10 ms
+14:32:45 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102680 | time=18 ms
+14:32:47 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=9 ms
+14:32:48 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102681 | time=25 ms
+14:32:48 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=10 ms
+14:32:49 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102682 | time=19 ms
+14:32:50 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=6 ms
+14:32:50 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102683 | time=15 ms
+14:32:52 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=9 ms
+14:32:53 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102684 | time=17 ms
+14:32:54 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=8 ms
+14:32:55 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102686 | time=14 ms
+14:32:56 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=6 ms
+14:32:56 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102691 | time=16 ms
+14:32:57 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=9 ms
+14:32:59 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102692 | time=56 ms
+14:32:59 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=8 ms
+14:33:00 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102694 | time=16 ms
+14:33:01 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=7 ms
+14:33:02 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102695 | time=16 ms
+14:33:03 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=6 ms
+14:33:05 - PUT /don-hang/{id}/huy-don | user=viet_mai | id=102695 | time=17 ms
+14:33:06 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=7 ms
+14:33:08 - GET /profile/info | user=viet_mai | time=4 ms
+14:33:08 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=10 ms
+14:33:10 - GET /book/book-new-carousel | time=0 ms
+14:33:10 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+14:33:10 - GET /wish-love/check | user=viet_mai | bookId=252 | time=4 ms
+14:33:10 - GET /wish-love/check | user=viet_mai | bookId=249 | time=4 ms
+14:33:10 - GET /wish-love/check | user=viet_mai | bookId=248 | time=4 ms
+14:33:10 - GET /wish-love/check | user=viet_mai | bookId=250 | time=5 ms
+14:33:10 - GET /wish-love/check | user=viet_mai | bookId=251 | time=7 ms
+14:33:10 - GET /wish-love/check | user=viet_mai | bookId=247 | time=4 ms
+14:33:10 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms
+14:33:10 - GET /wish-love/check | user=viet_mai | bookId=246 | time=3 ms
+14:34:06 - GET /books/248 | time=4 ms
+14:34:06 - GET /profile/info | user=viet_mai | time=3 ms
+14:34:06 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=248 | time=7 ms
+14:34:07 - GET /dia-chi/dia-chi-giao-hang | user=viet_mai | time=5 ms
+14:34:07 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=3 ms
+14:34:07 - GET /giao-hang/hinh-thuc-giao-hang | time=2 ms
+14:34:07 - GET /vouchers/user | user=viet_mai | time=15 ms
+14:34:12 - POST /order/place-order | user=viet_mai | time=7 ms
+14:34:14 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=6 ms
+14:34:18 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=15 ms
+14:34:32 - GET /profile/info | user=viet_mai | time=5 ms
+14:34:32 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=9 ms
+14:34:34 - GET /book/book-new-carousel | time=0 ms
+14:34:34 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+14:34:34 - GET /wish-love/check | user=viet_mai | bookId=252 | time=3 ms
+14:34:34 - GET /wish-love/check | user=viet_mai | bookId=249 | time=3 ms
+14:34:34 - GET /wish-love/check | user=viet_mai | bookId=250 | time=3 ms
+14:34:34 - GET /wish-love/check | user=viet_mai | bookId=248 | time=3 ms
+14:34:34 - GET /wish-love/check | user=viet_mai | bookId=251 | time=6 ms
+14:34:34 - GET /wish-love/check | user=viet_mai | bookId=247 | time=3 ms
+14:34:34 - GET /wish-love/check | user=viet_mai | bookId=246 | time=4 ms
+14:34:34 - GET /wish-love/check | user=viet_mai | bookId=245 | time=4 ms
+14:34:47 - GET /books/251 | time=4 ms
+14:34:47 - GET /profile/info | user=viet_mai | time=3 ms
+14:34:47 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=251 | time=4 ms
+14:34:55 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=2 ms
+14:34:55 - GET /giao-hang/hinh-thuc-giao-hang | time=2 ms
+14:34:55 - GET /dia-chi/dia-chi-giao-hang | user=viet_mai | time=4 ms
+14:34:55 - GET /vouchers/user | user=viet_mai | time=11 ms
+14:35:01 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=5 ms
+14:35:03 - GET /don-hang/trang-thai | user=viet_mai | status=DA_XAC_NHAN | time=14 ms
+14:35:09 - GET /book/book-new-carousel | time=0 ms
+14:35:09 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+14:35:09 - GET /wish-love/check | user=viet_mai | bookId=252 | time=3 ms
+14:35:09 - GET /wish-love/check | user=viet_mai | bookId=251 | time=4 ms
+14:35:09 - GET /wish-love/check | user=viet_mai | bookId=248 | time=3 ms
+14:35:09 - GET /wish-love/check | user=viet_mai | bookId=250 | time=3 ms
+14:35:09 - GET /wish-love/check | user=viet_mai | bookId=249 | time=3 ms
+14:35:09 - GET /wish-love/check | user=viet_mai | bookId=246 | time=2 ms
+14:35:09 - GET /wish-love/check | user=viet_mai | bookId=247 | time=3 ms
+14:35:09 - GET /wish-love/check | user=viet_mai | bookId=245 | time=3 ms

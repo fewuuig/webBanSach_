@@ -8,6 +8,7 @@ import com.example.webbansach_backend.Enum.TrangThaiMaGiamGia;
 import com.example.webbansach_backend.Repository.*;
 import com.example.webbansach_backend.dto.*;
 import com.example.webbansach_backend.dto.OrderItem;
+import com.example.webbansach_backend.exception.GeneralException;
 import com.example.webbansach_backend.exception.OutOfStockException;
 import com.example.webbansach_backend.exception.VoucherStateException;
 import com.example.webbansach_backend.mapper.DonHangMapper;
@@ -92,16 +93,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void placeOder( String tenDangNhap,DatHangRequestDTO datHangRequestDTO) throws JsonProcessingException {
-        // sẽ két hợp với việc chjoongs spam API đối vs 1 user để k bị đặt hàng chùng - > trải nghiêm tệ đối với user
-        // keys
-
         String requestId = UUID.randomUUID().toString() ;
         String itemJson = objectMapper.writeValueAsString(datHangRequestDTO.getItems()) ;
         String key1 = "order-stream" ;
-
         List<String> keys = Arrays.asList( key1 ) ;
-//        String request_id = UUID.randomUUID().toString() ;
-        // sử lý đătj hàng mà không dùng mã giảm giá
         String maGiam = datHangRequestDTO.getMaGiam() == null ? "null": datHangRequestDTO.getMaGiam().toString() ;
         Long result = redisTemplate.execute(stockOrder ,keys ,
                 requestId,
@@ -112,13 +107,13 @@ public class OrderServiceImpl implements OrderService {
                 datHangRequestDTO.getMaHinhThucGiaoHang(),
                 tenDangNhap
         );
-        if(result == -1) throw  new RuntimeException("kho không tồn tại") ;
-        if(result == -2) throw  new RuntimeException("kho bị âm") ;
-        if(result == -4) throw  new RuntimeException("số lượng muốn mua phải là chữu số") ;
-        if(result == -3) throw  new RuntimeException("số lượng muốn mua phải laf số dương (klhoong được âm)") ;
-        if(result ==  0) throw  new RuntimeException("kho không đủ") ;
-        if(result == -5) throw  new RuntimeException(tenDangNhap + " Spam API quá số lần quy định") ;
-        if(result == -9) throw new RuntimeException("số lượng mua không hợp lệ") ;
+        if(result == -1) throw new GeneralException("kho không tồn tại") ;
+        if(result == -2) throw new GeneralException("kho bị âm") ;
+        if(result == -4) throw new GeneralException("số lượng muốn mua phải là chữu số") ;
+        if(result == -3) throw new GeneralException("số lượng muốn mua phải laf số dương (klhoong được âm)") ;
+        if(result ==  0) throw new GeneralException("kho không đủ") ;
+        if(result == -5) throw new GeneralException("Spam API quá số lần quy định") ;
+        if(result == -9) throw new GeneralException("số lượng mua không hợp lệ") ;
         System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+"đặt đơn hàng");
 
 //        // đặt thanhf công thì xóa khỏi giỏ hàng
@@ -289,6 +284,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public void saveBatch(List<MapRecord<String , Object , Object>> messages) throws JsonProcessingException {
+        Map<Integer , HinhThucThanhToan> hinhThucThanhToanMap= hinhThucThanhToanRepository.findAll()
+                .stream().collect(Collectors.toMap(HinhThucThanhToan::getMaHinhThucThanhToan, s->s)) ;
+        Map<Integer ,HinhThucGiaoHang> hinhThucGiaoHangMap = hinhThucGiaoHangRepository.findAll()
+                .stream().collect(Collectors.toMap(HinhThucGiaoHang::getMaHinhThucGiaoHang ,s->s));
+        Map<Integer,DiaChiGiaoHang> diaChiGiaoHangMap = diaChiGiaoHangRepository.findAll()
+                .stream().collect(Collectors.toMap(DiaChiGiaoHang::getMaDiaChiGiaoHang ,s->s)) ;
         // gom id sách  va tenDangNhap
         Set<String> tenDangNhaps = new HashSet<>() ;
         Set<Integer> idSaches = new HashSet<>() ;
@@ -320,7 +321,7 @@ public class OrderServiceImpl implements OrderService {
             String maGiam = ParseJacksonUtil.toString(message.getValue().get("maGiam").toString()) ;
             if(isLogOrder(message ,request_Id)) continue;
             // create
-            DonHang donHang = makeDonHang(message, maGiam , sachMap , nguoiDungMap);
+            DonHang donHang = makeDonHang(message, maGiam , sachMap , nguoiDungMap ,hinhThucThanhToanMap,hinhThucGiaoHangMap ,diaChiGiaoHangMap );
             LogOrder log =makeLogOrder(message ,request_Id ,maGiam) ;
             // add list
             logs.add(log) ;
@@ -490,7 +491,13 @@ public class OrderServiceImpl implements OrderService {
         chiTietDonHang.setTongGia(sach.getGiaBan() * item.getSoLuong());
         return chiTietDonHang ;
     }
-    private DonHang makeDonHang(MapRecord<String , Object ,Object> message , String maGiam ,Map<Integer ,Sach>  sachMap ,Map<String , NguoiDung> nguoiDungMap) throws JsonProcessingException {
+    private DonHang makeDonHang(MapRecord<String , Object ,Object> message ,
+                                String maGiam ,
+                                Map<Integer ,Sach>  sachMap ,
+                                Map<String , NguoiDung> nguoiDungMap ,
+                                Map<Integer , HinhThucThanhToan> hinhThucThanhToanMap,
+                                Map<Integer ,HinhThucGiaoHang> hinhThucGiaoHangMap,
+                                Map<Integer,DiaChiGiaoHang> diaChiGiaoHangMap) throws JsonProcessingException {
         // Kiểm tra người dùng từ batch
         String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("tenDangNhap").toString()) ;
         NguoiDung nguoiDung = nguoiDungMap.get(tenDangNhap) ;

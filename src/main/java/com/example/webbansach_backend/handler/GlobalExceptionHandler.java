@@ -3,9 +3,11 @@ package com.example.webbansach_backend.handler;
 import com.example.webbansach_backend.dto.ErrorResponeDTO;
 import com.example.webbansach_backend.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
@@ -37,5 +39,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponeDTO> handleDisableException(DisableException ex){
         ErrorResponeDTO errorResponeDTO = new ErrorResponeDTO(ex.getMessage() , HttpStatus.CONFLICT.value() ,System.currentTimeMillis()) ;
         return ResponseEntity.status(HttpStatus.CONFLICT.value()).body(errorResponeDTO);
+    }
+    @ExceptionHandler(GeneralException.class)
+    public ResponseEntity<ErrorResponeDTO> handleGeneralException(GeneralException ex){
+        ErrorResponeDTO errorResponeDTO = new ErrorResponeDTO(ex.getMessage() , HttpStatus.BAD_REQUEST.value(), System.currentTimeMillis()) ;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorResponeDTO) ;
     }
 }
