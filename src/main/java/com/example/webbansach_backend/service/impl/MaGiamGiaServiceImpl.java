@@ -77,8 +77,6 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
     @Qualifier("redisTemplateMaGiamGia")
     private RedisTemplate<String ,MaGiamGiaUserResponeDTO> redisTemplateMaGiamGia ;
 
-    // chỗ này chú ý rằng nó sẽ có mã như 1 chuỗi ký tự . VD : "1,2,3" . khi lấy phải trùng y hệt "1,2,3" thì ms lấy đc .
-    // "1" hay "2,3" cx k bao giừo lấy đc . vì nó có dạng chuỗi để so khớp cho nhanh nhất có thể
     @Cacheable(
             value = "maGiamGiaSach" ,
             key = "#danhSachMaSach.stream().sorted().collect(T(java.util.stream.Collectors).joining(','))"
@@ -142,17 +140,14 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
     @Transactional
     public void dungMaGiamGiaUser(String tenDangNhap , int maGiam , String request_id ){
 
-        MaGiamGia maGiamGia = maGiamGiaRepository.findByMaGiam(maGiam).orElseThrow() ;
-        if(maGiamGia.getTrangThaiMaGiamGia()== TrangThaiMaGiamGia.KHOA || maGiamGia.getTrangThaiMaGiamGia()== TrangThaiMaGiamGia.HET_HAN  ){
-            throw new VoucherStateException("mã giảm giá đã đóng") ;
-        }
+
         // danh sách keys
         String key1 = "voucher:stock:"+maGiam ; // key kho còn bao nhiêu mã
         String key2 = "voucher:user:"+maGiam+":"+tenDangNhap ; // key use đã dùng
         String key3 = "voucher-stream" ; // key stream
         List<String> keys= Arrays.asList(key1,key2,key3);
 
-        Long result = redisTemplate.execute(stockVoucher ,keys , maGiamGia.getGioiHanSoLuongDungUser() , maGiam , tenDangNhap , request_id);
+        Long result = redisTemplate.execute(stockVoucher ,keys ,maGiam , tenDangNhap , request_id);
         if(result == 0){
             throw new RuntimeException("kho không đủ") ;
         }
@@ -160,7 +155,7 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
             throw new RuntimeException("kho không tồn tại") ;
         }
         if(result == -2){
-            throw new RuntimeException("user đã hết lượt dùng / quá số lần quy định ") ;
+            throw new RuntimeException("kho hết mã giảm giá ") ;
         }
         if(result == -3) {
             throw new RuntimeException("số lượt đã dùng voucher có vấn đề ") ;
@@ -174,12 +169,13 @@ public class MaGiamGiaServiceImpl implements MaGiamGiaService {
 
         // khi user dùng mã giảm giá thì xó mã giảm trong ram đi
         redisTemplateMaGiamGia.delete("user:voucher:"+tenDangNhap) ;
+        System.out.println("["+TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+" dùng mã giảm giá");
     }
 
 
-@Override
-@Transactional
-public void themMaGiamGia(MaGiamGiaRequestDTO maGiamGiaRequestDTO){
+    @Override
+    @Transactional
+    public void themMaGiamGia(MaGiamGiaRequestDTO maGiamGiaRequestDTO){
         MaGiamGia maGiamGia = maGiamGiaMapper.toEntity(maGiamGiaRequestDTO) ;
         if(maGiamGia.getDoiTuongApDungMa() != DoiTuongApDungMa.NGUOI_DUNG)
             throw new RuntimeException("Đối tượng áp dụng mã phải là NGUOI_DUNG") ;
@@ -199,60 +195,60 @@ public void themMaGiamGia(MaGiamGiaRequestDTO maGiamGiaRequestDTO){
         maGiamGiaRepository.save(maGiamGia) ;
         System.out.println("thêm mã giảm giá thàng công");
         System.out.println(maGiamGia.getTienGiam());
-}
+    }
 
-@Transactional
-public void updateVoucher(UpdateVoucherDTO updateVoucherDTO , int maGiam){
+    @Transactional
+    public void updateVoucher(UpdateVoucherDTO updateVoucherDTO , int maGiam){
         MaGiamGia maGiamGia = maGiamGiaRepository.findByMaGiam(maGiam).
                 orElseThrow(()-> new RuntimeException("mã gianmr giá không toòn tại")) ;
         maGiamGiaUserMapper.updateVoucherFromDTO(updateVoucherDTO , maGiamGia);
 
-}
-@Override
-public List<MaGiamGiaCuaUserResponeDTO> getAllVoucher(){
+    }
+    @Override
+    public List<MaGiamGiaCuaUserResponeDTO> getAllVoucher(){
         List<MaGiamGia> maGiamGias = maGiamGiaRepository.findAll() ;
         return maGiamGias.stream().map(maGiamGiaUserMapper::toDto).toList();
-}
-//xóa cache toàn bộ
-@CacheEvict(
-        value = "maGiamGiaSach" ,
-        allEntries = true
-)
-@Transactional
-public void capNhatMaGiamGiaSach(int maGiam , UpdateMaGiamGiaDTO updateMaGiamGiaDTO){
-    MaGiamGia maGiamGia =  maGiamGiaRepository.findByMaGiam(maGiam).orElseThrow(()-> new NotFoundException("mã giảm giá không tồn tại")) ;
+    }
+    //xóa cache toàn bộ
+    @CacheEvict(
+            value = "maGiamGiaSach" ,
+            allEntries = true
+    )
+    @Transactional
+    public void capNhatMaGiamGiaSach(int maGiam , UpdateMaGiamGiaDTO updateMaGiamGiaDTO){
+        MaGiamGia maGiamGia =  maGiamGiaRepository.findByMaGiam(maGiam).orElseThrow(()-> new NotFoundException("mã giảm giá không tồn tại")) ;
 
-    if(updateMaGiamGiaDTO.getSoLuong() !=null){
-        if(updateMaGiamGiaDTO.getSoLuong() < maGiamGia.getSoMaDaDung()){
-            throw new RuntimeException("KHông hợp lệ do đã có số lượng mã dùng lớn hơn so với sô lượng cập nhật") ;
+        if(updateMaGiamGiaDTO.getSoLuong() !=null){
+            if(updateMaGiamGiaDTO.getSoLuong() < maGiamGia.getSoMaDaDung()){
+                throw new RuntimeException("KHông hợp lệ do đã có số lượng mã dùng lớn hơn so với sô lượng cập nhật") ;
+            }
+            maGiamGia.setSoLuong(updateMaGiamGiaDTO.getSoLuong());
         }
-        maGiamGia.setSoLuong(updateMaGiamGiaDTO.getSoLuong());
-    }
-    if(updateMaGiamGiaDTO.getNgayHetHan()!=null){
-        if(updateMaGiamGiaDTO.getNgayHetHan().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("Không hợp lệ khi mã vẫn đang còn hạn") ;
+        if(updateMaGiamGiaDTO.getNgayHetHan()!=null){
+            if(updateMaGiamGiaDTO.getNgayHetHan().isBefore(LocalDateTime.now())){
+                throw new RuntimeException("Không hợp lệ khi mã vẫn đang còn hạn") ;
+            }
+            maGiamGia.setNgayHetHan(updateMaGiamGiaDTO.getNgayHetHan());
         }
-        maGiamGia.setNgayHetHan(updateMaGiamGiaDTO.getNgayHetHan());
+        if(updateMaGiamGiaDTO.getDonGiaTu()!=null){
+            maGiamGia.setDonGiaTu(updateMaGiamGiaDTO.getDonGiaTu());
+        }
+        if(updateMaGiamGiaDTO.getGiamToiDa()!=null){
+            maGiamGia.setGiamToiDa(updateMaGiamGiaDTO.getGiamToiDa());
+        }
     }
-    if(updateMaGiamGiaDTO.getDonGiaTu()!=null){
-        maGiamGia.setDonGiaTu(updateMaGiamGiaDTO.getDonGiaTu());
-    }
-    if(updateMaGiamGiaDTO.getGiamToiDa()!=null){
-        maGiamGia.setGiamToiDa(updateMaGiamGiaDTO.getGiamToiDa());
-    }
-}
 
-// când xem lại chỗ này
-@Scheduled(cron ="0 * * * * ?" )
-@Transactional
-public void updateVoucherStatusAuto(){
+    // când xem lại chỗ này
+    @Scheduled(cron ="0 * * * * ?" )
+    @Transactional
+    public void updateVoucherStatusAuto(){
 
-    List<MaGiamGia> maHetHans = maGiamGiaRepository.findByTrangThaiHoatDongAndNgayHetHan(TrangThaiMaGiamGia.DANG_HOAT_DONG , LocalDateTime.now()) ;
+        List<MaGiamGia> maHetHans = maGiamGiaRepository.findByTrangThaiHoatDongAndNgayHetHan(TrangThaiMaGiamGia.DANG_HOAT_DONG , LocalDateTime.now()) ;
 
-    for(MaGiamGia maGiamGia : maHetHans){
-        maGiamGia.setTrangThaiMaGiamGia(TrangThaiMaGiamGia.HET_HAN);
+        for(MaGiamGia maGiamGia : maHetHans){
+            maGiamGia.setTrangThaiMaGiamGia(TrangThaiMaGiamGia.HET_HAN);
+        }
     }
-}
 
     @PostConstruct
     public void initStream(){
@@ -266,17 +262,17 @@ public void updateVoucherStatusAuto(){
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 200) // 0,1s chạy ngầm 1 lần
+    @Scheduled(fixedDelay = 1000) // 0,1s chạy ngầm 1 lần
     public void consumeNewMessage(){
         List< MapRecord<String , Object , Object> > messages = redisTemplate.opsForStream().read(
                 Consumer.from("voucher-group" , "consumer-1") , // công nhân 1 xin stream gửi mesage
-                StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)) , // mỗi lần lấy tối đa 10 message , đợi tối đa 2s nếu k thấy mesage
+                StreamReadOptions.empty().count(300).block(Duration.ofSeconds(2)) , // mỗi lần lấy tối đa 10 message , đợi tối đa 2s nếu k thấy mesage
                 StreamOffset.create("voucher-stream" , ReadOffset.lastConsumed()) // chỉ lấy những message chưa đưa vào group
 
         );
-        if(messages == null) return ;
+        if(messages.isEmpty() ||  messages == null) return ;
         // handle ở đây
-        messages.forEach(this::handleMessage);
+        saveBatchVoucher(messages);
     }
     @Transactional
     @Scheduled(fixedDelay = 5000)
@@ -289,8 +285,10 @@ public void updateVoucherStatusAuto(){
         PendingMessages pendingMessages = redisTemplate.opsForStream()
                 .pending("voucher-stream" ,
                         Consumer.from("voucher-group" ,"consumer-1") ,
-                        Range.unbounded() , 10) ;
+                        Range.unbounded() , 300) ;
 
+        // list mesage
+        List<MapRecord<String , Object ,Object>> messages = new ArrayList<>() ;
         // kiểm tra xem pending nào có idle >= 5s thì cho nó claim laị
         for(PendingMessage pending : pendingMessages){
 
@@ -327,116 +325,117 @@ public void updateVoucherStatusAuto(){
                         Duration.ofSeconds(10) ,
                         pending.getId()
                 ) ;
-                // handle ở đây
-                claimed.forEach(this::handleMessage);
-            }
-
-        }
-    }
-
-    // xử lý ACK\
-    @Transactional
-    public void handleMessage(MapRecord<String , Object , Object> message)  {
-        Optional<LogOrder> exsist = logOrderRepository.findByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString())) ;
-
-        Integer maDonHang = null ;
-        if(exsist.isPresent()){
-            StatusLogOrder status =  exsist.get().getStatus() ;
-            if(status == StatusLogOrder.CONFIRMED){
-                redisTemplate.opsForStream().acknowledge(
-                        "voucher-stream" ,
-                        "voucher-group" ,
-                        message.getId()
-                );
-                redisTemplate.opsForZSet().remove("order_timeout_queue" , maDonHang) ;
-                return ;
-            }else if(status == StatusLogOrder.PENDING){
-                maDonHang = processVoucher(message);
-                exsist.get().setStatus(StatusLogOrder.CONFIRMED);
-            }
-
-        }else return ;
-
-        Integer finalMaDonHang = maDonHang;
-        TransactionSynchronizationManager.registerSynchronization(
-                new TransactionSynchronization() {
-                    @Override
-                    public void afterCommit() {
-
-                        String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("username").toString()) ;
-                        int maGiam = Integer.parseInt(message.getValue().get("voucherID").toString()) ;
-                        // xóa khỏi danh sách quêue order timeout khi nó đã thành công xác thực đơn
-                        if(finalMaDonHang != null) redisTemplate.opsForZSet().remove("order_timeout_queue" , finalMaDonHang) ;
-
-                        System.out.println("["+ TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+":dùng mã giảm giá:"+maGiam);
-                        redisTemplate.opsForStream().acknowledge("voucher-stream", "voucher-group" , message.getId()) ;
-                        System.out.println("["+ TimeLogUtil.toTimeSystemLog() +"]" + " user:"+tenDangNhap+":đặt hàng thành công");
-                    }
+                for(MapRecord<String , Object ,Object> message : claimed){
+                    messages.add(message) ;
                 }
-        );
+            }
+        }
+        if(messages.isEmpty()) return ;
+        saveBatchVoucher(messages);
     }
-
 
 
 
     // nếu 2  consumer trở lên vẫn có thể dinh multiThread (stream cho phép )
 
-    public Integer processVoucher(MapRecord<String , Object , Object> message){
-        String tenDangNhap = ParseJacksonUtil.toString(message.getValue().get("username").toString()) ;
-        int maGiam = Integer.parseInt(message.getValue().get("voucherID").toString()) ;
-
-        // pessimistic_lock
-        MaGiamGia maGiamGia = maGiamGiaRepository.findByMaGiamForUpdate(maGiam).orElseThrow() ;
-
-        if(maGiamGia.getTrangThaiMaGiamGia() == TrangThaiMaGiamGia.KHOA || maGiamGia.getTrangThaiMaGiamGia() == TrangThaiMaGiamGia.HET_HAN){
-            throw new VoucherStateException("mã giảm giá "+message.getValue().get("voucherID").toString()+ " không còn hoạt động") ;
+    public void saveBatchVoucher(List<MapRecord<String , Object , Object>> messages) {
+        // gom request Id
+        //  gom voucherId
+        // gom tên đăng nhập
+        Set<String> usernames = new HashSet<>() ;
+        Set<Integer> voucherIds = new HashSet<>();
+        Set<String> requestIds = new HashSet<>();
+        for (MapRecord<String , Object , Object> message : messages) {
+            usernames.add(ParseJacksonUtil.toString(message.getValue().get("username").toString())) ;
+            voucherIds.add(Integer.parseInt(message.getValue().get("voucherID").toString()));
+            requestIds.add(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()));
         }
-        if(maGiamGia.getSoMaDaDung() == maGiamGia.getSoLuong()) throw new RuntimeException("mã giảm giá đã dùng hết");
-        maGiamGia.setSoMaDaDung(maGiamGia.getSoMaDaDung() + 1);
+        //batch don hang fetch and confirm
+        List<DonHang> donHangs = donHangRepository.findByRequestIdIn(requestIds) ;
+        donHangs.forEach(donHang->{
+            donHang.setTrangThai(TrangThaiGiaoHang.DA_XAC_NHAN);
+        });
+        // batch log and confirm
+        List<LogOrder> logOrders = logOrderRepository.findByRequestIdIn(requestIds);
+        logOrders.forEach(log->{
+            log.setStatus(StatusLogOrder.CONFIRMED);
+        });
 
+        // batch fetch
+        Map<Integer, MaGiamGia> voucherMap =
+                maGiamGiaRepository.findByMaGiamIn(voucherIds)
+                        .stream()
+                        .collect(Collectors.toMap(MaGiamGia::getMaGiam, v -> v));
 
-        Optional<MaGiamGiaNguoiDung> exsist = maGiamGiaNguoiDungRepository.findByMaGiamGia_MaGiamAndNguoiDung_TenDangNhap(maGiam,tenDangNhap);
-        if(exsist.isPresent()){
-            MaGiamGiaNguoiDung maGiamGiaNguoiDung = exsist.get() ;
-            if(maGiamGiaNguoiDung.getDaDung() == maGiamGia.getGioiHanSoLuongDungUser())
-                throw new RuntimeException("user đã hết ượt dùng mã giảm giá");
-            exsist.get().setDaDung(maGiamGiaNguoiDung.getDaDung() + 1);
-            maGiamGiaNguoiDungRepository.save(maGiamGiaNguoiDung) ;
+        List<MaGiamGiaNguoiDung> userVouchers = new ArrayList<>();
 
-        }else {
-            NguoiDung nguoiDung =nguoiDungRepository.findByTenDangNhap(tenDangNhap).orElseThrow() ;
+        // batch maGiamNguoiDung + kết hợp đánh index
+        Map<String , MaGiamGiaNguoiDung> maGiamNGuoiDungMap = maGiamGiaNguoiDungRepository.findByMaGiamGia_MaGiamInAndNguoiDung_TenDangNhapIn(voucherIds , usernames)
+                .stream().collect(Collectors.toMap(s->s.getNguoiDung().getTenDangNhap() +":"+ s.getMaGiamGia().getMaGiam(), s->s)) ; // phải viết vế sau trc
 
-            MaGiamGiaNguoiDung entity = new MaGiamGiaNguoiDung() ;
-            entity.setNguoiDung(nguoiDung);
-            entity.setDaDung(1); // xem lại
-            entity.setMaGiamGia(maGiamGia);
-            entity.setLuotDungToiDa(maGiamGia.getGioiHanSoLuongDungUser());
-            entity.setNgayNhan(LocalDateTime.now());
+        for (MapRecord<String , Object , Object> message : messages) {
+            String username = ParseJacksonUtil.toString(message.getValue().get("username").toString());
+            int voucherId = Integer.parseInt(message.getValue().get("voucherID").toString()) ;
+            MaGiamGia voucher = voucherMap.get(voucherId);
 
-            maGiamGiaNguoiDungRepository.save(entity) ;
+            if (voucher.getSoMaDaDung() >= voucher.getSoLuong()) continue;
+            MaGiamGiaNguoiDung maGiamGiaNguoiDung = maGiamNGuoiDungMap.get(username+":"+voucherId) ;
+            if (maGiamGiaNguoiDung != null) {
+                if(maGiamGiaNguoiDung.getLuotDungToiDa() <= maGiamGiaNguoiDung.getDaDung()) {
+                    continue;
+                }
+                maGiamGiaNguoiDung.setDaDung(maGiamGiaNguoiDung.getDaDung() + 1);
+            } else {
+                NguoiDung user = nguoiDungRepository.findByTenDangNhap(username).orElseThrow(()-> new RuntimeException("không tìm thấy user voucher"));
+
+                MaGiamGiaNguoiDung entity = new MaGiamGiaNguoiDung();
+                entity.setNguoiDung(user);
+                entity.setMaGiamGia(voucher);
+                entity.setDaDung(1);
+                userVouchers.add(entity) ;
+            }
+            voucher.setSoMaDaDung(voucher.getSoMaDaDung() + 1);
         }
+        // batch save
+        maGiamGiaNguoiDungRepository.saveAll(userVouchers);
 
-        // set status đơn hàng
-        DonHang donHang = donHangRepository.findByRequestId(ParseJacksonUtil.toString(message.getValue().get("request_id").toString()))
-                .orElseThrow(()-> new RuntimeException("không tìm thấy ddn hang")) ;
-        donHang.setTrangThai(TrangThaiGiaoHang.DA_XAC_NHAN);
+        // ACK sau commit
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        System.out.println("commit thành công");
+                        RecordId[] ids = messages.stream()
+                                .map(MapRecord::getId)
+                                .toArray(RecordId[]::new);
 
-        return donHang.getMaDonHang() ;
+                        redisTemplate.opsForStream()
+                                .acknowledge("voucher-stream", "voucher-group", ids);
+                        // xóa khỏi danh sách quêue order timeout khi nó đã thành công xác thực đơn
+                        donHangs.forEach(donHang->{
+                            System.out.println("["+TimeLogUtil.toTimeSystemLog()+"]"+" Đơn hàng:"+donHang.getMaDonHang()+"xác thực mã giảm giá thàng công" );
+                            redisTemplate.opsForZSet().remove("order_timeout_queue" , donHang.getMaDonHang()) ;
+                        });
+
+
+
+                    }
+                }
+        );
     }
-
     // xử lý những mã voucher bị dead-letter
-    @Scheduled(fixedDelay = 6000)
+    @Scheduled(fixedDelay = 5000)
     @Transactional
     // sao 6s thì compensate
     void compensateVoucherInDeadLetter() {
         // lấy lên danh sách message(voucher cần compensate )
         List<MapRecord<String, Object, Object>> messages = redisTemplate.opsForStream().read(
                 Consumer.from("voucher-dead-letter-group", "consumer-1"),
-                StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)),
+                StreamReadOptions.empty().count(700).block(Duration.ofSeconds(2)),
                 StreamOffset.create("voucher-dead-letter", ReadOffset.lastConsumed())
         );
         if (messages == null || messages.isEmpty()) return;
-
+        System.out.println("vào bù kho voucher");
         // lấy ra danh sách id voucher để check dưới DB rồi reconcicle
         Set<Integer> idVouchers = new HashSet<>();
         for (MapRecord<String, Object, Object> message : messages) {
@@ -458,7 +457,8 @@ public void updateVoucherStatusAuto(){
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        messages.forEach(message ->  redisTemplate.opsForStream().acknowledge("voucher-dead-letter", "voucher-dead-letter-group", message.getId()));
+                        RecordId[] recordIds = messages.stream().map(message->message.getId()).toArray(RecordId[]::new);
+                        redisTemplate.opsForStream().acknowledge("voucher-dead-letter", "voucher-dead-letter-group", recordIds);
                     }
                 }
         );

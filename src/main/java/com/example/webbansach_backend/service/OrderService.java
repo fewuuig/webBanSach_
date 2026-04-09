@@ -15,5 +15,6 @@ public interface OrderService {
     void capNhatTrangThaiDonHang( String tenDangNhap,int maDonHang, TrangThaiGiaoHang trangThai) ;
     List<DonHangTrangThaiResponeDTO> getDonHangTheoTrangThai( String tenDangNhap,TrangThaiGiaoHang trangThaiGiaoHang);
     void thaoTacDonHang(String tenDangNhap , int maDonHang) ;
+    void saveBatch(List<MapRecord<String , Object , Object>> messages , int shard) throws JsonProcessingException;
 
 }

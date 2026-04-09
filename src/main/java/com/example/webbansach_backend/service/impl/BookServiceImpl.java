@@ -93,7 +93,7 @@ public class BookServiceImpl implements BookService {
                     @Override
                     public void afterCommit() {
                         redisTemplate.execute(addBook,
-                                List.of("page_book_id" , "page_book_id_category:"+theLoai.getMaTheLoai(),"book:"+ sachEntity.getMaSach()),
+                                List.of("page:book:all" , "page:book:category:"+theLoai.getMaTheLoai(),"book:"+ sachEntity.getMaSach()),
                                 sachEntity.getMaSach() ,sachEntity.getSoLuong()) ;
                     }
                 }
@@ -115,17 +115,17 @@ public class BookServiceImpl implements BookService {
                 // xóa key page_book_id
                 ids.forEach(id->{
                     // xóa khỏi image:book:
-                    redisTemplate.delete("image:book:"+id) ;
+                    redisTemplate.delete("book:"+id+":image") ;
                     //xóa khỏi zset price
-                    redisTemplate.opsForZSet().remove("price" , id) ;
+                    redisTemplate.opsForZSet().remove("page:book:price" , id) ;
                     // xóa khỏi top:selling
                     redisTemplate.opsForZSet().remove("top:selling:books" ,id ) ;
-                    redisTemplate.opsForZSet().remove("page_book_id" , id) ;
+                    redisTemplate.opsForZSet().remove("page:book:all" , id) ;
                     // xáo key "page_book_id_category:" + maTheLoai
-                    redisTemplate.opsForZSet().remove("page_book_id_category:" + maTheLoai , maTheLoai ,id) ;
+                    redisTemplate.opsForZSet().remove("page:book:category:" + maTheLoai , maTheLoai ,id) ;
                 });
                 // xóa book_info:
-                List<String> idBookInfo = ids.stream().map(id->"book_info:"+id).toList() ;
+                List<String> idBookInfo = ids.stream().map(id->"book:{info}:"+id).toList() ;
 
                 redisTemplate.delete(idBookInfo) ;
             }
@@ -162,9 +162,9 @@ public class BookServiceImpl implements BookService {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
-                redisTemplate.delete("book_info:"+bookUpdateDTO.getMaSach());
+                redisTemplate.delete("book:{info}:"+bookUpdateDTO.getMaSach());
                 if(bookUpdateDTO.getIdImgDelete()!=null || bookUpdateDTO.getHinhAnhDTOS() != null ){
-                    redisTemplate.delete("image:book:"+bookUpdateDTO.getMaSach()) ;
+                    redisTemplate.delete("book:"+bookUpdateDTO.getMaSach()+":image") ;
                 }
             }
         });
@@ -174,11 +174,11 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public List<BookResponeDTO> getBookCategory(int maTheLoai){
         // tận dụng lại key phân trang . lấy tất cả lên
-        List<Object> ids = redisTemplate.execute(paginate , List.of("page_book_id_category:"+maTheLoai),0 , -1) ;
+        List<Object> ids = redisTemplate.execute(paginate , List.of("page:book:category:"+maTheLoai),0 , -1) ;
 
         List<Integer> idBooks = ParseListUtil.toListNumber(ids) ;
 
-        List<String> keyInfo = ParseListUtil.toKeyBookInfo( idBooks ,"book_info:") ;
+        List<String> keyInfo = ParseListUtil.toKeyBookInfo( idBooks ,"book:{info}:") ;
 
         List<Object> cached = redisTemplate.opsForValue().multiGet(keyInfo);
         List<Integer> idNotFind = new ArrayList<>() ;
@@ -199,7 +199,7 @@ public class BookServiceImpl implements BookService {
             for(Sach sach : saches){
                 System.out.println("lookup:"+sach.getMaSach());
                 bookResponeDTOS.add(bookMapper.toDTO(sach)) ;
-                redisTemplate.opsForValue().set("book_info:"+sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
+                redisTemplate.opsForValue().set("book:{info}:"+sach.getMaSach() , bookMapper.toDTO(sach) , 10 ,TimeUnit.MINUTES);
             }
         }
 
@@ -209,15 +209,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookResponeDTO>  bestSellerCarousel(){
         // lấy trong zset key : top:selling:books . lấy ra 3 quyển
-        List<Object> bookIds = redisTemplate.execute(carousel , List.of("top:selling:books") ,0 ,2) ;
+        List<Object> bookIds = redisTemplate.execute(carousel , List.of("top:selling:book") ,0 ,2) ;
         if( bookIds.isEmpty()||bookIds == null){
             System.out.println("vào đây1");
-            List<Object> ids = redisTemplate.execute(paginate ,List.of("page_book_id") , 0 , 2) ;
+            List<Object> ids = redisTemplate.execute(paginate ,List.of("page:book:all") , 0 , 2) ;
             return convertBookRespDTOCache(ids) ;
         }
         // nếu k đủ 3 thì lấy 2 .. 1 cái đầu của page id
         if(bookIds.size() !=3){
-            List<Object> ids = redisTemplate.execute(paginate ,List.of("page_book_id") ,  0, bookIds.size()==1?1:0) ;
+            List<Object> ids = redisTemplate.execute(paginate ,List.of("page:book:all") ,  0, bookIds.size()==1?1:0) ;
             // gộp id của bookidsd vào đay
             bookIds.forEach(id->{
                 assert ids != null;
@@ -272,8 +272,8 @@ public class BookServiceImpl implements BookService {
                     public void afterCommit() {
                         // thêm id vào category , page
                         ids.forEach(id->{
-                            redisTemplate.opsForZSet().add("page_book_id" , id ,id) ;
-                            redisTemplate.opsForZSet().add("page_book_id_category:"+maTheLoai,id ,id ) ;
+                            redisTemplate.opsForZSet().add("page:book:all" , id ,id) ;
+                            redisTemplate.opsForZSet().add("page:book:category:"+maTheLoai,id ,id ) ;
                         });
                     }
                 }
@@ -281,7 +281,7 @@ public class BookServiceImpl implements BookService {
     }
     public List<BookResponeDTO> convertBookRespDTOCache(List<Object> bookIds){
         List<Integer> bookIdNumber = ParseListUtil.toListNumber(bookIds) ;
-        List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(bookIdNumber ,"top:selling:books") ;
+        List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(bookIdNumber ,"top:selling:book") ;
         List<Object> caches = redisTemplate.opsForValue().multiGet(keyBookInfo);
 
         List<BookResponeDTO> bookResponeDTOS = new ArrayList<>() ;

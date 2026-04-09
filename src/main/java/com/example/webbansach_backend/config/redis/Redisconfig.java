@@ -1,4 +1,4 @@
-package com.example.webbansach_backend.config;
+package com.example.webbansach_backend.config.redis;
 
 import com.example.webbansach_backend.dto.*;
 import com.example.webbansach_backend.dto.Message.MessageResponeDTO;
@@ -6,12 +6,16 @@ import com.example.webbansach_backend.dto.img.HinhAnhResponeDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.lettuce.core.ReadFrom;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +25,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class Redisconfig {
+
+
    @Bean
     public RedisTemplate<String , Object> redisTemplate(RedisConnectionFactory factory){
        // khỏi tạo và kết nối đến redis ở Ram ( ở đây ta coi RedisTemplate<K,V> như môtkj công cụ kết nối dể giao dịch ... với RAM server Redis)

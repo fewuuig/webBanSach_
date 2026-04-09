@@ -1,4 +1,4 @@
-package com.example.webbansach_backend.config;
+package com.example.webbansach_backend.config.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

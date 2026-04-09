@@ -63,21 +63,21 @@ public class PaginateServiceImpl implements PaginateService {
 
     @Override
     public Page<BookResponeDTO> getBookPageAndSize( int page ,int size ){
-       return getBookPage(-1 , page , size ,"page_book_id" , "book_info:") ;
+       return getBookPage(-1 , page , size ,"page:book:all" , "book:{info}:") ;
 
     }
 
     // lấy sachs lên theo thể loại
     public Page<BookResponeDTO> getBookCategoryAndPageAndSize(int maTheLoai , int page , int size){
         // phân trang
-        return getBookPage(maTheLoai , page , size ,"page_book_id_category:" , "book_info:" ) ;
+        return getBookPage(maTheLoai , page , size ,"page:book:category:" , "book:{info}:" ) ;
     }
 
 
     // ở đay có thể làm hot key redis cluster
     @Override
     public BookResponeDTO getInfoBook(int maSach){
-        String key = "book_info:" +maSach ;
+        String key = "book:{info}:" +maSach ;
         // check cache truowcs
         Object cached = redisTemplate.opsForValue().get(key) ;
 
@@ -133,7 +133,7 @@ public class PaginateServiceImpl implements PaginateService {
             Page<BookResponeDTO>  page = getBookPage(maTheLoai ,
                     pageable.getPageNumber(),
                     (int)pageable.getPageSize() ,
-                    "page_book_id_category:" ,"book_info:") ;
+                    "page:book:category:" ,"book:{info}:") ;
             if(!page.getContent().isEmpty()){
                 return new PageImpl<>(page.getContent() ,pageable , page.getContent().size()) ;
             }
@@ -151,19 +151,19 @@ public class PaginateServiceImpl implements PaginateService {
             Double priceFrom = bookSearchBuiler.getPriceFrom() ;
             Double priceTo = bookSearchBuiler.getPriceTo() ;
             if(priceFrom != null && priceTo != null){
-                ids = redisTemplate.execute(priceFilter,List.of("price") , priceFrom ,priceTo , pageable.getOffset() , pageable.getPageSize() ) ;
+                ids = redisTemplate.execute(priceFilter,List.of("page:book:price") , priceFrom ,priceTo , pageable.getOffset() , pageable.getPageSize() ) ;
             }
             if(priceFrom == null && priceTo != null){
-                ids = redisTemplate.execute(priceFilter,List.of("price") , 0 ,priceTo ,pageable.getOffset() , pageable.getPageSize() ) ;
+                ids = redisTemplate.execute(priceFilter,List.of("page:book:price") , 0 ,priceTo ,pageable.getOffset() , pageable.getPageSize() ) ;
             }
             if(priceFrom != null && priceTo == null){
-                ids = redisTemplate.execute(priceFilter,List.of("price") , priceFrom , Double.MAX_VALUE,pageable.getOffset() , pageable.getPageSize()) ;
+                ids = redisTemplate.execute(priceFilter,List.of("page:book:price") , priceFrom , Double.MAX_VALUE,pageable.getOffset() , pageable.getPageSize()) ;
             }
 
             // chuyền ids về int
             if(ids != null ) {
                 List<Integer> idNumber = ParseListUtil.toListNumber(ids);
-                List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(idNumber ,"book_info:") ;
+                List<String> keyBookInfo = ParseListUtil.toKeyBookInfo(idNumber ,"book:{info}:") ;
                 List<Object> cached = redisTemplate.opsForValue().multiGet(keyBookInfo) ;
                 List<Integer> idNotFind = new ArrayList<>() ; // id sách không tìm thấy
                 int index = 0 ;
@@ -182,7 +182,7 @@ public class PaginateServiceImpl implements PaginateService {
                     List<Sach> saches = sachRepository.findByMaSachInAndIsActive(idNotFind,true) ;
                     for(Sach sach : saches){
                         order.put(sach.getMaSach() ,bookMapper.toDTO(sach) ) ;
-                        redisTemplate.opsForValue().set("book_info:" + sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
+                        redisTemplate.opsForValue().set("book:{info}:" + sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
                     }
 
                 }else System.out.println("cached");
@@ -190,7 +190,7 @@ public class PaginateServiceImpl implements PaginateService {
                 List<BookResponeDTO> bookResponeDTOS =  new ArrayList<>(order.values()) ;
                 Collections.reverse(bookResponeDTOS);
 
-                long totalElement =redisTemplate.opsForZSet().count("price" , priceFrom!=null?priceFrom:0 , priceTo!=null?priceTo:Double.MAX_VALUE) ;
+                long totalElement =redisTemplate.opsForZSet().count("page:book:price" , priceFrom!=null?priceFrom:0 , priceTo!=null?priceTo:Double.MAX_VALUE) ;
 
                 return new PageImpl<>(bookResponeDTOS , pageable , totalElement) ;
 
@@ -207,18 +207,18 @@ public class PaginateServiceImpl implements PaginateService {
             int start = pageable.getPageNumber() * pageable.getPageSize() ;
             int end = start + pageable.getPageSize() -1 ;
             int maTheLoai = bookSearchBuiler.getma_the_loai() ;
-            List<Object> idCategory = redisTemplate.execute(paginate ,List.of("page_book_id_category:"+maTheLoai),start ,end ) ;
+            List<Object> idCategory = redisTemplate.execute(paginate ,List.of("page:book:category:"+maTheLoai),start ,end ) ;
             List<Object> idPrice = null ;
             Double priceFrom = bookSearchBuiler.getPriceFrom() ;
             Double priceTo = bookSearchBuiler.getPriceTo() ;
             if(priceFrom != null && priceTo != null){
-                idPrice = redisTemplate.execute(priceFilter,List.of("price") , priceFrom ,priceTo ) ;
+                idPrice = redisTemplate.execute(priceFilter,List.of("page:book:price") , priceFrom ,priceTo ) ;
             }
             if(priceFrom == null && priceTo != null){
-                idPrice = redisTemplate.execute(priceFilter,List.of("price") , 0 ,priceTo ) ;
+                idPrice = redisTemplate.execute(priceFilter,List.of("page:book:price") , 0 ,priceTo ) ;
             }
             if(priceFrom != null && priceTo == null){
-                idPrice = redisTemplate.execute(priceFilter,List.of("price") , priceFrom , Double.MAX_VALUE) ;
+                idPrice = redisTemplate.execute(priceFilter,List.of("page:book:price") , priceFrom , Double.MAX_VALUE) ;
             }
 
             List<Integer> idCategoryNumber = ParseListUtil.toListNumber(idCategory) ;
@@ -226,7 +226,7 @@ public class PaginateServiceImpl implements PaginateService {
             // lấy giao của nó => đc sách chung
             Set<Integer> idCate = new HashSet<>(idCategoryNumber) ;
             List<Integer>idBook =  idPriceNumber.stream().filter(idCate::contains).toList() ;
-            List<String> keyInfo = ParseListUtil.toKeyBookInfo(idBook ,"book_info:") ;
+            List<String> keyInfo = ParseListUtil.toKeyBookInfo(idBook ,"book:{info}:") ;
             List<Object> cached = redisTemplate.opsForValue().multiGet(keyInfo) ;
 
             List<Integer> idNotFind = new ArrayList<>() ;
@@ -246,7 +246,7 @@ public class PaginateServiceImpl implements PaginateService {
 
                 for(Sach sach : saches){
                     order.put(sach.getMaSach() ,bookMapper.toDTO(sach) ) ;
-                    redisTemplate.opsForValue().set("book_info:" + sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
+                    redisTemplate.opsForValue().set("book:{info}:" + sach.getMaSach() , bookMapper.toDTO(sach) , 1 ,TimeUnit.HOURS);
                 }
 
             }else System.out.println("cached");

@@ -28,7 +28,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
     private ModelMapper modelMapper ;
     @Override
     public ProfileUserResponeDTO getProfileUser(String tenDangNhap) {
-        String key = "profile:user:"+tenDangNhap ;
+        String key = "user:"+tenDangNhap+":profile" ;
         ProfileUserResponeDTO cached = (ProfileUserResponeDTO) redisTemplate.opsForValue().get(key) ;
         if(cached != null){
             return cached ;

@@ -24,4 +24,5 @@ public class AccountInitializer implements ApplicationRunner {
         usernames.forEach(username -> redisTemplate.opsForValue().set("username:"+username ,username));
         emails.forEach(email -> redisTemplate.opsForValue().set("email:"+email , email ));
     }
+    // giữ nguyên cho nó sharding
 }

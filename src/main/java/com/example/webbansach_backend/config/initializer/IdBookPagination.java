@@ -27,7 +27,7 @@ public class IdBookPagination implements ApplicationRunner {
             for(Sach s : tl.getDanhSachQuyenSach()){
                 if(s.isActive()){
 
-                    redisTemplate.opsForZSet().add("page_book_id_category:"+tl.getMaTheLoai() ,
+                    redisTemplate.opsForZSet().add("page:book:category:"+tl.getMaTheLoai() ,
                             s.getMaSach() ,
                             s.getMaSach());
                 }
@@ -36,9 +36,9 @@ public class IdBookPagination implements ApplicationRunner {
         List<Sach> saches = sachRepository.findAll() ;
         saches.forEach(s ->{
             if(s.isActive()){
-                String key = "page_book_id";
+                String key = "page:book:all";
                 redisTemplate.opsForZSet().add(key , s.getMaSach() , s.getMaSach() ) ;
-                redisTemplate.opsForZSet().add("price" ,s.getMaSach() ,s.getGiaBan()) ;
+                redisTemplate.opsForZSet().add("page:book:price" ,s.getMaSach() ,s.getGiaBan()) ;
             }
         });
 

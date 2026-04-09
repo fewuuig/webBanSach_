@@ -24,7 +24,7 @@ public class HinhAnhServiceImpl implements HinhAnhService {
     @Override
     public List<HinhAnhResponeDTO> getAnhCuaMotSach(int maSach, int soLuong){
         // image:book:{idBook}
-        List<HinhAnhResponeDTO> cached = redisHinhAnhBook.opsForList().range("image:book:"+maSach , 0 , -1) ;
+        List<HinhAnhResponeDTO> cached = redisHinhAnhBook.opsForList().range("book:"+maSach+":image" , 0 , -1) ;
         if(!cached.isEmpty()){
             if(soLuong == 1) return cached.subList(0,1) ;
             return cached;
@@ -36,8 +36,8 @@ public class HinhAnhServiceImpl implements HinhAnhService {
         sach.getDanhSachHinhAnh().forEach(hinhAnh->{
             hinhAnhResponeDTOS.add(hinhAnhMapper.toDTO(hinhAnh)) ;
         });
-        redisHinhAnhBook.opsForList().rightPushAll("image:book:"+maSach , hinhAnhResponeDTOS) ;
-        redisHinhAnhBook.expire("image:book:"+maSach , Duration.ofHours(1));
+        redisHinhAnhBook.opsForList().rightPushAll("book:"+maSach +":image", hinhAnhResponeDTOS) ;
+        redisHinhAnhBook.expire("book:"+maSach+":image" , Duration.ofHours(1));
         System.out.println("kq : " + hinhAnhResponeDTOS.size());
         if(soLuong == 1) return hinhAnhResponeDTOS.subList(0,1) ;
         return hinhAnhResponeDTOS ;

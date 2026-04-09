@@ -13,6 +13,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RepositoryRestResource(path = "don-hang")
 public interface DonHangRepository extends JpaRepository<DonHang,Integer> {
@@ -39,7 +40,7 @@ public interface DonHangRepository extends JpaRepository<DonHang,Integer> {
 
     List<DonHang> findByNguoiDungAndTrangThai(@Param("nguoiDung") NguoiDung nguoiDung ,@Param("trangThaiGiaoHang") TrangThaiGiaoHang trangThaiGiaoHang) ;
     Optional<DonHang> findByNguoiDung_TenDangNhapAndMaDonHang(String tenDangNhap , int maDonHang) ;
-    Optional<DonHang> findByRequestId(String requestId) ;
+    List<DonHang> findByRequestIdIn(Set<String> requestId) ;
 
     @EntityGraph(attributePaths = "danhSachChiTietDonHang") // lâyus hết danh sacxhs chi tiết đơn hàng lên
     @Query( """

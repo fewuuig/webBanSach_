@@ -49,8 +49,7 @@ public class DanhGiaSanPhamServiceImpl implements DanhGiaSanPhamService {
                 danhGiaResponeDTO.setNhanXet(danhGia.getNhanXet());
                 danhGiaResponeDTO.setDiemXepHang(danhGia.getDiemXepHang());
                 danhGiaResponeDTO.setAnhDaiDien(nguoiDung.getAnhDaiDien());
-                redisDanhGia.opsForList().rightPush("comment:book:"+maSach , danhGiaResponeDTO) ;
-                System.out.println("commented");
+                redisDanhGia.opsForList().rightPush("book:"+maSach+":comment" , danhGiaResponeDTO) ;
             }
         });
     }
@@ -77,7 +76,7 @@ public class DanhGiaSanPhamServiceImpl implements DanhGiaSanPhamService {
     @Override
     public List<DanhGiaResponeDTO> getDanhGiaMotQuyenSachCache(int maSach){
         // thieeys kees key
-        List<DanhGiaResponeDTO> cached = redisDanhGia.opsForList().range("comment:book:"+maSach , 0 , -1) ;
+        List<DanhGiaResponeDTO> cached = redisDanhGia.opsForList().range("book:"+maSach+":comment" , 0 , -1) ;
         if(cached !=null &&  !cached.isEmpty()){
             return cached ;
         }
@@ -95,8 +94,8 @@ public class DanhGiaSanPhamServiceImpl implements DanhGiaSanPhamService {
             danhGiaResponeDTOS1.add(danhGiaResponeDTO) ;
 
         }
-        redisDanhGia.opsForList().rightPushAll("comment:book:"+maSach ,danhGiaResponeDTOS1 ) ;
-        redisDanhGia.expire("comment:book:"+maSach, Duration.ofHours(1)) ;
+        redisDanhGia.opsForList().rightPushAll("book:"+maSach+":comment" ,danhGiaResponeDTOS1 ) ;
+        redisDanhGia.expire("book:"+maSach+":comment", Duration.ofHours(1)) ;
         return danhGiaResponeDTOS1 ;
     }
 }
