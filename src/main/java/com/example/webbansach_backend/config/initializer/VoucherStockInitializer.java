@@ -30,15 +30,8 @@ public class VoucherStockInitializer implements ApplicationRunner {
         List<MaGiamGia> maGiamGias = maGiamGiaRepository.findByTrangThaiMaGiamGia(TrangThaiMaGiamGia.DANG_HOAT_DONG) ;
         for(MaGiamGia maGiamGia : maGiamGias){
             Integer remain = maGiamGia.getSoLuong() - maGiamGia.getSoMaDaDung() ;
-            redisTemplate.opsForValue().set("voucher:stock:"+maGiamGia.getMaGiam() , remain );
+            redisTemplate.opsForValue().set("stock:voucher:"+maGiamGia.getMaGiam() , remain );
         }
 
-        // lâý lên danh sách lượt dùng mã mà user đã dùng
-
-        List<MaGiamGiaNguoiDung> maGiamGiaNguoiDungs = maGiamGiaNguoiDungRepository.findAll() ;
-        for(MaGiamGiaNguoiDung maGiamGiaNguoiDung : maGiamGiaNguoiDungs){
-            redisTemplate.opsForValue().set("voucher:user:"+maGiamGiaNguoiDung.getMaGiamGia().getMaGiam()+":"+maGiamGiaNguoiDung.getNguoiDung().getTenDangNhap()
-                                           , maGiamGiaNguoiDung.getDaDung());
-        }
     }
 }

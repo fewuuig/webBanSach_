@@ -2,6 +2,7 @@ package com.example.webbansach_backend.Repository;
 
 import com.example.webbansach_backend.Entity.NguoiDung;
 import com.example.webbansach_backend.dto.account.Acccount;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,7 +23,15 @@ public interface NguoiDungRepository extends JpaRepository<NguoiDung,Integer> {
 
     NguoiDung findByEmail(String email) ;
 
+    @EntityGraph(attributePaths = "diaChiGiaoHangs")
+    @Query("""
+        SELECT nd
+        FROM NguoiDung nd
+        WHERE nd.tenDangNhap = :tenDangNhap
+    """)
+    Optional<NguoiDung> findByTenDangNhapFetchDiaChi(@Param("tenDangNhap") String tenDangNhap) ;
     Optional<NguoiDung> findByTenDangNhap(@Param("tenDangNhap") String tenDangNhap) ;
+    List<NguoiDung> findByTenDangNhapIn(Set<String> tenDangNhaps) ;
 
     @Query("SELECT nd FROM NguoiDung nd " +
             "LEFT JOIN fetch nd.maGiamGiaNguoiDungs mggnd " +

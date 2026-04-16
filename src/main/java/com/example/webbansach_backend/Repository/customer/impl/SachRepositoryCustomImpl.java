@@ -2,13 +2,18 @@ package com.example.webbansach_backend.Repository.customer.impl;
 import com.example.webbansach_backend.Repository.customer.SachCustomRepository;
 import com.example.webbansach_backend.builder.BookSearchBuiler;
 import com.example.webbansach_backend.dto.book.BookResponeDTO;
+import com.example.webbansach_backend.service.PaginateService;
 import com.example.webbansach_backend.utils.NumberUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
@@ -16,6 +21,7 @@ import java.util.List;
 
 @Repository
 public class SachRepositoryCustomImpl implements SachCustomRepository {
+
 
     private void queryNormal(BookSearchBuiler bookSearchBuiler , StringBuilder where){
         try {
@@ -55,6 +61,7 @@ public class SachRepositoryCustomImpl implements SachCustomRepository {
     }
 
     // lấy lên và phân trang cho nó luôn
+    // sẽ tối ưu hóa tại đây để tránh xuống DB
     @PersistenceContext
     private EntityManager entityManager ;
     @Override
@@ -67,6 +74,7 @@ public class SachRepositoryCustomImpl implements SachCustomRepository {
         joinTable(bookSearchBuiler , query ,countQuery);
         queryNormal(bookSearchBuiler,where);
         querySpecial(bookSearchBuiler , where);
+        where.append(" And s.is_active=true ") ;
         query = query.append(where) ;
 
         // query data lên

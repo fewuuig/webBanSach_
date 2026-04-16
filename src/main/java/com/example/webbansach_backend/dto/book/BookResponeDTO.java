@@ -14,7 +14,7 @@ public class BookResponeDTO {
     private int maSach ;
     private String tenSach ;
     private String tenTacGia ;
-
+    private String isbn ;
     private String moTa ;
     private double giaNiemYet ;
     private double giaBan ;

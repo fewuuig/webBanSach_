@@ -1,0 +1,447 @@
+10:50:35 - GET /book/book-new-carousel | time=0 ms
+10:50:35 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=132 ms
+10:50:35 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=41 ms
+10:50:35 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=44 ms
+10:50:35 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=47 ms
+10:50:35 - GET /profile/info | user=viet_mai | time=95 ms
+10:50:35 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=23 ms
+10:50:35 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=40 ms
+10:50:35 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=29 ms
+10:50:35 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=44 ms
+10:50:35 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=24 ms
+10:50:35 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=49 ms
+10:50:35 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=54 ms
+10:50:35 - GET /wish-love/check | user=viet_mai | bookId=257 | time=37 ms
+10:50:35 - GET /wish-love/check | user=viet_mai | bookId=258 | time=26 ms
+10:50:35 - GET /wish-love/check | user=viet_mai | bookId=259 | time=33 ms
+10:50:35 - GET /wish-love/check | user=viet_mai | bookId=256 | time=11 ms
+10:50:35 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=81 ms
+10:50:35 - GET /wish-love/check | user=viet_mai | bookId=254 | time=9 ms
+10:50:35 - GET /wish-love/check | user=viet_mai | bookId=255 | time=4 ms
+10:50:35 - GET /wish-love/check | user=viet_mai | bookId=252 | time=4 ms
+10:50:35 - GET /wish-love/check | user=viet_mai | bookId=253 | time=8 ms
+10:50:51 - GET /book/book-new-carousel | time=0 ms
+10:50:51 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=21 ms
+10:50:51 - GET /profile/info | user=viet_mai | time=6 ms
+10:50:51 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=6 ms
+10:50:51 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=8 ms
+10:50:51 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=7 ms
+10:50:51 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=4 ms
+10:50:51 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=4 ms
+10:50:51 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=6 ms
+10:50:51 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=9 ms
+10:50:51 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=11 ms
+10:50:51 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=6 ms
+10:50:51 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=16 ms
+10:50:51 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=20 ms
+10:50:51 - GET /wish-love/check | user=viet_mai | bookId=257 | time=6 ms
+10:50:51 - GET /wish-love/check | user=viet_mai | bookId=259 | time=5 ms
+10:50:51 - GET /wish-love/check | user=viet_mai | bookId=258 | time=7 ms
+10:50:51 - GET /wish-love/check | user=viet_mai | bookId=256 | time=4 ms
+10:50:51 - GET /wish-love/check | user=viet_mai | bookId=254 | time=5 ms
+10:50:51 - GET /wish-love/check | user=viet_mai | bookId=253 | time=5 ms
+10:50:51 - GET /wish-love/check | user=viet_mai | bookId=255 | time=5 ms
+10:50:51 - GET /wish-love/check | user=viet_mai | bookId=252 | time=6 ms
+10:50:52 - GET /book/book-new-carousel | time=0 ms
+10:50:52 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=11 ms
+10:50:52 - GET /profile/info | user=viet_mai | time=3 ms
+10:50:52 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=11 ms
+10:50:52 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=9 ms
+10:50:52 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=12 ms
+10:50:52 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=10 ms
+10:50:52 - GET /wish-love/check | user=viet_mai | bookId=259 | time=7 ms
+10:50:52 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=33 ms
+10:50:52 - GET /wish-love/check | user=viet_mai | bookId=258 | time=6 ms
+10:50:52 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=11 ms
+10:50:52 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=22 ms
+10:50:52 - GET /wish-love/check | user=viet_mai | bookId=257 | time=7 ms
+10:50:52 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=32 ms
+10:50:52 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=30 ms
+10:50:52 - GET /wish-love/check | user=viet_mai | bookId=256 | time=6 ms
+10:50:52 - GET /wish-love/check | user=viet_mai | bookId=255 | time=6 ms
+10:50:52 - GET /wish-love/check | user=viet_mai | bookId=254 | time=8 ms
+10:50:52 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=14 ms
+10:50:52 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=34 ms
+10:50:52 - GET /wish-love/check | user=viet_mai | bookId=252 | time=5 ms
+10:50:52 - GET /wish-love/check | user=viet_mai | bookId=253 | time=5 ms
+10:50:54 - GET /image/book/259/20 | maSach=259 | soLuong=20 | time=1 ms
+10:50:54 - GET /books/259 | time=2 ms
+10:50:54 - GET /profile/info | user=viet_mai | time=3 ms
+10:50:54 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=259 | time=17 ms
+10:50:57 - GET /book/book-new-carousel | time=0 ms
+10:50:57 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=7 ms
+10:50:57 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=3 ms
+10:50:57 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=4 ms
+10:50:57 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=2 ms
+10:50:57 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=3 ms
+10:50:57 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=2 ms
+10:50:57 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=5 ms
+10:50:57 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=8 ms
+10:50:57 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=11 ms
+10:50:57 - GET /wish-love/check | user=viet_mai | bookId=259 | time=2 ms
+10:50:57 - GET /wish-love/check | user=viet_mai | bookId=258 | time=2 ms
+10:50:57 - GET /wish-love/check | user=viet_mai | bookId=257 | time=2 ms
+10:50:57 - GET /wish-love/check | user=viet_mai | bookId=256 | time=2 ms
+10:50:57 - GET /wish-love/check | user=viet_mai | bookId=255 | time=3 ms
+10:50:57 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=4 ms
+10:50:57 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=5 ms
+10:50:57 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=3 ms
+10:50:57 - GET /wish-love/check | user=viet_mai | bookId=253 | time=4 ms
+10:50:57 - GET /wish-love/check | user=viet_mai | bookId=252 | time=4 ms
+10:50:57 - GET /wish-love/check | user=viet_mai | bookId=254 | time=4 ms
+18:00:20 - GET /book/book-new-carousel | time=0 ms
+18:00:20 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=132 ms
+18:00:20 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=75 ms
+18:00:20 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=80 ms
+18:00:20 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=28 ms
+18:00:20 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=99 ms
+18:00:20 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=46 ms
+18:00:20 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=25 ms
+18:00:20 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=42 ms
+18:00:20 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=72 ms
+18:00:20 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=94 ms
+18:00:21 - GET /profile/info | user=viet_mai | time=140 ms
+18:00:21 - GET /wish-love/check | user=viet_mai | bookId=258 | time=26 ms
+18:00:21 - GET /wish-love/check | user=viet_mai | bookId=259 | time=41 ms
+18:00:21 - GET /wish-love/check | user=viet_mai | bookId=257 | time=9 ms
+18:00:21 - GET /wish-love/check | user=viet_mai | bookId=255 | time=9 ms
+18:00:21 - GET /wish-love/check | user=viet_mai | bookId=256 | time=11 ms
+18:00:21 - GET /wish-love/check | user=viet_mai | bookId=254 | time=11 ms
+18:00:21 - GET /wish-love/check | user=viet_mai | bookId=253 | time=9 ms
+18:00:21 - GET /wish-love/check | user=viet_mai | bookId=252 | time=9 ms
+18:00:21 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=181 ms
+18:00:21 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=204 ms
+18:01:52 - GET /book/book-new-carousel | time=0 ms
+18:01:52 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=20 ms
+18:01:52 - GET /profile/info | user=viet_mai | time=6 ms
+18:01:52 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=8 ms
+18:01:52 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=12 ms
+18:01:52 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=6 ms
+18:01:52 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=6 ms
+18:01:52 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=24 ms
+18:01:52 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=22 ms
+18:01:52 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=32 ms
+18:01:52 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=25 ms
+18:01:52 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=35 ms
+18:01:52 - GET /wish-love/check | user=viet_mai | bookId=259 | time=8 ms
+18:01:52 - GET /wish-love/check | user=viet_mai | bookId=258 | time=8 ms
+18:01:52 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=56 ms
+18:01:53 - GET /wish-love/check | user=viet_mai | bookId=256 | time=8 ms
+18:01:53 - GET /wish-love/check | user=viet_mai | bookId=257 | time=7 ms
+18:01:53 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=56 ms
+18:01:53 - GET /wish-love/check | user=viet_mai | bookId=255 | time=8 ms
+18:01:53 - GET /wish-love/check | user=viet_mai | bookId=253 | time=5 ms
+18:01:53 - GET /wish-love/check | user=viet_mai | bookId=252 | time=5 ms
+18:01:53 - GET /wish-love/check | user=viet_mai | bookId=254 | time=12 ms
+18:02:00 - GET /image/book/254/20 | maSach=254 | soLuong=20 | time=3 ms
+18:02:00 - GET /books/254 | time=3 ms
+18:02:00 - GET /profile/info | user=viet_mai | time=4 ms
+18:02:00 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=254 | time=20 ms
+18:02:01 - GET /book/book-new-carousel | time=0 ms
+18:02:01 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=9 ms
+18:02:01 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=3 ms
+18:02:01 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=2 ms
+18:02:01 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=8 ms
+18:02:01 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=6 ms
+18:02:01 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=2 ms
+18:02:01 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=5 ms
+18:02:01 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=12 ms
+18:02:01 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=18 ms
+18:02:01 - GET /wish-love/check | user=viet_mai | bookId=259 | time=4 ms
+18:02:01 - GET /wish-love/check | user=viet_mai | bookId=257 | time=4 ms
+18:02:01 - GET /wish-love/check | user=viet_mai | bookId=258 | time=4 ms
+18:02:01 - GET /wish-love/check | user=viet_mai | bookId=256 | time=2 ms
+18:02:01 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=10 ms
+18:02:01 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=14 ms
+18:02:01 - GET /wish-love/check | user=viet_mai | bookId=255 | time=4 ms
+18:02:01 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=18 ms
+18:02:01 - GET /wish-love/check | user=viet_mai | bookId=254 | time=4 ms
+18:02:01 - GET /wish-love/check | user=viet_mai | bookId=253 | time=4 ms
+18:02:01 - GET /wish-love/check | user=viet_mai | bookId=252 | time=4 ms
+18:02:33 - GET /books/259 | time=2 ms
+18:02:33 - GET /image/book/259/20 | maSach=259 | soLuong=20 | time=2 ms
+18:02:33 - GET /profile/info | user=viet_mai | time=4 ms
+18:02:33 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=259 | time=6 ms
+18:02:34 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+18:02:34 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=60 ms
+18:02:34 - GET /giao-hang/hinh-thuc-giao-hang | time=60 ms
+18:02:34 - GET /vouchers/user | user=viet_mai | time=69 ms
+18:02:34 - GET /dia-chi/dia-chi-giao-hang | user=viet_mai | time=71 ms
+18:04:00 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=79 ms
+18:04:00 - GET /giao-hang/hinh-thuc-giao-hang | time=10 ms
+18:04:00 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=13 ms
+18:04:00 - GET /dia-chi/dia-chi-giao-hang | user=viet_mai | time=12 ms
+18:04:00 - GET /profile/info | user=viet_mai | time=31 ms
+18:04:00 - GET /vouchers/user | user=viet_mai | time=37 ms
+18:06:04 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=76 ms
+18:06:04 - GET /giao-hang/hinh-thuc-giao-hang | time=11 ms
+18:06:04 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=13 ms
+18:06:04 - GET /dia-chi/dia-chi-giao-hang | user=viet_mai | time=12 ms
+18:06:04 - GET /profile/info | user=viet_mai | time=34 ms
+18:06:04 - GET /vouchers/user | user=viet_mai | time=36 ms
+18:06:43 - POST /order/place-order | user=viet_mai | time=19 ms
+18:06:44 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=28 ms
+18:13:58 - GET /book/book-new-carousel | time=0 ms
+18:13:58 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=27 ms
+18:13:58 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=9 ms
+18:13:58 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=11 ms
+18:13:58 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=13 ms
+18:13:58 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=5 ms
+18:13:58 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=8 ms
+18:13:58 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=3 ms
+18:13:58 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=4 ms
+18:13:58 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=7 ms
+18:13:58 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=3 ms
+18:13:58 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=11 ms
+18:13:58 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=12 ms
+18:13:58 - GET /wish-love/check | user=viet_mai | bookId=256 | time=7 ms
+18:13:58 - GET /wish-love/check | user=viet_mai | bookId=258 | time=7 ms
+18:13:58 - GET /wish-love/check | user=viet_mai | bookId=259 | time=7 ms
+18:13:58 - GET /wish-love/check | user=viet_mai | bookId=257 | time=7 ms
+18:13:58 - GET /wish-love/check | user=viet_mai | bookId=255 | time=7 ms
+18:13:58 - GET /wish-love/check | user=viet_mai | bookId=254 | time=8 ms
+18:13:58 - GET /wish-love/check | user=viet_mai | bookId=253 | time=4 ms
+18:13:58 - GET /wish-love/check | user=viet_mai | bookId=252 | time=4 ms
+18:14:00 - GET /books/259 | time=4 ms
+18:14:00 - GET /image/book/259/20 | maSach=259 | soLuong=20 | time=5 ms
+18:14:00 - GET /profile/info | user=viet_mai | time=5 ms
+18:14:00 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=259 | time=11 ms
+18:14:02 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+18:14:02 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=4 ms
+18:14:02 - GET /giao-hang/hinh-thuc-giao-hang | time=4 ms
+18:14:02 - GET /dia-chi/dia-chi-giao-hang | user=viet_mai | time=6 ms
+18:14:02 - GET /vouchers/user | user=viet_mai | time=32 ms
+18:14:06 - POST /order/place-order | user=viet_mai | time=13 ms
+18:14:10 - GET /don-hang/trang-thai | user=viet_mai | status=CHO_XAC_NHAN | time=11 ms
+18:14:12 - GET /book/book-new-carousel | time=0 ms
+18:14:12 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=17 ms
+18:14:12 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=9 ms
+18:14:12 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=20 ms
+18:14:12 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=35 ms
+18:14:12 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=12 ms
+18:14:12 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=22 ms
+18:14:12 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=38 ms
+18:14:12 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=48 ms
+18:14:12 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=58 ms
+18:14:12 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=59 ms
+18:14:12 - GET /wish-love/check | user=viet_mai | bookId=258 | time=6 ms
+18:14:12 - GET /wish-love/check | user=viet_mai | bookId=259 | time=5 ms
+18:14:12 - GET /wish-love/check | user=viet_mai | bookId=254 | time=8 ms
+18:14:12 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=93 ms
+18:14:12 - GET /wish-love/check | user=viet_mai | bookId=256 | time=8 ms
+18:14:12 - GET /wish-love/check | user=viet_mai | bookId=255 | time=6 ms
+18:14:12 - GET /wish-love/check | user=viet_mai | bookId=257 | time=7 ms
+18:14:12 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=77 ms
+18:14:12 - GET /wish-love/check | user=viet_mai | bookId=253 | time=6 ms
+18:14:12 - GET /wish-love/check | user=viet_mai | bookId=252 | time=6 ms
+18:14:34 - GET /tai-khoan/check-username | username=an_tran | time=2 ms
+18:14:35 - POST /tai-khoan/dang-nhap | username=an_tran | time=344 ms
+18:14:35 - GET /book/book-new-carousel | time=0 ms
+18:14:35 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=9 ms
+18:14:35 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=3 ms
+18:14:35 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=5 ms
+18:14:35 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=8 ms
+18:14:35 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=3 ms
+18:14:35 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=3 ms
+18:14:35 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=10 ms
+18:14:35 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=17 ms
+18:14:35 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=16 ms
+18:14:35 - GET /wish-love/check | user=an_tran | bookId=259 | time=5 ms
+18:14:35 - GET /wish-love/check | user=an_tran | bookId=258 | time=5 ms
+18:14:35 - GET /profile/info | user=an_tran | time=83 ms
+18:14:35 - GET /wish-love/check | user=an_tran | bookId=257 | time=5 ms
+18:14:35 - GET /wish-love/check | user=an_tran | bookId=256 | time=5 ms
+18:14:35 - GET /wish-love/check | user=an_tran | bookId=255 | time=6 ms
+18:14:35 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=5 ms
+18:14:35 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=3 ms
+18:14:35 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=9 ms
+18:14:35 - GET /wish-love/check | user=an_tran | bookId=254 | time=6 ms
+18:14:35 - GET /wish-love/check | user=an_tran | bookId=253 | time=4 ms
+18:14:35 - GET /wish-love/check | user=an_tran | bookId=252 | time=3 ms
+18:14:37 - GET /books/259 | time=3 ms
+18:14:37 - GET /image/book/259/20 | maSach=259 | soLuong=20 | time=3 ms
+18:14:37 - GET /profile/info | user=an_tran | time=4 ms
+18:14:37 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=259 | time=6 ms
+18:14:40 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+18:14:40 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=3 ms
+18:14:40 - GET /giao-hang/hinh-thuc-giao-hang | time=3 ms
+18:14:40 - GET /vouchers/user | user=an_tran | time=14 ms
+18:14:40 - GET /dia-chi/dia-chi-giao-hang | user=an_tran | time=24 ms
+18:14:44 - POST /order/place-order | user=an_tran | time=7 ms
+18:14:46 - GET /don-hang/trang-thai | user=an_tran | status=CHO_XAC_NHAN | time=9 ms
+18:20:16 - GET /book/book-new-carousel | time=0 ms
+18:20:16 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+18:20:16 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=3 ms
+18:20:16 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=6 ms
+18:20:16 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=9 ms
+18:20:16 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=3 ms
+18:20:16 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=7 ms
+18:20:16 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=9 ms
+18:20:16 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=11 ms
+18:20:16 - GET /wish-love/check | user=an_tran | bookId=259 | time=6 ms
+18:20:16 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=23 ms
+18:20:16 - GET /wish-love/check | user=an_tran | bookId=258 | time=7 ms
+18:20:16 - GET /wish-love/check | user=an_tran | bookId=256 | time=4 ms
+18:20:16 - GET /wish-love/check | user=an_tran | bookId=257 | time=4 ms
+18:20:16 - GET /wish-love/check | user=an_tran | bookId=255 | time=5 ms
+18:20:16 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=7 ms
+18:20:16 - GET /wish-love/check | user=an_tran | bookId=254 | time=4 ms
+18:20:16 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=13 ms
+18:20:16 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=3 ms
+18:20:16 - GET /wish-love/check | user=an_tran | bookId=253 | time=4 ms
+18:20:16 - GET /wish-love/check | user=an_tran | bookId=252 | time=4 ms
+18:20:40 - GET /image/book/259/20 | maSach=259 | soLuong=20 | time=3 ms
+18:20:40 - GET /books/259 | time=3 ms
+18:20:40 - GET /profile/info | user=an_tran | time=3 ms
+18:20:41 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=259 | time=6 ms
+18:20:42 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=3 ms
+18:20:42 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=3 ms
+18:20:42 - GET /giao-hang/hinh-thuc-giao-hang | time=3 ms
+18:20:42 - GET /dia-chi/dia-chi-giao-hang | user=an_tran | time=4 ms
+18:20:42 - GET /vouchers/user | user=an_tran | time=18 ms
+18:20:48 - POST /order/place-order | user=an_tran | time=6 ms
+18:20:49 - GET /don-hang/trang-thai | user=an_tran | status=CHO_XAC_NHAN | time=21 ms
+18:20:49 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+18:21:05 - GET /profile/info | user=an_tran | time=4 ms
+18:21:05 - GET /don-hang/trang-thai | user=an_tran | status=CHO_XAC_NHAN | time=12 ms
+18:21:05 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+18:21:19 - PUT /don-hang/{id}/huy-don | user=an_tran | id=130615 | time=36 ms
+18:21:21 - GET /don-hang/trang-thai | user=an_tran | status=CHO_XAC_NHAN | time=8 ms
+18:21:25 - GET /profile/info | user=an_tran | time=4 ms
+18:21:25 - GET /don-hang/trang-thai | user=an_tran | status=CHO_XAC_NHAN | time=13 ms
+18:21:26 - GET /book/book-new-carousel | time=0 ms
+18:21:26 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+18:21:26 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=3 ms
+18:21:26 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=4 ms
+18:21:26 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=7 ms
+18:21:26 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=4 ms
+18:21:26 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=3 ms
+18:21:26 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=7 ms
+18:21:26 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=11 ms
+18:21:26 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=15 ms
+18:21:26 - GET /wish-love/check | user=an_tran | bookId=259 | time=4 ms
+18:21:26 - GET /wish-love/check | user=an_tran | bookId=258 | time=4 ms
+18:21:26 - GET /wish-love/check | user=an_tran | bookId=257 | time=4 ms
+18:21:26 - GET /wish-love/check | user=an_tran | bookId=256 | time=4 ms
+18:21:26 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=5 ms
+18:21:26 - GET /wish-love/check | user=an_tran | bookId=255 | time=5 ms
+18:21:26 - GET /wish-love/check | user=an_tran | bookId=253 | time=5 ms
+18:21:26 - GET /wish-love/check | user=an_tran | bookId=254 | time=4 ms
+18:21:26 - GET /wish-love/check | user=an_tran | bookId=252 | time=4 ms
+18:21:26 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=3 ms
+18:21:26 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=16 ms
+18:21:29 - GET /books/254 | time=2 ms
+18:21:29 - GET /image/book/254/20 | maSach=254 | soLuong=20 | time=3 ms
+18:21:29 - GET /profile/info | user=an_tran | time=3 ms
+18:21:30 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=254 | time=6 ms
+18:21:31 - GET /book/book-new-carousel | time=0 ms
+18:21:31 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=7 ms
+18:21:31 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=3 ms
+18:21:31 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=4 ms
+18:21:31 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=7 ms
+18:21:31 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=1 ms
+18:21:31 - GET /wish-love/check | user=an_tran | bookId=259 | time=3 ms
+18:21:31 - GET /wish-love/check | user=an_tran | bookId=258 | time=3 ms
+18:21:31 - GET /wish-love/check | user=an_tran | bookId=257 | time=3 ms
+18:21:31 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=6 ms
+18:21:31 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=4 ms
+18:21:31 - GET /wish-love/check | user=an_tran | bookId=256 | time=5 ms
+18:21:31 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=9 ms
+18:21:31 - GET /wish-love/check | user=an_tran | bookId=255 | time=4 ms
+18:21:31 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=6 ms
+18:21:31 - GET /wish-love/check | user=an_tran | bookId=254 | time=5 ms
+18:21:31 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=3 ms
+18:21:31 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+18:21:31 - GET /wish-love/check | user=an_tran | bookId=253 | time=5 ms
+18:21:31 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=5 ms
+18:21:31 - GET /wish-love/check | user=an_tran | bookId=252 | time=4 ms
+18:21:32 - GET /books/259 | time=3 ms
+18:21:32 - GET /image/book/259/20 | maSach=259 | soLuong=20 | time=4 ms
+18:21:32 - GET /profile/info | user=an_tran | time=4 ms
+18:21:32 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=259 | time=8 ms
+18:21:33 - GET /book/book-new-carousel | time=0 ms
+18:21:33 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=6 ms
+18:21:33 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=3 ms
+18:21:33 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=6 ms
+18:21:33 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=6 ms
+18:21:33 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=2 ms
+18:21:33 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=3 ms
+18:21:33 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=6 ms
+18:21:33 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=13 ms
+18:21:33 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=10 ms
+18:21:33 - GET /wish-love/check | user=an_tran | bookId=257 | time=3 ms
+18:21:33 - GET /wish-love/check | user=an_tran | bookId=258 | time=3 ms
+18:21:33 - GET /wish-love/check | user=an_tran | bookId=259 | time=3 ms
+18:21:33 - GET /wish-love/check | user=an_tran | bookId=256 | time=3 ms
+18:21:33 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=4 ms
+18:21:33 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=5 ms
+18:21:33 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=7 ms
+18:21:33 - GET /wish-love/check | user=an_tran | bookId=255 | time=4 ms
+18:21:33 - GET /wish-love/check | user=an_tran | bookId=252 | time=3 ms
+18:21:33 - GET /wish-love/check | user=an_tran | bookId=253 | time=3 ms
+18:21:33 - GET /wish-love/check | user=an_tran | bookId=254 | time=3 ms
+18:21:34 - GET /books/257 | time=4 ms
+18:21:34 - GET /image/book/257/20 | maSach=257 | soLuong=20 | time=4 ms
+18:21:34 - GET /profile/info | user=an_tran | time=3 ms
+18:21:34 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=257 | time=6 ms
+18:21:35 - GET /book/book-new-carousel | time=0 ms
+18:21:35 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=8 ms
+18:21:35 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=2 ms
+18:21:35 - GET /wish-love/check | user=an_tran | bookId=259 | time=4 ms
+18:21:35 - GET /wish-love/check | user=an_tran | bookId=258 | time=4 ms
+18:21:35 - GET /wish-love/check | user=an_tran | bookId=257 | time=4 ms
+18:21:35 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=9 ms
+18:21:35 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=15 ms
+18:21:35 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=16 ms
+18:21:35 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=5 ms
+18:21:35 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=7 ms
+18:21:35 - GET /wish-love/check | user=an_tran | bookId=256 | time=3 ms
+18:21:35 - GET /wish-love/check | user=an_tran | bookId=255 | time=3 ms
+18:21:35 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=11 ms
+18:21:35 - GET /wish-love/check | user=an_tran | bookId=254 | time=4 ms
+18:21:35 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=7 ms
+18:21:35 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=3 ms
+18:21:35 - GET /wish-love/check | user=an_tran | bookId=253 | time=5 ms
+18:21:35 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=4 ms
+18:21:35 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=8 ms
+18:21:35 - GET /wish-love/check | user=an_tran | bookId=252 | time=4 ms
+18:23:09 - GET /books/259 | time=3 ms
+18:23:09 - GET /image/book/259/20 | maSach=259 | soLuong=20 | time=3 ms
+18:23:09 - GET /profile/info | user=an_tran | time=3 ms
+18:23:09 - GET /danh-gia/{maSach}/danhSachDanhGia | bookId=259 | time=7 ms
+18:23:11 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+18:23:11 - GET /thanh-toan/lay-hinh-thuc-thanh-toan | time=3 ms
+18:23:11 - GET /dia-chi/dia-chi-giao-hang | user=an_tran | time=3 ms
+18:23:11 - GET /giao-hang/hinh-thuc-giao-hang | time=3 ms
+18:23:11 - GET /vouchers/user | user=an_tran | time=13 ms
+18:23:19 - POST /order/place-order | user=an_tran | time=6 ms
+18:23:22 - GET /don-hang/trang-thai | user=an_tran | status=CHO_XAC_NHAN | time=12 ms
+18:23:22 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=3 ms
+18:23:26 - GET /don-hang/trang-thai | user=an_tran | status=DA_XAC_NHAN | time=13 ms
+18:23:26 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=3 ms
+18:23:26 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=6 ms
+18:23:26 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+18:23:26 - GET /image/book/29/1 | maSach=29 | soLuong=1 | time=17 ms
+18:23:27 - GET /don-hang/trang-thai | user=an_tran | status=CHO_XAC_NHAN | time=6 ms
+18:23:27 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=2 ms
+19:15:36 - GET /book/book-new-carousel | time=0 ms
+19:15:36 - GET /books/page-size | page=0 | size=8 | user=anonymousUser | time=98 ms
+19:15:37 - GET /image/book/259/1 | maSach=259 | soLuong=1 | time=49 ms
+19:15:37 - GET /image/book/257/1 | maSach=257 | soLuong=1 | time=55 ms
+19:15:37 - GET /image/book/258/1 | maSach=258 | soLuong=1 | time=58 ms
+19:15:37 - GET /image/book/256/-1 | maSach=256 | soLuong=-1 | time=15 ms
+19:15:37 - GET /image/book/254/-1 | maSach=254 | soLuong=-1 | time=16 ms
+19:15:37 - GET /image/book/259/-1 | maSach=259 | soLuong=-1 | time=54 ms
+19:15:37 - GET /image/book/257/-1 | maSach=257 | soLuong=-1 | time=50 ms
+19:15:37 - GET /image/book/258/-1 | maSach=258 | soLuong=-1 | time=52 ms
+19:15:37 - GET /image/book/255/-1 | maSach=255 | soLuong=-1 | time=40 ms
+19:15:37 - GET /image/book/252/-1 | maSach=252 | soLuong=-1 | time=45 ms
+19:15:37 - GET /image/book/253/-1 | maSach=253 | soLuong=-1 | time=65 ms
+19:15:37 - GET /wish-love/check | user=an_tran | bookId=254 | time=7 ms
+19:15:37 - GET /wish-love/check | user=an_tran | bookId=259 | time=7 ms
+19:15:37 - GET /wish-love/check | user=an_tran | bookId=257 | time=7 ms
+19:15:37 - GET /wish-love/check | user=an_tran | bookId=256 | time=7 ms
+19:15:37 - GET /wish-love/check | user=an_tran | bookId=255 | time=7 ms
+19:15:37 - GET /wish-love/check | user=an_tran | bookId=258 | time=7 ms
+19:15:37 - GET /wish-love/check | user=an_tran | bookId=252 | time=11 ms
+19:15:37 - GET /wish-love/check | user=an_tran | bookId=253 | time=11 ms

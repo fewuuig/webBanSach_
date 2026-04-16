@@ -3,8 +3,8 @@
 -- KEYS[2] = rate limit key
 
 -- ARGV
--- 1 request_id
--- 2 items json
+
+-- 1 items json
 -- 3 maGiam
 -- 4 maDiaChi
 -- 5 maThanhToan
@@ -15,22 +15,13 @@
 -- 1 rate limit
 ------------------------------------------------
 
-local limit = redis.call("INCR", KEYS[2])
-
-if limit == 1 then
-    redis.call("EXPIRE", KEYS[2], 10)
-end
-
-if limit > 1 then
-    return -5
-end
 
 
 ------------------------------------------------
 -- 2 parse JSON
 ------------------------------------------------
 
-local items = cjson.decode(ARGV[2])
+local items = cjson.decode(ARGV[1])
 
 
 if type(items) == "string" then
@@ -59,7 +50,7 @@ for _, item in ipairs(items) do
         return -3
     end
 
-    local stockKey = "book:" .. maSach
+    local stockKey = KEYS[1] .. maSach
     local stock = redis.call("GET", stockKey)
 
     if not stock then
@@ -75,6 +66,7 @@ for _, item in ipairs(items) do
     if soLuong > stock then
         return 0
     end
+    redis.call("DECRBY", stockKey, soLuong)
 
 end
 
@@ -83,33 +75,11 @@ end
 -- 4 giảm kho
 ------------------------------------------------
 
-for _, item in ipairs(items) do
 
-    local maSach = tonumber(item["maSach"])
-    local soLuong = tonumber(item["soLuong"])
-
-    local stockKey = "book:" .. maSach
-
-    redis.call("DECRBY", stockKey, soLuong)
-
-end
 
 
 ------------------------------------------------
 -- 5 push order vào stream
 ------------------------------------------------
-
-redis.call(
-    "XADD",
-    KEYS[1],
-    "*",
-    "request_id", ARGV[1],
-    "tenDangNhap", ARGV[7],
-    "items", ARGV[2],
-    "maGiam", ARGV[3],
-    "maDiaChiGiaoHang", ARGV[4],
-    "maHinhThucThanhToan", ARGV[5],
-    "maHinhThucGiaoHang", ARGV[6]
-)
 
 return 1

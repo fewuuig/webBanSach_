@@ -28,7 +28,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
     private ModelMapper modelMapper ;
     @Override
     public ProfileUserResponeDTO getProfileUser(String tenDangNhap) {
-        String key = "profile:user:"+tenDangNhap ;
+        String key = "user:"+tenDangNhap+":profile" ;
         ProfileUserResponeDTO cached = (ProfileUserResponeDTO) redisTemplate.opsForValue().get(key) ;
         if(cached != null){
             return cached ;
@@ -37,7 +37,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
 
         ProfileUserResponeDTO profileUserResponeDTO = modelMapper.map(nguoiDung , ProfileUserResponeDTO.class) ;
 
-        redisTemplate.opsForValue().set(key,profileUserResponeDTO , Duration.ofHours(12));
+        redisTemplate.opsForValue().set(key,profileUserResponeDTO , Duration.ofHours(1));
         return profileUserResponeDTO ;
     }
 }

@@ -5,10 +5,7 @@ import jakarta.persistence.LockModeType;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,8 +20,40 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
      Page<Sach> findByDanhSachTheLoai_MaTheLoai(@RequestParam("maTheLoai") int maTheLoai , Pageable pageable) ;
      Page<Sach> findByTenSachContainingAndDanhSachTheLoai_MaTheLoai(@RequestParam("tenSach") String tenSach ,@RequestParam("maTheLoai") int maTheLoai ,Pageable pageable) ;
      Optional<Sach> findByMaSachAndIsActive(int maSach , boolean isActive ) ;
+
+     // fetch ảnh lên
+     @EntityGraph(attributePaths = "danhSachHinhAnh")
+     @Query("""
+          SELECT s
+          FROM Sach s
+          WHERE s.maSach = :maSach AND s.isActive = :isActive
+     """)
+     Optional<Sach> findByMaSachAndIsActiveFetchImg(@Param("maSach") int maSach ,@Param("isActive") boolean isActive ) ;
+
+     @EntityGraph(attributePaths = "danhSachHinhAnh")
+     @Query("""
+          SELECT s
+          FROM Sach s
+          WHERE s.maSach = :maSach
+     """)
+     Optional<Sach> findByMaSachAndFetchImg(@Param("maSach") int maSach ) ;
+     // danh sách bình luận
+     @EntityGraph(attributePaths = "danhSachDanhGia")
+     @Query("""
+     SELECT s
+     FROM Sach s
+     WHERE s.maSach = :maSach and s.isActive = :isActive
+     """)
+     Optional<Sach> findByMaSachAndIsActiveFetchDanhGia(@Param("maSach") int maSach ,@Param("isActive") boolean isActive ) ;
      Page<Sach> findAll(Pageable pageable) ;
      List<Sach> findByMaSachInAndIsActive(Collection<Integer> danhSachMaSach ,  boolean isActive) ;
+     @Query(value = """
+          SELECT s.*
+          FROM sach s
+          JOIN sach_theloai stl ON stl.ma_sach = s.ma_sach
+          WHERE s.ma_sach in :maSaches And s.is_active = true and stl.ma_the_loai = :maTheLoai
+    """ , nativeQuery = true)
+     List<Sach> findByMaSachInAndIsActiveAndMaTheLoai(@Param("maSaches") Collection<Integer> danhSachMaSach ,@Param("maTheLoai") int maTheLoai) ;
 
      @Lock(LockModeType.PESSIMISTIC_WRITE)
      @Query("select s from Sach s where s.maSach = :maSach")
@@ -44,7 +73,7 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
              """,nativeQuery = true)
      void updateIsActive(@Param("ids") List<Integer> ids) ;
 
-     // lấy 3 quyển cho carousel
+     // lấy 3 quyển cho
      @Query(value = """
           SELECT s.*
           FROM sach s
@@ -53,4 +82,20 @@ public interface SachRepository extends JpaRepository<Sach,Integer> {
           LIMIT 3
      """ , nativeQuery = true)
      List<Sach>  findSachNew() ;
+
+     @Query(value = """
+          SELECT s.*
+          FROM sach s
+          JOIN sach_theloai stl ON stl.ma_sach =s.ma_sach
+          WHERE s.is_active = false and stl.ma_the_loai = :maTheLoai
+     """,nativeQuery = true)
+     List<Sach> findSachDeleted(@Param("maTheLoai") int maTheLoai) ;
+
+     @Modifying
+     @Query(value = """
+          UPDATE sach
+          SET sach.is_active = true
+          WHERE sach.ma_sach IN :ids
+     """,nativeQuery = true)
+     void reStoreBook(@Param("ids") List<Integer> ids) ;
 }

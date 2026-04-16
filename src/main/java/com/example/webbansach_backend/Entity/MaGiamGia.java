@@ -46,8 +46,6 @@ public class MaGiamGia {
     @Enumerated(EnumType.STRING)
     private DoiTuongApDungMa doiTuongApDungMa ;
 
-    @Column(name = "ma_the_loai")
-    private int maTheLoai ;
 
     @Column(name = "phan_tram_giam")
     private Double phanTramGiam ;

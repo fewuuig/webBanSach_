@@ -26,14 +26,22 @@ public class IdBookPagination implements ApplicationRunner {
         for(TheLoai tl : theLoais){
             for(Sach s : tl.getDanhSachQuyenSach()){
                 if(s.isActive()){
-                    String key = "page_book_id";
-                    redisTemplate.opsForZSet().add(key , s.getMaSach() , s.getMaSach() ) ;
-                    redisTemplate.opsForZSet().add("page_book_id_category:"+tl.getMaTheLoai() ,
+
+                    redisTemplate.opsForZSet().add("page:book:category:"+tl.getMaTheLoai() ,
                             s.getMaSach() ,
                             s.getMaSach());
                 }
             }
         }
+        List<Sach> saches = sachRepository.findAll() ;
+        saches.forEach(s ->{
+            if(s.isActive()){
+                String key = "page:book:all";
+                redisTemplate.opsForZSet().add(key , s.getMaSach() , s.getMaSach() ) ;
+                redisTemplate.opsForZSet().add("page:book:price" ,s.getMaSach() ,s.getGiaBan()) ;
+            }
+        });
 
     }
 }
+// sau sửa lại for 2 gộp vaof 1
