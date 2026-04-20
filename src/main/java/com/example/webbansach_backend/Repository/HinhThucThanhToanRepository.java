@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @RepositoryRestResource(path = "hinh-thuc-thanh-toan")
 public interface HinhThucThanhToanRepository extends JpaRepository<HinhThucThanhToan,Integer> {
-    Optional<HinhThucThanhToan> findById(int maHinhThucThanhToan) ;
+
     List<HinhThucThanhToan> findByMaHinhThucThanhToanIn(List<Integer> danhSachMaHinhThucThanhToan) ;
 }

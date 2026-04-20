@@ -7,7 +7,6 @@ import com.example.webbansach_backend.exception.DuplicationDisableException;
 import com.example.webbansach_backend.service.AccountService;
 import com.example.webbansach_backend.service.EmailService;
 import com.example.webbansach_backend.utils.CheckRoleUItil;
-import com.example.webbansach_backend.utils.ParseJacksonUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service

@@ -2,7 +2,6 @@ package com.example.webbansach_backend.Entity;
 
 import com.example.webbansach_backend.Enum.StatusLogOrder;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 @Setter
 public class LogOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "log_order_id")
     private Long logOrderId ;
 

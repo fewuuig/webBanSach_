@@ -1,7 +1,6 @@
 package com.example.webbansach_backend.Entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +10,6 @@ import lombok.Setter;
 @Table(name = "chi_tiet_don_hang")
 public class ChiTietDonHang {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ma_chi_tiet_don_hang")
     private long maChiTietDonHang ;
 

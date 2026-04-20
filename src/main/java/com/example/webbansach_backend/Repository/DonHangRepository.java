@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RepositoryRestResource(path = "don-hang")
-public interface DonHangRepository extends JpaRepository<DonHang,Integer> {
+public interface DonHangRepository extends JpaRepository<DonHang,Long> {
     List<DonHang> findByTrangThai(TrangThaiGiaoHang trangThaiGiaoHang);
 //    @EntityGraph(attributePaths = "danhSachChiTietDonHang")
 //    @Query(value = """

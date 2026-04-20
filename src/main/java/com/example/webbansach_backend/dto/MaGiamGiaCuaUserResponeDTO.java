@@ -3,7 +3,6 @@ package com.example.webbansach_backend.dto;
 import com.example.webbansach_backend.Enum.DoiTuongApDungMa;
 import com.example.webbansach_backend.Enum.LoaiMaGiamGia;
 import com.example.webbansach_backend.Enum.TrangThaiMaGiamGia;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -2,12 +2,9 @@ package com.example.webbansach_backend.Entity;
 
 import com.example.webbansach_backend.Enum.TrangThaiGiaoHang;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Controller;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +14,8 @@ import java.util.List;
 @Table(name = "don_hang")
 public class DonHang {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ma_don_hang")
-    private int maDonHang ;
+    private Long maDonHang   ;
 
     @Column(name = "ngay_tao")
     private LocalDateTime ngayTao ;

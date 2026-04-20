@@ -5,7 +5,6 @@ import com.example.webbansach_backend.Entity.NguoiDung;
 import com.example.webbansach_backend.Enum.DoiTuongApDungMa;
 import com.example.webbansach_backend.Enum.TrangThaiMaGiamGia;
 import jakarta.persistence.LockModeType;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;

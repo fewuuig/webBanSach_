@@ -1,6 +1,5 @@
 package com.example.webbansach_backend.dto;
 
-import com.example.webbansach_backend.dto.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

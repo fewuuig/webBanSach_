@@ -1,8 +1,6 @@
 package com.example.webbansach_backend.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

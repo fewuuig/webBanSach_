@@ -1,0 +1,2 @@
+ALTER table chi_tiet_don_hang
+drop column ma_don_hang

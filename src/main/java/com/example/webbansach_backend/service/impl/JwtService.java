@@ -4,102 +4,125 @@ import com.example.webbansach_backend.Entity.NguoiDung;
 import com.example.webbansach_backend.Entity.Quyen;
 import com.example.webbansach_backend.service.UserService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
 
-@Component
+@Service
 public class JwtService {
     @Autowired
-    private UserService userService ;
-    // khóa bí mật
-    private static final String SECRET_KEY = "8492384NNK34234234238084M234234KK23423MH4234LF4234" ;
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private UserService userService;
 
-    // taọ token để lưu trên local storage or cookie
-    public String generateToken(String username){
-        // tại nội dung payload của token
-        Map<String , Object> claims = new HashMap<>() ;
-        claims.put("role" , true) ;
-        NguoiDung nguoiDung = userService.findByUsername(username) ;
-        List<Quyen> quyen = new ArrayList<>() ;
-        nguoiDung.getNguoiDungQuyens().forEach(ndq->{
-            quyen.add(ndq.getQuyen()) ;
-        });
-        boolean isAdmin = false ;
-        boolean isStaff = false ;
-        boolean isUser = false ;
-        for(Quyen q : quyen){
-            if(q.getTenQuyen().equals("ADMIN")){
-                isAdmin = true ;
-            }
-            if(q.getTenQuyen().equals("STAFF")){
-                isStaff = true ;
-            }
-            if(q.getTenQuyen().equals("USER")){
-                isUser = true ;
-            }
-        }
-        claims.put("isAdmin" , isAdmin) ;
-        claims.put("isStaff" , isStaff) ;
-        claims.put("isUser" ,isUser) ;
+    // Khóa bí mật
+    private static final String SECRET_KEY = "8492384NNK34234234238084M234234KK23423MH4234LF4234";
+    private Key cachedKey;
+    private JwtParser jwtParser;
+    @PostConstruct
+    public void init() {
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        this.cachedKey = Keys.hmacShaKeyFor(keyBytes);
 
-        return createToken(claims , username ) ;
+        // Cache luôn cái máy giải mã.
+        this.jwtParser = Jwts.parser().setSigningKey(this.cachedKey);
     }
+
+    // Taọ token để lưu trên local storage or cookie
+    public String generateToken(String username){
+        Map<String , Object> claims = new HashMap<>();
+        claims.put("role" , true);
+
+        NguoiDung nguoiDung = userService.findByUsername(username);
+        List<Quyen> quyen = new ArrayList<>();
+        nguoiDung.getNguoiDungQuyens().forEach(ndq -> {
+            quyen.add(ndq.getQuyen());
+        });
+
+        boolean isAdmin = false;
+        boolean isStaff = false;
+        boolean isUser = false;
+
+        for(Quyen q : quyen){
+            if(q.getTenQuyen().equals("ADMIN")) isAdmin = true;
+            if(q.getTenQuyen().equals("STAFF")) isStaff = true;
+            if(q.getTenQuyen().equals("USER")) isUser = true;
+        }
+        claims.put("isAdmin" , isAdmin);
+        claims.put("isStaff" , isStaff);
+        claims.put("isUser" , isUser);
+
+        return createToken(claims , username);
+    }
+
     private String createToken(Map<String , Object> claims , String username ){
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 7*24*60 *1000) )
-                .signWith(SignatureAlgorithm.HS256 , getSignKey())
-                .compact() ;
+                // Đã fix bug toán học: 7 ngày * 24h * 60m * 60s * 1000ms. Thêm chữ 'L' để tránh tràn bộ nhớ kiểu int.
+                .setExpiration(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000) )
+                .signWith(SignatureAlgorithm.HS256 , this.cachedKey) // Dùng key đã cache
+                .compact();
     }
 
-    // chuyển chữ ký sang dạng byte
-    private Key getSignKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes) ;
-    }
-
-    // trích xuất toàn bộ claims : đầu tiên đọc , xác thực token , so sánh chữ ký xem có giống sever không  , phân tích token -> header , payload(claims) , signature . rồi lấy phần thân Object paylaod(claims)
+    // Trích xuất toàn bộ claims (Siêu nhanh nhờ dùng lại jwtParser)
     private Claims extractAllClaims(String token){
-        return Jwts.parser().setSigningKey(getSignKey()).parseClaimsJws(token).getBody() ;
+        return this.jwtParser.parseClaimsJws(token).getBody();
     }
-    // trích xuất thông tin cho 1 claim (mỗi 1 key : value đc gọi là 1 claim . nhièu nó bên trong thằng Map thì được gọi là : claims  )
-    // chỗn ày giúp sủ lý ngắn gọn viẹc lấy ra claim mà nguiowuf dùng muốn lấy để xác thực điều gì đó
+
+    // Trích xuất thông tin cho 1 claim
     public <T> T extractClaim(String token , Function<Claims , T> claimsTFunction){
         Claims claims = extractAllClaims(token);
-        return claimsTFunction.apply(claims) ;
+        return claimsTFunction.apply(claims);
     }
 
-    // lấy ra thời hnaj đăng nhập
+    // Lấy ra thời hạn đăng nhập
     public Date extractExpiration(String token){
-        return extractClaim(token , Claims::getExpiration) ;
+        return extractClaim(token , Claims::getExpiration);
     }
 
-    // lấy ra ten đăg nhập
+    // Lấy ra Roles (Trực tiếp từ Token, không cần gọi DB)
+    public List<String> extractRole(String token){
+        Claims claims = extractAllClaims(token);
+        List<String> roles = new ArrayList<>();
+        if(claims.get("isAdmin" , Boolean.class)) roles.add("ADMIN");
+        if(claims.get("isStaff" , Boolean.class)) roles.add("STAFF");
+        if(claims.get("isUser" , Boolean.class)) roles.add("USER");
+        return roles;
+    }
+
+    // Lấy ra tên đăng nhập
     public String extractUsername(String token){
-        return extractClaim(token , Claims::getSubject) ;
+        return extractClaim(token , Claims::getSubject);
     }
 
-    // kiểm tra token đã hết hạn chưa
+    // Kiểm tra token đã hết hạn chưa
     public Boolean isTokenExpired(String token){
-        return extractExpiration(token).before(new Date()) ;
+        return extractExpiration(token).before(new Date());
     }
 
-    // kiêmr tra tínhd hợp lệ đăng nhập
-    public Boolean validateToken(String token , UserDetails userDetails){
-        String username = extractUsername(token) ;
-        return (username.equals(userDetails.getUsername())) ;
+    // Kiểm tra tính hợp lệ đăng nhập (Nhanh như điện vì chỉ check Redis)
+    public Boolean validateToken(String token ){
+        try {
+            // Lưu ý: thư viện jjwt sẽ tự động throw ExpiredJwtException khi gọi extractAllClaims
+            // nếu token hết hạn. Nên khối try-catch này bắt lỗi rất an toàn.
+            if(isTokenExpired(token)) return false;
+            String username = extractUsername(token);
+            return (username.equals(redisTemplate.opsForValue().get("username:" + username)));
+        }catch (Exception ex){
+            return false;
+        }
     }
-
-
 }

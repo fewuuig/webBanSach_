@@ -1,4 +1,4 @@
-package com.example.webbansach_backend.config.redis;
+package com.example.webbansach_backend.config.redis.cluster;
 
 import io.lettuce.core.ReadFrom;
 import io.lettuce.core.cluster.ClusterClientOptions;
@@ -16,9 +16,9 @@ public class ClusterConfig {
     @Bean
     public LettuceConnectionFactory connectionFactory(){
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration() ;
-        redisClusterConfiguration.clusterNode("192.168.0.104" , 6379) ;
-        redisClusterConfiguration.clusterNode("192.168.0.104" , 6380) ;
-        redisClusterConfiguration.clusterNode("192.168.0.104" , 6381) ;
+        redisClusterConfiguration.clusterNode("192.168.0.105" , 6379) ;
+        redisClusterConfiguration.clusterNode("192.168.0.105" , 6380) ;
+        redisClusterConfiguration.clusterNode("192.168.0.105" , 6381) ;
 
         // cấu hình topology
         ClusterTopologyRefreshOptions clusterTopologyRefreshOptions = ClusterTopologyRefreshOptions.

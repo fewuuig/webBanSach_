@@ -25,7 +25,7 @@ public class ReturnOrderTimeoutBatchServiceImpl implements ReturnOrderTimeoutBat
     private DefaultRedisScript<List> returnOrderTimeout ;
     @Autowired
     private DonHangRepository donHangRepository;
-    public void addOrderTimeout(int orderId){
+    public void addOrderTimeout(Long orderId){
         String key = "order_timeout_queue" ;
         long delayTime = System.currentTimeMillis() + 5000 ;
         redisTemplate.opsForZSet().add(key , orderId ,delayTime) ;
