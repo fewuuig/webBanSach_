@@ -27,7 +27,8 @@ public class EndPoint {
             "/elastic/search/complex/book",
             "/elastic/search/fuzziness/book" ,
             "/elastic/search/fuzziness/multi-match/book",
-            "/elastic/search/auto-complete"
+            "/elastic/search/auto-complete",
+            "/elastic/search/paginate"
     };
     public static final String[] PUBLIC_POST_ENDPOINS = {
             "/tai-khoan/dang-ky",

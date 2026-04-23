@@ -4,8 +4,7 @@ import co.elastic.clients.elasticsearch._types.FieldSort;
 import co.elastic.clients.elasticsearch._types.SortOptions;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.aggregations.*;
-import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import co.elastic.clients.elasticsearch.core.search.SourceFilter;
 import co.elastic.clients.json.JsonData;
 import com.example.webbansach_backend.Entity.TheLoai;
@@ -16,6 +15,9 @@ import com.example.webbansach_backend.dto.elastic.BookDocumentDTO;
 import com.example.webbansach_backend.mapper.SachDocumentMapper;
 import com.example.webbansach_backend.service.ElasticSyncService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregation;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchAggregations;
@@ -56,6 +58,7 @@ public class ElasticSyncServiceImpl implements ElasticSyncService {
         sachElasticRepository.saveAll(sachDocuments) ;
         return "Đồng bộ thành công!" ;
     }
+    // chỗ này cần cải thiện thêm , nếu gọi trực tiếp có thể ảnh hưởng đến hiệu năng -> nên async đoạn này (driven-event)
     public void syncOneBookToElastic(int maSach){
       sachRepository.findById(maSach).ifPresent(
                 s->{
@@ -231,5 +234,52 @@ public class ElasticSyncServiceImpl implements ElasticSyncService {
             return  hit.getContent().getTenSach() ;
         }).toList() ;
     }
+
+    // phân trang
+    @Override
+    public Page<SachDocument> searchPagination(Pageable pageable , String tenSach){
+        Query query = Query.of(q->q.match(m->m.field("tenSach").query(tenSach).fuzziness("1"))) ;
+        NativeQuery nativeQuery = NativeQuery.builder().withQuery(query).withPageable(pageable).build() ;
+        SearchHits<SachDocument> searchHits = elasticsearchOperations.search(nativeQuery , SachDocument.class) ;
+        List<SachDocument> sachDocuments =searchHits.stream().map(SearchHit::getContent).toList() ;
+
+        return new PageImpl<>(sachDocuments , pageable , searchHits.getTotalHits()) ;
+    }
+    // hãy dựa trên thư viện elasticsearch client , spring data elasticserahc đer phát triển tiếp____
+    // như : Function score query (tìm kiếm dưạ trên lượt mua/ rating )
+    // như : gợi tý từu khóa hot (trending searchs) + redis (zset)
+
+    // -> mục tiêu boost : chấm điẻm theo lượt mua / rating : scorefinal = score(match)*score(func)
+    // log1p : giúp rút ngắn khoảng cách điểm số với các cuốn bán só lượng ít hơn => vẫn đc đề xuất
+
+    // tìm theo cái nào có lượt mua nhièu nhất thì lên dâu + match : hit -> điểm cao
+    public Page<SachDocument> searchTrendingBoost(Pageable pageable , String keyword){
+        // cho phep sai 1
+        Query queryMatch = Query.of(q->q.match(m->m.field("tenSach").query(keyword).fuzziness("1"))) ;
+
+        // boost điểm số , ta sẽ kết hợp với lượt bán để đẩy lên trending tim kiếm
+        // dùng logarit để giảm khoảng cách điểm số log(1+luot ban )
+        FunctionScore functionScore = FunctionScore.of(f->f.fieldValueFactor(fvf->fvf.field("luotBan").modifier(FieldValueFactorModifier.Log1p).factor(1.2).missing(0.0))) ;
+
+        // két hợp thành 1 query
+        Query queryFinal = Query.of(q->q.functionScore(fsq->fsq.query(queryMatch).functions(functionScore).boostMode(FunctionBoostMode.Multiply))) ; // ưu tiên nhân
+
+        // native
+        NativeQuery nativeQuery = NativeQuery.builder().withQuery(queryFinal).withPageable(pageable).build() ;
+
+        // truy vấn lên
+        SearchHits<SachDocument> searchHits = elasticsearchOperations.search(nativeQuery, SachDocument.class) ;
+
+        // lấy sách document
+        List<SachDocument> sachDocuments = searchHits.getSearchHits().stream().map(SearchHit::getContent).toList() ;
+
+        return new PageImpl<>( sachDocuments, pageable ,searchHits.getTotalHits()) ;
+    }
+
+    // dùng zset mà làm thôi
+    public void  searchKeyTrending(){}
+
+    // hàm trả về danh sách các key word khi mới bấm vào thanh tìm kiếm (chưa gõ gì cả) - còn nếu gõ mk sẽ gọi hàm matchPhasePrefix bên trên
+    public  List<String> getSearchKeyTrending(){return null ;}
 
 }

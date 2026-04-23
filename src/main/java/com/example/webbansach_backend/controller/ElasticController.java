@@ -3,6 +3,8 @@ package com.example.webbansach_backend.controller;
 import com.example.webbansach_backend.Repository.elasticSearch.SachElasticRepository;
 import com.example.webbansach_backend.service.ElasticSyncService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +40,10 @@ public class ElasticController {
     @GetMapping("/search/auto-complete")
     public ResponseEntity<?> autoCompleteSearch(@RequestParam("prefix") String prefix){
         return ResponseEntity.ok(elasticSyncService.autoCompleteSearch(prefix)) ;
+    }
+    @GetMapping("/search/paginate")
+    public ResponseEntity<?> paginateSearch(@RequestParam("tenSach") String tenSach  ,
+                                            @PageableDefault(size = 10 , page = 0)Pageable pageable){
+        return ResponseEntity.ok(elasticSyncService.searchPagination(pageable , tenSach))  ; 
     }
 }
