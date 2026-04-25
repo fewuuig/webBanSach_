@@ -79,4 +79,11 @@ public class RedisLuaConfig {
         script.setResultType(List.class);
         return script ;
     }
+    @Bean
+    public DefaultRedisScript<Long> autoCompleteSearch(){
+        DefaultRedisScript<Long> defaultRedisScript = new DefaultRedisScript<>() ;
+        defaultRedisScript.setResultType(Long.class);
+        defaultRedisScript.setLocation(new ClassPathResource("/lua/search/autoComplete.lua"));
+        return defaultRedisScript ;
+    }
 }

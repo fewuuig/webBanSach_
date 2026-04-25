@@ -46,4 +46,18 @@ public class ElasticController {
                                             @PageableDefault(size = 10 , page = 0)Pageable pageable){
         return ResponseEntity.ok(elasticSyncService.searchPagination(pageable , tenSach))  ; 
     }
+    @GetMapping("/search/trending-boost")
+    public ResponseEntity<?> searchTrendingBoost(@RequestParam("tenSach") String tenSach  ,
+                                            @PageableDefault(size = 10 , page = 0)Pageable pageable){
+        return ResponseEntity.ok(elasticSyncService.searchTrendingBoost(pageable , tenSach))  ;
+    }
+    @GetMapping("/search/trending-boost-rescore")
+    public ResponseEntity<?> searchRescore(@RequestParam("tenSach") String tenSach  ,
+                                            @PageableDefault(size = 10 , page = 0)Pageable pageable){
+        return ResponseEntity.ok(elasticSyncService.searchRescore(pageable , tenSach))  ;
+    }
+    @GetMapping("/books/{maSach}/more-like-this")
+    public ResponseEntity<?> clickMoreLikeThis(@PathVariable("maSach") int maSach){
+        return ResponseEntity.ok(elasticSyncService.moreLikeThis(maSach)) ;
+    }
 }

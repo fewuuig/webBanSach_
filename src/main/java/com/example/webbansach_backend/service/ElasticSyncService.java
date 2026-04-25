@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ElasticSyncService {
     String syncAllBookToElastic() ;
@@ -17,6 +18,9 @@ public interface ElasticSyncService {
     BookDocumentDTO searchComplexV2(double priceFrom , double priceTo , String category) ;
     List<SachDocument> fuzzinessSearch(String bookName);
     List<SachDocument> fuzzinessMultiMatchSearch(String bookName) ;
-    List<String> autoCompleteSearch(String prefix);
+    Set<String> autoCompleteSearch(String prefix);
     Page<SachDocument> searchPagination(Pageable pageable , String tenSach) ;
+    Page<SachDocument> searchTrendingBoost(Pageable pageable , String keyword) ;
+    Page<SachDocument> searchRescore(Pageable pageable, String keyword) ;
+    List<SachDocument> moreLikeThis(int maSach) ;
 }
