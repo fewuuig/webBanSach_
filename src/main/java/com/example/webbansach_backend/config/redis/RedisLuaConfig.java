@@ -3,11 +3,7 @@ package com.example.webbansach_backend.config.redis;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.PathResource;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.data.redis.core.script.ScriptExecutor;
-import org.springframework.security.core.userdetails.UserCache;
 
 import java.util.List;
 
@@ -82,5 +78,12 @@ public class RedisLuaConfig {
         script.setLocation(new ClassPathResource("/lua/carousel/carousel.lua"));
         script.setResultType(List.class);
         return script ;
+    }
+    @Bean
+    public DefaultRedisScript<Long> autoCompleteSearch(){
+        DefaultRedisScript<Long> defaultRedisScript = new DefaultRedisScript<>() ;
+        defaultRedisScript.setResultType(Long.class);
+        defaultRedisScript.setLocation(new ClassPathResource("/lua/search/autoComplete.lua"));
+        return defaultRedisScript ;
     }
 }

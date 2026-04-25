@@ -1,28 +1,39 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/web_ban_sach
+    # 1. Thêm tham số này vào đuôi URL kết nối MySQL để ép nó nhận Batch
+    url: jdbc:mysql://localhost:3306/web_ban_sach?rewriteBatchedStatements=true
     username: root
     password: 12345
-
     hikari:
-      maximum-pool-size: 100
-      minimum-idle: 10
-
+      maximum-pool-size: 200
+      minimum-idle: 30
+  jpa:
+    properties:
+      hibernate:
+        # 2. Bật tính năng Batching của Hibernate
+        jdbc.batch_size: 500
+        order_inserts: true
+        order_updates: true
 
   data:
     redis:
       timeout: 10000
       cluster:
         nodes:
-          - 192.168.0.104:6379
-          - 192.168.0.104:6380
-          - 192.168.0.104:6381
-          - 192.168.0.104:6382
-          - 192.168.0.104:6383
-          - 192.168.0.104:6384
+          - 192.168.0.105:6379
+          - 192.168.0.105:6380
+          - 192.168.0.105:6381
+          - 192.168.0.105:6382
+          - 192.168.0.105:6383
+          - 192.168.0.105:6384
         max-redirects: 3
       lettuce:
         cluster:
           refresh:
             adaptive: true
             period: 60s
+        pool:
+          min-idle: 50
+          max-idle: 100
+          max-active: 300
+          time-between-eviction-runs: 10s

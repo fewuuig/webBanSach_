@@ -2,10 +2,8 @@ package com.example.webbansach_backend.Entity;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -80,7 +78,7 @@ public class Sach {
     private List<GioHangSach> gioHangSaches ;
     @OneToMany(mappedBy = "sach", cascade = CascadeType.ALL)
     Set<MaGiamGiaSach> maGiamGiaSaches = new HashSet<>();
-    @OneToMany(mappedBy = "sach" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sach", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<SachTheLoai> sachTheLoais = new ArrayList<>() ;
 
 }

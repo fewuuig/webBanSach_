@@ -1,19 +1,14 @@
 package com.example.webbansach_backend.Repository.customer.impl;
+
 import com.example.webbansach_backend.Repository.customer.SachCustomRepository;
 import com.example.webbansach_backend.builder.BookSearchBuiler;
 import com.example.webbansach_backend.dto.book.BookResponeDTO;
-import com.example.webbansach_backend.service.PaginateService;
-import com.example.webbansach_backend.utils.NumberUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;

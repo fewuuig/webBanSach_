@@ -3,8 +3,9 @@ package com.example.webbansach_backend.mapper;
 import com.example.webbansach_backend.Entity.MaGiamGia;
 import com.example.webbansach_backend.dto.MaGiamGiaCuaSachRespone;
 import com.example.webbansach_backend.dto.MaGiamGiaRequestDTO;
-import com.example.webbansach_backend.dto.MaGiamGiaUserResponeDTO;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring" , unmappedTargetPolicy = ReportingPolicy.IGNORE)
 

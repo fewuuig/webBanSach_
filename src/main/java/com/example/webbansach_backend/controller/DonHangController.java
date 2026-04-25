@@ -2,14 +2,12 @@ package com.example.webbansach_backend.controller;
 
 import com.example.webbansach_backend.Enum.TrangThaiGiaoHang;
 import com.example.webbansach_backend.service.impl.OrderServiceImpl;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 // cập nhật trạng thái của đơn hàng
 @RestController
@@ -26,7 +24,7 @@ public class DonHangController {
 
     // ================= UPDATE STATUS =================
     @PutMapping("/{id}/trang-thai")
-    public ResponseEntity<?> capNhatTrangThaiGiaoHang(@PathVariable int id,
+    public ResponseEntity<?> capNhatTrangThaiGiaoHang(@PathVariable Long id,
                                                       @RequestParam("trangThai") TrangThaiGiaoHang trangThaiGiaoHang){
 
         long start = System.currentTimeMillis();

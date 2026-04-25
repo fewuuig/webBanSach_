@@ -1,7 +1,7 @@
-package com.example.webbansach_backend.config.executerService;
+package com.example.webbansach_backend.service.impl;
 
+import com.example.webbansach_backend.service.ExecuterService;
 import com.example.webbansach_backend.service.OrderService;
-import com.example.webbansach_backend.service.impl.OrderServiceImpl;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -12,13 +12,12 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class ExecuterService implements ApplicationRunner , DisposableBean {
+public class ExecuterServiceImpl implements ApplicationRunner , DisposableBean , ExecuterService {
 
     @Autowired
     private OrderService orderService ;
@@ -40,19 +39,20 @@ public class ExecuterService implements ApplicationRunner , DisposableBean {
         }
 
     }
-    private void taskConsumeMessage(int shard){
+    @Override
+    public  void taskConsumeMessage(int shard){
         while (isRunning && !Thread.currentThread().isInterrupted()){
             // đọc consumer tại đây
             try { // nhiệm vụ cuiar vòng này k cho nó ngắt kết nối
                 List<MapRecord<String , Object , Object>> messages = redisTemplate.opsForStream().read(
                         Consumer.from("group:shard-"+shard , "consumer-1") ,
                         StreamReadOptions.empty().count(300).block(Duration.ofSeconds(2)) ,
-                        StreamOffset.create("order-stream:{shard-"+shard+"}" , ReadOffset.lastConsumed())
+                        StreamOffset.create("order-stream:{ws}:shard-"+shard , ReadOffset.lastConsumed())
                 );
-                if(messages.isEmpty()  ) continue;
+                if(messages == null ||  messages.isEmpty()  ) continue;
                 try {
                     // lưu batch
-                    if(!messages.isEmpty()) orderService.saveBatch(messages ,shard);
+                    orderService.saveBatch(messages ,shard);
                 }catch (Exception ex){
                     System.out.println("Quá trình save bath message bị lỗi");
                 }

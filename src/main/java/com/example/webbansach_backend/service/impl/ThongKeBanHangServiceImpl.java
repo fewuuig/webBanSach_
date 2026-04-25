@@ -2,7 +2,6 @@ package com.example.webbansach_backend.service.impl;
 
 import com.example.webbansach_backend.Entity.DonHang;
 import com.example.webbansach_backend.Repository.customer.StatCustomerRepository;
-import com.example.webbansach_backend.dto.DonHangTrangThaiResponeDTO;
 import com.example.webbansach_backend.dto.stats.StatLastWeekDTO;
 import com.example.webbansach_backend.dto.stats.StatTodayDTO;
 import com.example.webbansach_backend.service.EmailService;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

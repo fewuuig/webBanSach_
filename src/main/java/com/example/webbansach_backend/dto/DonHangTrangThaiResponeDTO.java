@@ -9,7 +9,7 @@ import java.util.List;
 public class DonHangTrangThaiResponeDTO {
     private String soDienThoai ;
     private String hoTen ;
-    private int maDonHang ;
+    private Long maDonHang ;
     private double chiPhiGiaoHang ;
     private String diaChiNhanHang ;
     private TrangThaiGiaoHang trangThai ;

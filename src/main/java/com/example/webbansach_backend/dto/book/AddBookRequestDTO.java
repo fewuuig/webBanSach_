@@ -1,12 +1,10 @@
 package com.example.webbansach_backend.dto.book;
 
 import com.example.webbansach_backend.dto.picture.HinhAnhDTO;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.NumberFormat;
 
 import java.util.List;
 @Getter

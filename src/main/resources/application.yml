@@ -1,4 +1,9 @@
 spring:
+  elasticsearch:
+    uris: http://localhost:9200
+    # Nếu có bảo mật, thêm username và password bên dưới
+    # username: elastic
+    # password: your_password
   profiles:
     active: uat
 
@@ -20,5 +25,12 @@ spring:
 
 server:
   tomcat:
-    max-threads: 400
     accept-count: 3000
+    max-connections: 10000
+    connection-timeout: 20000
+    threads:
+      max: 400
+      min-spare: 100
+logging:
+  level:
+    PERF_LOGGER: OFF

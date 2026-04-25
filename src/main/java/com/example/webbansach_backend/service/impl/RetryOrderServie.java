@@ -2,13 +2,10 @@ package com.example.webbansach_backend.service.impl;
 
 import com.example.webbansach_backend.service.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.netty.channel.ChannelHandler;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Range;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.RequestEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,7 +23,7 @@ public class RetryOrderServie {
     private OrderService orderService ;
 
 
-    @Scheduled(fixedDelay = 300000)
+    @Scheduled(fixedDelay = 5*60*1000)
     public void retryOrder() throws JsonProcessingException {
         // chia ra 8 luồng
         List<CompletableFuture<Void>> futures = new ArrayList<>() ;
@@ -39,13 +36,13 @@ public class RetryOrderServie {
     @Async
     public CompletableFuture<Void> retryOrderWorker(int shard) throws JsonProcessingException {
         PendingMessagesSummary pendingMessagesSummary = redisTemplate.opsForStream().pending(
-                "order-stream:{shard-"+shard+"}",
+                "order-stream:{ws}:shard-"+shard,
                 "group:shard-"+shard
         ) ;
-        if(pendingMessagesSummary == null || pendingMessagesSummary.getTotalPendingMessages() == 0) return CompletableFuture.completedFuture(null);
+        if(pendingMessagesSummary == null|| pendingMessagesSummary.getTotalPendingMessages() == 0) return CompletableFuture.completedFuture(null);
 
         PendingMessages pendingMessages = redisTemplate.opsForStream().pending(
-                "order-stream:{shard-"+shard+"}" ,
+                "order-stream:{ws}:shard-"+shard ,
                 Consumer.from("group:shard-"+shard , "consumer-1") ,
                 Range.unbounded() , 300
         ) ;
@@ -55,7 +52,7 @@ public class RetryOrderServie {
         for(PendingMessage pendingMessage : pendingMessages){
             if(pendingMessage.getTotalDeliveryCount() >=6){
                 List<MapRecord<String , Object,Object>> claimed  = redisTemplate.opsForStream().claim(
-                        "order-stream:{shard-"+shard+"}" ,
+                        "order-stream:{ws}:shard-"+shard ,
                         "group:shard-"+shard ,
                         "consumer-1" ,
                         Duration.ofSeconds(30) ,
@@ -68,7 +65,7 @@ public class RetryOrderServie {
                 }
                 // ACK để xóa nó khỏi PEL của voucher-stream -> voucher-group
                 redisTemplate.opsForStream().acknowledge(
-                        "order-stream:{shard-"+shard+"}",
+                        "order-stream:{ws}:shard-"+shard,
                         "group:shard-"+shard,
                         pendingMessage.getId()
                 );
@@ -77,7 +74,7 @@ public class RetryOrderServie {
 
             if(pendingMessage.getElapsedTimeSinceLastDelivery().toSeconds() >= 30){
                 List<MapRecord<String , Object,Object>> claimed  = redisTemplate.opsForStream().claim(
-                        "order-stream:{shard-"+shard+"}" ,
+                        "order-stream:{ws}:shard-"+shard ,
                         "group:shard-"+shard ,
                         "consumer-1" ,
                         Duration.ofSeconds(2) ,

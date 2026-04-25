@@ -21,14 +21,25 @@ public class EndPoint {
             "/book/category/{categoryId}",
             "/books/{maSach}",
             "/books/page-size?page=${page}&size=8",
-            "/books/category-page-size?maTheLoai=${maTheLoai}&page=${page}&size=8"
+            "/books/category-page-size?maTheLoai=${maTheLoai}&page=${page}&size=8",
+            "/test" ,
+            "/elastic/search/books" ,
+            "/elastic/search/complex/book",
+            "/elastic/search/fuzziness/book" ,
+            "/elastic/search/fuzziness/multi-match/book",
+            "/elastic/search/auto-complete",
+            "/elastic/search/paginate",
+            "/elastic/search/trending-boost",
+            "/elastic/search/trending-boost-rescore",
+            "/elastic/books/{maSach}/more-like-this"
     };
     public static final String[] PUBLIC_POST_ENDPOINS = {
             "/tai-khoan/dang-ky",
             "/tai-khoan/dang-nhap",
             "/tai-khoan/refresh-token",
             "/tai-khoan/logout" ,
-            "/chat/users/dm"
+            "/chat/users/dm",
+
     };
     public static final String[] ADMIN_GET_ENDPOINS = {
             "/nguoi-dung" ,
@@ -44,7 +55,8 @@ public class EndPoint {
             "/them-sach" ,
 
             "/book/add-new-book",
-            "/vouchers/add-voucher"
+            "/vouchers/add-voucher",
+            "/elastic/sync/all-books"
     } ;
     public static final String[] ADMIN_PUT_ENDPOINS ={
             "/tai-khoan/disable",
@@ -68,6 +80,7 @@ public class EndPoint {
             "/chat/list-users" ,
             "chat/users",
             "chat/users/dm/messages" ,
+            "/sse/order/subscribe"
 
     } ;
     public  static final String[] USER_DELETE_ENDPINTS = {
@@ -77,10 +90,10 @@ public class EndPoint {
             "/cart/add-to-cart",
             "/wish-love/add-to-wish-love",
             "/order/place-order-from-cart",
-            "/order/place-order",
             "/dia-chi/them-dia-chi-giao-hang" ,
             "/vouchers/user/use-voucher/{maGiam}" ,
-            "/danh-gia/{maSach}/{noiDungDanhGia}"
+            "/danh-gia/{maSach}/{noiDungDanhGia}",
+            "/order/place-order"
     } ;
     public  static final String[] USER_PUT_ENDPINTS = {
             "/don-hang/{maDonHang}/huy-don",

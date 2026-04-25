@@ -1,8 +1,6 @@
 package com.example.webbansach_backend.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.stream.MapRecord;
 
 public class ParseJacksonUtil {
     public static String toString(String value){
